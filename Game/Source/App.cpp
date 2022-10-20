@@ -13,6 +13,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <Box2D/Box2D.h>
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
