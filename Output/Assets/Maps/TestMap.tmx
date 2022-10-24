@@ -9052,7 +9052,7 @@
  <objectgroup id="8" name="Colliders">
   <object id="1" name="Ground" class="solid" x="0" y="352" width="800" height="128"/>
   <object id="4" name="Ground" class="solid" x="416" y="320" width="224" height="32"/>
-  <object id="7" name="Ground" class="solid" x="-37.571" y="-9.61118" width="36.6972" height="509.393"/>
+  <object id="7" name="Ground" class="solid" x="-38" y="-10" width="36" height="510"/>
   <object id="9" name="Ground" class="solid" x="864" y="320" width="416" height="160"/>
   <object id="10" name="Ground" class="solid" x="992" y="288" width="128" height="32"/>
   <object id="11" name="Ground" class="solid" x="1280" y="352" width="160" height="128"/>
