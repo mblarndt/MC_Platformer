@@ -41,46 +41,56 @@ bool Player::Start() {
 
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, bodyType::DYNAMIC);
+	pleft = app->physics->CreateRectangle(position.x + 32, position.y + 32, 5, 15, bodyType::DYNAMIC);
 
 	return true;
 }
+
+
+b2Vec2 velocity = b2Vec2(10, -GRAVITY_Y);
 
 bool Player::Update()
 {
 
 
 	// L07 TODO 5: Add physics to the player - updated player position using physics
-	b2Vec2 velocity = b2Vec2(0, -GRAVITY_Y);
+	
+
+	pbody->body->SetFixedRotation(true);
+	pleft->body->SetFixedRotation(true);
+
 
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
 		remainingJumpSteps = 6;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
 		//position.y += 1;
+		int val = velocity.x* (-1);
+		velocity = b2Vec2(val, -GRAVITY_Y);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
 		//position.x -= 1;
 		velocity = b2Vec2(-10, -GRAVITY_Y);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
 		//position.x -= 1;
 		velocity = b2Vec2(10, -GRAVITY_Y);
 	}
 
-	if (remainingJumpSteps > 0) {
-		pbody->body->ApplyForce(b2Vec2(0, -400), pbody->body->GetPosition(), true);
-		remainingJumpSteps--;
+	if (remainingJumpSteps > 0)
+	{
+			pbody->body->ApplyForce(b2Vec2(0, -400), pbody->body->GetPosition(), true);
+			remainingJumpSteps--;
 	}
 
-
-	if (remainingJumpSteps == 0) {
+	else 
+	{
 		pbody->body->SetLinearVelocity(velocity);
 	}
-	
 	
 
 
