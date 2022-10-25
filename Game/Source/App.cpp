@@ -7,13 +7,13 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Map.h"
+#include "Physics.h"
 
 #include "Defs.h"
 #include "Log.h"
 
 #include <iostream>
 #include <sstream>
-#include <Box2D/Box2D.h>
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -25,6 +25,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	render = new Render();
 	tex = new Textures();
 	audio = new Audio();
+	//L07 TODO 2: Add Physics module
+	physics = new Physics();
 	scene = new Scene();
 	entityManager = new EntityManager();
 	map = new Map();
@@ -35,6 +37,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(win);
 	AddModule(tex);
 	AddModule(audio);
+	//L07 TODO 2: Add Physics module
+	AddModule(physics);
 	AddModule(scene);
 	AddModule(entityManager);
 	AddModule(map);
