@@ -229,6 +229,10 @@ bool Map::Load()
         }
     }
 
+    LoadObjectGroups(mapFileXML.child("map"));
+
+
+
     if(mapFileXML) mapFileXML.reset();
 
     mapLoaded = ret;
@@ -331,6 +335,63 @@ bool Map::LoadAllLayers(pugi::xml_node mapNode) {
 
         //add the layer to the map
         mapData.maplayers.Add(mapLayer);
+    }
+
+    return ret;
+}
+
+bool Map::LoadObjectGroups(pugi::xml_node mapNode)
+{
+    bool ret = true;
+
+    for (pugi::xml_node objectNode = mapNode.child("objectgroup"); objectNode && ret; objectNode = objectNode.next_sibling("objectgroup"))
+    {
+        ObjectGroups* objectgroup = new ObjectGroups();
+        ret = LoadObjects(objectNode, objectgroup);
+
+        mapData.objectgroups.Add(objectgroup);
+    }
+    return ret;
+}
+
+bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
+{
+    bool ret = true;
+
+    //Load the attributes
+    group->id = node.attribute("id").as_int();
+    group->name = node.attribute("name").as_string();
+
+
+
+    //Iterate over all the obects and assign the values
+    pugi::xml_node object;
+
+    for (object = node.child("object"); object && ret; object = object.next_sibling("object"))
+    {
+        Object* newObject = new Object();
+        
+        newObject->id = object.attribute("id").as_int();
+        
+        newObject->stringType = object.attribute("class").as_string();
+        if (newObject->stringType == "solid") {
+            newObject->type = OBJECTTYPE_SOLID;
+        }
+        else if (newObject->stringType == "warp") {
+            newObject->type = OBJECTTYPE_WARP;
+        }
+        else
+            newObject->type = OBJECTTYPE_ENTITY;
+
+        newObject->height = object.attribute("height").as_int();
+        newObject->width = object.attribute("width").as_int();
+        
+        newObject->x = object.attribute("x").as_int();
+        newObject->y = object.attribute("y").as_int();
+        
+        newObject->name = object.attribute("name").as_string();
+
+        group->object.Add(newObject);
     }
 
     return ret;
