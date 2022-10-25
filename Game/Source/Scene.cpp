@@ -7,17 +7,9 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Map.h"
-#include "Player.h"
-
-# include <iostream>
-# include <cmath>
-# include <iomanip>
-# include <cstdlib>
 
 #include "Defs.h"
 #include "Log.h"
-using namespace std;
-
 
 Scene::Scene() : Module()
 {
@@ -87,23 +79,19 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		app->LoadGameRequest();
 
+	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		app->render->camera.y += 1;
 
+	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		app->render->camera.y -= 1;
 
-	int offset = 384;
-	int objectPosition = -(player->position.x);
-	int targetPosition;
+	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		app->render->camera.x += 1;
 
+	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		app->render->camera.x -= 1;
 
-	targetPosition = objectPosition + offset;
-
-	
-	app->render->camera.x = targetPosition;
-
-
-	if (targetPosition > 0) {
-		app->render->camera.x = 0;
-	}
-
+	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 
 	// Draw map
 	app->map->Draw();
