@@ -33,8 +33,6 @@ private:
 
 	// L07 TODO 5: Add physics to the player - declare a Physics body
 	PhysBody* pbody;
-	b2PolygonShape* polyL;
-	b2PolygonShape* polyR;
 
 	int width;
 	int height;
