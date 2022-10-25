@@ -37,6 +37,8 @@ private:
 	int width;
 	int height;
 
+	int remainingJumpSteps;
+
 };
 
 #endif // __PLAYER_H__

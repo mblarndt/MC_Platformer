@@ -54,7 +54,7 @@ bool Player::Update()
 
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-		//position.y -= 1;
+		remainingJumpSteps = 6;
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
@@ -71,9 +71,19 @@ bool Player::Update()
 		velocity = b2Vec2(10, -GRAVITY_Y);
 	}
 
+	if (remainingJumpSteps > 0) {
+		pbody->body->ApplyForce(b2Vec2(0, -400), pbody->body->GetPosition(), true);
+		remainingJumpSteps--;
+	}
 
 
-	pbody->body->SetLinearVelocity(velocity);
+	if (remainingJumpSteps == 0) {
+		pbody->body->SetLinearVelocity(velocity);
+	}
+	
+	
+
+
 
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
