@@ -28,8 +28,8 @@ bool Player::Awake() {
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
-	width = 32;
-	height = 32;
+	width = 30;
+	height = 30;
 
 	return true;
 }
@@ -41,7 +41,21 @@ bool Player::Start() {
 
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, bodyType::DYNAMIC);
-	pleft = app->physics->CreateRectangle(position.x + 32, position.y + 32, 5, 15, bodyType::DYNAMIC);
+
+	b2PolygonShape polyShapeR;
+	polyShapeR.SetAsBox(0.1,0.5, b2Vec2(0.5, 0),0);
+
+	b2PolygonShape polyShapeL;
+	polyShapeL.SetAsBox(0.1, 0.5, b2Vec2(-0.5, 0), 0);
+
+	b2FixtureDef plR;
+	plR.shape = &polyShapeR;
+
+	b2FixtureDef plL;
+	plL.shape = &polyShapeL;
+
+	pbody->body->CreateFixture(&plR);
+	pbody->body->CreateFixture(&plL);
 
 	return true;
 }
@@ -54,10 +68,7 @@ bool Player::Update()
 
 
 	// L07 TODO 5: Add physics to the player - updated player position using physics
-	
-
 	pbody->body->SetFixedRotation(true);
-	pleft->body->SetFixedRotation(true);
 
 
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
