@@ -42,6 +42,9 @@ bool Player::Start() {
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, bodyType::DYNAMIC);
 
+
+
+
 	b2PolygonShape polyShapeR;
 	polyShapeR.SetAsBox(0.1,0.5, b2Vec2(0.5, 0),0);
 
@@ -54,14 +57,14 @@ bool Player::Start() {
 	b2FixtureDef plL;
 	plL.shape = &polyShapeL;
 
-	pbody->body->CreateFixture(&plR);
-	pbody->body->CreateFixture(&plL);
+	//pbody->body->CreateFixture(&plR);
+	//pbody->body->CreateFixture(&plL);
 
 	return true;
 }
 
 
-b2Vec2 velocity = b2Vec2(10, -GRAVITY_Y);
+b2Vec2 velocity = b2Vec2(0, -GRAVITY_Y);
 
 bool Player::Update()
 {
@@ -73,7 +76,8 @@ bool Player::Update()
 
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-		remainingJumpSteps = 6;
+		remainingJumpSteps = 3;
+		//pbody->body->ApplyForce(b2Vec2(0,2) , pbody->body->GetPosition(), true);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
@@ -94,7 +98,7 @@ bool Player::Update()
 
 	if (remainingJumpSteps > 0)
 	{
-			pbody->body->ApplyForce(b2Vec2(0, -400), pbody->body->GetPosition(), true);
+			pbody->body->ApplyLinearImpulse(b2Vec2(0, -8), pbody->body->GetPosition(), true);
 			remainingJumpSteps--;
 	}
 
