@@ -20,7 +20,9 @@
     <ClCompile Include="Source\Item.cpp" />
     <ClCompile Include="Source\Map.cpp" />
     <ClCompile Include="Source\Physics.cpp" />
+
     <ClCompile Include="ContactListener.cpp" />
+
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -65,6 +67,7 @@
     <ClInclude Include="Source\Map.h" />
     <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="ContactListener.h" />
+
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

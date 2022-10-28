@@ -28,8 +28,10 @@ bool Player::Awake() {
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
+
 	width = 30;
 	height = 30;
+
 
 	return true;
 }
@@ -43,23 +45,6 @@ bool Player::Start() {
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, bodyType::DYNAMIC);
 
 
-
-
-	b2PolygonShape polyShapeR;
-	polyShapeR.SetAsBox(0.1,0.5, b2Vec2(0.5, 0),0);
-
-	b2PolygonShape polyShapeL;
-	polyShapeL.SetAsBox(0.1, 0.5, b2Vec2(-0.5, 0), 0);
-
-	b2FixtureDef plR;
-	plR.shape = &polyShapeR;
-
-	b2FixtureDef plL;
-	plL.shape = &polyShapeL;
-
-	//pbody->body->CreateFixture(&plR);
-	//pbody->body->CreateFixture(&plL);
-
 	return true;
 }
 
@@ -68,6 +53,7 @@ b2Vec2 velocity = b2Vec2(0, -GRAVITY_Y);
 
 bool Player::Update()
 {
+
 
 
 	// L07 TODO 5: Add physics to the player - updated player position using physics
@@ -106,8 +92,6 @@ bool Player::Update()
 	{
 		pbody->body->SetLinearVelocity(velocity);
 	}
-	
-
 
 
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);

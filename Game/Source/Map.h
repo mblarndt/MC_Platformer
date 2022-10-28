@@ -58,6 +58,7 @@ struct Properties
 		ListItem<Property*>* item;
 		item = list.start;
 
+
 		while (item != NULL)
 		{
 			RELEASE(item->data);
@@ -69,6 +70,7 @@ struct Properties
 
 	// L06: DONE 7: Method to ask for the value of a custom property
 	Property* GetProperty(const char* name);
+
 
 	List<Property*> list;
 };
@@ -138,6 +140,16 @@ struct MapData
 };
 
 
+struct ObjectData
+{
+	int id;
+	ObjectTypes type;
+	int x;
+	int y;
+	int width;
+	int height;
+};
+
 
 class Map : public Module
 {
@@ -180,9 +192,11 @@ private:
 	// L06: DONE 6: Load a group of properties 
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
+
 	bool LoadObjectGroups(pugi::xml_node mapNode);
 
 	bool LoadObjects(pugi::xml_node& node, ObjectGroups* group);
+
 
 public: 
 
