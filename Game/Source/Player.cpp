@@ -25,11 +25,12 @@ bool Player::Awake() {
 	//texturePath = "Assets/Textures/player/idle1.png";
 
 	//L02: DONE 5: Get Player parameters from XML
-	position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
-	texturePath = parameters.attribute("texturepath").as_string();
-	width = 30;
-	height = 30;
+	position.x = parameters.child("startpos").attribute("x").as_int();
+	position.y = parameters.child("startpos").attribute("y").as_int();
+	texturePath = parameters.child("texture").attribute("path").as_string();
+	width = parameters.child("texture").attribute("width").as_int();
+	height = parameters.child("texture").attribute("height").as_int();
+	speed = parameters.child("movement").attribute("speed").as_int();
 
 	return true;
 }
@@ -43,28 +44,12 @@ bool Player::Start() {
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, bodyType::DYNAMIC);
 
 
-
-
-	b2PolygonShape polyShapeR;
-	polyShapeR.SetAsBox(0.1,0.5, b2Vec2(0.5, 0),0);
-
-	b2PolygonShape polyShapeL;
-	polyShapeL.SetAsBox(0.1, 0.5, b2Vec2(-0.5, 0), 0);
-
-	b2FixtureDef plR;
-	plR.shape = &polyShapeR;
-
-	b2FixtureDef plL;
-	plL.shape = &polyShapeL;
-
-	//pbody->body->CreateFixture(&plR);
-	//pbody->body->CreateFixture(&plL);
-
 	return true;
 }
 
 
-b2Vec2 velocity = b2Vec2(0, -GRAVITY_Y);
+b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
+
 
 bool Player::Update()
 {
@@ -72,40 +57,49 @@ bool Player::Update()
 
 	// L07 TODO 5: Add physics to the player - updated player position using physics
 	pbody->body->SetFixedRotation(true);
+	b2Vec2 vel = pbody->body->GetLinearVelocity();
 
 
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-		remainingJumpSteps = 6;
-		//pbody->body->ApplyForce(b2Vec2(0,2) , pbody->body->GetPosition(), true);
+		isjumping = true;
+		remainingJumpSteps = 10;
+		vel.y = -10;//upwards - don't change x velocity
+		pbody->body->SetLinearVelocity(vel);
+		isjumping = false;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
+	else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
 		//position.y += 1;
-		int val = velocity.x* (-1);
-		velocity = b2Vec2(val, -GRAVITY_Y);
+		int val = velocitx.x* (-1);
+		velocitx = b2Vec2(val, -GRAVITY_Y);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
+	else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
 		//position.x -= 1;
-		velocity = b2Vec2(-10, -GRAVITY_Y);
+		velocitx = b2Vec2(-10, -GRAVITY_Y);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
+	else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
 		//position.x -= 1;
-		velocity = b2Vec2(10, -GRAVITY_Y);
+		velocitx = b2Vec2(10, -GRAVITY_Y);
 	}
 
-	if (remainingJumpSteps > 0)
-	{
-			pbody->body->ApplyLinearImpulse(b2Vec2(0, -6), pbody->body->GetPosition(), true);
+
+
+	b2Vec2 vale = pbody->body->GetLinearVelocity();
+
+	if(isjumping==false)
+		if (remainingJumpSteps > 0) {
+			pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
 			remainingJumpSteps--;
-	}
+		}
+		else {
+			pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, velocitx.y));
+		}
 
-	else 
-	{
-		pbody->body->SetLinearVelocity(velocity);
-	}
+
+
 	
 
 
@@ -120,6 +114,27 @@ bool Player::Update()
 
 bool Player::CleanUp()
 {
+
+	return true;
+}
+
+bool Player::LoadState(pugi::xml_node& data)
+{
+	position.x = data.child("camera").attribute("x").as_int();
+	position.y = data.child("camera").attribute("y").as_int();
+
+	return true;
+}
+
+// L03: DONE 8: Create a method to save the state of the renderer
+// using append_child and append_attribute
+bool Player::SaveState(pugi::xml_node& data)
+{
+	pugi::xml_node player = data.append_child("position");
+
+	player.append_attribute("x") = position.x;
+	player.append_attribute("y") = position.y;
+
 
 	return true;
 }
