@@ -72,6 +72,17 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+
+	//Load First Level
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+
+	//Load Second Level
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+
+	//Load Startposition of Level
+	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+
+
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		app->SaveGameRequest();
@@ -82,14 +93,22 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		app->render->camera.y += 1;
 
+	//Camera Movement
+	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		app->render->camera.y += 1;
+
 	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 		app->render->camera.y -= 1;
+
 
 	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 		app->render->camera.x += 1;
 
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x -= 1;
+
+	if(player->position.x > 400 && player->position.x < 2576)
+		app->render->camera.x = -(player->position.x) + 400;
 
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 

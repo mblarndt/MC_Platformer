@@ -28,8 +28,10 @@ bool Player::Awake() {
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
-	width = 32;
-	height = 32;
+
+	width = 30;
+	height = 30;
+
 
 	return true;
 }
@@ -42,38 +44,55 @@ bool Player::Start() {
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, bodyType::DYNAMIC);
 
+
 	return true;
 }
+
+
+b2Vec2 velocity = b2Vec2(0, -GRAVITY_Y);
 
 bool Player::Update()
 {
 
 
+
 	// L07 TODO 5: Add physics to the player - updated player position using physics
-	b2Vec2 velocity = b2Vec2(0, -GRAVITY_Y);
+	pbody->body->SetFixedRotation(true);
+
 
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-		//position.y -= 1;
+		remainingJumpSteps = 6;
+		//pbody->body->ApplyForce(b2Vec2(0,2) , pbody->body->GetPosition(), true);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
 		//position.y += 1;
+		int val = velocity.x* (-1);
+		velocity = b2Vec2(val, -GRAVITY_Y);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
 		//position.x -= 1;
 		velocity = b2Vec2(-10, -GRAVITY_Y);
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
 		//position.x -= 1;
 		velocity = b2Vec2(10, -GRAVITY_Y);
 	}
 
+	if (remainingJumpSteps > 0)
+	{
+			pbody->body->ApplyLinearImpulse(b2Vec2(0, -6), pbody->body->GetPosition(), true);
+			remainingJumpSteps--;
+	}
 
+	else 
+	{
+		pbody->body->SetLinearVelocity(velocity);
+	}
 
-	pbody->body->SetLinearVelocity(velocity);
 
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);

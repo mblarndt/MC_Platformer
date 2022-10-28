@@ -58,6 +58,7 @@ struct Properties
 		ListItem<Property*>* item;
 		item = list.start;
 
+
 		while (item != NULL)
 		{
 			RELEASE(item->data);
@@ -69,6 +70,7 @@ struct Properties
 
 	// L06: DONE 7: Method to ask for the value of a custom property
 	Property* GetProperty(const char* name);
+
 
 	List<Property*> list;
 };
@@ -100,6 +102,27 @@ struct MapLayer
 	}
 };
 
+struct Object
+{
+	int id;
+	SString stringType;
+	ObjectTypes type;
+	SString name;
+	int x;
+	int y;
+	int width;
+	int height;
+
+};
+
+struct ObjectGroups 
+{
+	List<Object*> object;
+	int id;
+	SString name;
+	Properties properties;
+};
+
 // L04: DONE 1: Create a struct needed to hold the information to Map node
 struct MapData
 {
@@ -112,7 +135,10 @@ struct MapData
 
 	// L05: DONE 2: Add a list/array of layers to the map
 	List<MapLayer*> maplayers;
+
+	List<ObjectGroups*> objectgroups;
 };
+
 
 struct ObjectData
 {
@@ -123,6 +149,7 @@ struct ObjectData
 	int width;
 	int height;
 };
+
 
 class Map : public Module
 {
@@ -165,7 +192,11 @@ private:
 	// L06: DONE 6: Load a group of properties 
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
-	bool LoadObjects(pugi::xml_node mapFile);
+
+	bool LoadObjectGroups(pugi::xml_node mapNode);
+
+	bool LoadObjects(pugi::xml_node& node, ObjectGroups* group);
+
 
 public: 
 
