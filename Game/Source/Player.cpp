@@ -76,7 +76,7 @@ bool Player::Update()
 
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-		remainingJumpSteps = 3;
+		remainingJumpSteps = 6;
 		//pbody->body->ApplyForce(b2Vec2(0,2) , pbody->body->GetPosition(), true);
 	}
 
@@ -98,7 +98,7 @@ bool Player::Update()
 
 	if (remainingJumpSteps > 0)
 	{
-			pbody->body->ApplyLinearImpulse(b2Vec2(0, -8), pbody->body->GetPosition(), true);
+			pbody->body->ApplyLinearImpulse(b2Vec2(0, -6), pbody->body->GetPosition(), true);
 			remainingJumpSteps--;
 	}
 
