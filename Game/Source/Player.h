@@ -46,6 +46,8 @@ private:
 	int width;
 	int height;
 	float speed;
+	float jumpforce;
+	int jumpsteps;
 
 	int remainingJumpSteps;
 

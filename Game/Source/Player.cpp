@@ -31,6 +31,8 @@ bool Player::Awake() {
 	width = parameters.child("texture").attribute("width").as_int();
 	height = parameters.child("texture").attribute("height").as_int();
 	speed = parameters.child("movement").attribute("speed").as_int();
+	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
+	jumpsteps = parameters.child("movement").attribute("jumpsteps").as_int();
 
 	return true;
 }
@@ -62,41 +64,38 @@ bool Player::Update()
 
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+		remainingJumpSteps = jumpsteps;
+		vel.y = -jumpforce;//upwards - don't change x velocity
 		isjumping = true;
-		remainingJumpSteps = 10;
-		vel.y = -10;//upwards - don't change x velocity
-		pbody->body->SetLinearVelocity(vel);
-		isjumping = false;
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
-		//position.y += 1;
-		int val = velocitx.x* (-1);
-		velocitx = b2Vec2(val, -GRAVITY_Y);
+		velocitx = b2Vec2(speed * (-1), -GRAVITY_Y);
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
-		//position.x -= 1;
-		velocitx = b2Vec2(-10, -GRAVITY_Y);
+		velocitx = b2Vec2(-speed, -GRAVITY_Y);
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
 		//position.x -= 1;
-		velocitx = b2Vec2(10, -GRAVITY_Y);
+		velocitx = b2Vec2(speed, -GRAVITY_Y);
 	}
 
 
 
 	b2Vec2 vale = pbody->body->GetLinearVelocity();
 
-	if(isjumping==false)
+	if (isjumping == true)
 		if (remainingJumpSteps > 0) {
 			pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
 			remainingJumpSteps--;
 		}
-		else {
-			pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, velocitx.y));
-		}
+		else
+			isjumping = false;
+	else {
+		pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, velocitx.y));
+	}
 
 
 
