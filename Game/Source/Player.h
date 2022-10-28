@@ -5,6 +5,10 @@
 #include "Point.h"
 #include "SDL/include/SDL.h"
 
+#define MAX_JUMP_SPEED 7.0f
+#define MAX_VEL 4.0f
+#define DAMP 0.9f
+
 struct SDL_Texture;
 
 class Player : public Entity
@@ -36,6 +40,8 @@ private:
 
 	int width;
 	int height;
+
+	int remainingJumpSteps;
 
 };
 

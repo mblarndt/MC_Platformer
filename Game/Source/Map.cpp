@@ -192,9 +192,9 @@ bool Map::Load()
     }
     
     // L07 TODO 3: Create colliders
-    app->physics->CreateRectangle(272, 416, 544, 128 , STATIC);
-    app->physics->CreateRectangle(272, 736, 544, 64, STATIC);
-    app->physics->CreateRectangle(272, 736, 544, 64, STATIC);
+    //app->physics->CreateRectangle(272, 416, 544, 128 , STATIC);
+    //app->physics->CreateRectangle(272, 736, 544, 64, STATIC);
+    //app->physics->CreateRectangle(272, 736, 544, 64, STATIC);
     // Later you can create a function here to load and create the colliders from the map
     
 
@@ -390,6 +390,8 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         newObject->y = object.attribute("y").as_int();
         
         newObject->name = object.attribute("name").as_string();
+
+        app->physics->CreateRectangle(newObject->x + (newObject->width)/2, newObject->y + (newObject->height)/2, newObject->width, newObject->height, STATIC);
 
         group->object.Add(newObject);
     }
