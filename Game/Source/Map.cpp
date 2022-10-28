@@ -57,7 +57,7 @@ void Map::Draw()
 
     while (mapLayerItem != NULL) {
 
-        //L06: DONE 7: use GetProperty method to ask each layer if your â€œDrawâ€ property is true.
+        //L06: DONE 7: use GetProperty method to ask each layer if your “Draw” property is true.
         if (mapLayerItem->data->properties.GetProperty("Draw") != NULL && mapLayerItem->data->properties.GetProperty("Draw")->value) {
 
             for (int x = 0; x < mapLayerItem->data->width; x++)
@@ -192,7 +192,9 @@ bool Map::Load()
     }
     
     // L07 TODO 3: Create colliders
-
+    //app->physics->CreateRectangle(272, 416, 544, 128 , STATIC);
+    //app->physics->CreateRectangle(272, 736, 544, 64, STATIC);
+    //app->physics->CreateRectangle(272, 736, 544, 64, STATIC);
     // Later you can create a function here to load and create the colliders from the map
     
 
@@ -228,6 +230,7 @@ bool Map::Load()
     }
 
     LoadObjectGroups(mapFileXML.child("map"));
+
 
 
     if(mapFileXML) mapFileXML.reset();
@@ -337,11 +340,9 @@ bool Map::LoadAllLayers(pugi::xml_node mapNode) {
     return ret;
 }
 
-
 bool Map::LoadObjectGroups(pugi::xml_node mapNode)
-
 {
-    bool ret = false;
+    bool ret = true;
 
     for (pugi::xml_node objectNode = mapNode.child("objectgroup"); objectNode && ret; objectNode = objectNode.next_sibling("objectgroup"))
     {

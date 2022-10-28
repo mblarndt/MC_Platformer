@@ -41,9 +41,7 @@ private:
 	int width;
 	int height;
 
-
 	int remainingJumpSteps;
-
 
 };
 
