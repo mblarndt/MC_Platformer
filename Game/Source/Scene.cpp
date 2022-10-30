@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Map.h"
+#include "Physics.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -81,6 +82,10 @@ bool Scene::Update(float dt)
 
 	//Load Startposition of Level
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+
+	//Enable Debug
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+		
 
 
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)

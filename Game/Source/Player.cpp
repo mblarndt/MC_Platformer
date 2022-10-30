@@ -63,10 +63,10 @@ bool Player::Update()
 
 
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
+
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-		remainingJumpSteps = jumpsteps;
-		vel.y = -jumpforce;//upwards - don't change x velocity
-		isjumping = true;
+			remainingJumpSteps = jumpsteps;
+			isjumping = true;
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
@@ -84,10 +84,10 @@ bool Player::Update()
 
 
 
-	b2Vec2 vale = pbody->body->GetLinearVelocity();
 
 	if (isjumping == true)
 		if (remainingJumpSteps > 0) {
+			vel.y = -jumpforce;//upwards - don't change x velocity
 			pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
 			remainingJumpSteps--;
 		}
