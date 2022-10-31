@@ -31,6 +31,8 @@ bool Player::Awake() {
 	width = 30;
 	height = 30;
 
+	movement.PushBack({});
+
 	return true;
 }
 
