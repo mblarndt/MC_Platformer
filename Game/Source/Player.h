@@ -3,6 +3,9 @@
 
 #include "Entity.h"
 #include "Point.h"
+
+#include "Animation.h"
+
 #include "SDL/include/SDL.h"
 
 #define MAX_JUMP_SPEED 7.0f
@@ -26,6 +29,8 @@ public:
 	bool Update();
 
 	bool CleanUp();
+
+	Animation movement;
 
 public:
 
