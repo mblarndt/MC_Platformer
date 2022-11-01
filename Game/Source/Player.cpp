@@ -45,6 +45,11 @@ bool Player::Start() {
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, bodyType::DYNAMIC);
 
+	// L07 DONE 7: Assign collider type
+	pbody->ctype = ColliderType::PLAYER;
+
+	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
+	pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
 
 	return true;
 }
@@ -136,4 +141,25 @@ bool Player::SaveState(pugi::xml_node& data)
 
 
 	return true;
+}
+
+// L07 DONE 6: Define OnCollision function for the player. Check the virtual function on Entity class
+void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
+
+	// L07 DONE 7: Detect the type of collision
+
+	switch (physB->ctype)
+	{
+	case ColliderType::ITEM:
+		LOG("Collision ITEM");
+		app->audio->PlayFx(pickCoinFxId);
+		break;
+	case ColliderType::PLATFORM:
+		LOG("Collision PLATFORM");
+		break;
+	case ColliderType::UNKNOWN:
+		LOG("Collision UNKNOWN");
+		break;
+	}
+
 }
