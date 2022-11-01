@@ -25,7 +25,7 @@
   <scene>
 	  <player>
 		  <startpos x="192" y="322"/>
-		  <texture path="Assets/Textures/Slime.png" width="30" height="30"/>
+		  <texture path="Assets/Textures/Slime_Spritesheet.png" width="30" height="30"/>
 		  <movement speed="7" jumpforce="3" jumpsteps="7"/>
 	  </player>
     <item x="250" y="322" texturepath="Assets/Textures/goldCoin.png"/>
