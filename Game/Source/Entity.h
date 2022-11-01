@@ -6,7 +6,7 @@
 #include "Input.h"
 #include "Render.h"
 
-struct Collider;
+class PhysBody;
 
 enum class EntityType
 {
@@ -82,7 +82,7 @@ public:
 
 	// Possible properties, it depends on how generic we
 	// want our Entity class, maybe it's not renderable...
-	iPoint position;       
+	iPoint position;
 	bool renderable = true;
 };
 

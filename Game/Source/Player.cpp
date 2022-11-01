@@ -70,8 +70,10 @@ bool Player::Update()
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+		jumpcount++;
+		if (jumpcount == 1) {
 			remainingJumpSteps = jumpsteps;
-			isjumping = true;
+		}
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
@@ -89,15 +91,11 @@ bool Player::Update()
 
 
 
-
-	if (isjumping == true)
-		if (remainingJumpSteps > 0) {
-			vel.y = -jumpforce;//upwards - don't change x velocity
-			pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
-			remainingJumpSteps--;
-		}
-		else
-			isjumping = false;
+	if (remainingJumpSteps > 0) {
+		vel.y = -jumpforce;//upwards - don't change x velocity
+		pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
+		remainingJumpSteps--;
+	}
 	else {
 		pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, velocitx.y));
 	}
@@ -156,6 +154,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	case ColliderType::PLATFORM:
 		LOG("Collision PLATFORM");
+		break;
+	case ColliderType::FLOOR:
+		LOG("Collision FLOOR");
+		jumpcount = 0;
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");

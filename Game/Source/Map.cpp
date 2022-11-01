@@ -385,7 +385,7 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         cstr = "c" + cnr;
 
         PhysBody* cstr  = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
-        cstr->ctype = ColliderType::PLAYER;
+        cstr->ctype = ColliderType::FLOOR;
 
 
         group->object.Add(newObject);
