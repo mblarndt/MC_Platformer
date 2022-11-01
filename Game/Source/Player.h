@@ -3,6 +3,9 @@
 
 #include "Entity.h"
 #include "Point.h"
+
+#include "Animation.h"
+
 #include "SDL/include/SDL.h"
 
 #define MAX_JUMP_SPEED 7.0f
@@ -26,6 +29,19 @@ public:
 	bool Update();
 
 	bool CleanUp();
+	
+	Animation idle;
+	Animation movement;
+	Animation jumpStart;
+	Animation jumpEnd;
+	Animation jumpUp;
+	Animation jumpDown;
+
+	int jumpStart_counter = 4;
+	int frameCounter;
+
+	// Current animation check
+	Animation* currentAnimation = nullptr;
 
 public:
 
@@ -53,7 +69,6 @@ private:
 	float speed;
 	float jumpforce;
 	int jumpsteps;
-
 	int remainingJumpSteps;
 
 };
