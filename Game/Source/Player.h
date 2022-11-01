@@ -31,6 +31,10 @@ public:
 	bool CleanUp();
 
 	Animation movement;
+	Animation idle;
+
+	// Current animation check
+	Animation* currentAnimation = nullptr;
 
 public:
 

@@ -31,10 +31,6 @@ bool Player::Awake() {
 	width = 30;
 	height = 30;
 
-	// Sprite rectangle inside the keys of the function
-	// Input the animation steps in order
-	movement.PushBack({});
-	movement.loop = false;
 
 	return true;
 }
@@ -43,12 +39,19 @@ bool Player::Start() {
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);
+	
+	// Sprite rectangle inside the keys of the function
+	// Input the animation steps in order
+	movement.PushBack({  1, 120, 44, 30 });
+	movement.PushBack({ 60, 120, 44, 30 });
+	movement.loop = true;
+
+	idle.PushBack({15, 8, 30, 32});
+	idle.PushBack({75, 8, 30, 32});
+	movement.loop = true;
 
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, bodyType::DYNAMIC);
-
-
-
 
 	b2PolygonShape polyShapeR;
 	polyShapeR.SetAsBox(0.1,0.5, b2Vec2(0.5, 0),0);
@@ -73,53 +76,47 @@ b2Vec2 velocity = b2Vec2(0, -GRAVITY_Y);
 
 bool Player::Update()
 {
-
-
 	// L07 TODO 5: Add physics to the player - updated player position using physics
 	pbody->body->SetFixedRotation(true);
 
-
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
-	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-		remainingJumpSteps = 6;
-		//pbody->body->ApplyForce(b2Vec2(0,2) , pbody->body->GetPosition(), true);
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
-		//position.y += 1;
-		int val = velocity.x* (-1);
-		velocity = b2Vec2(val, -GRAVITY_Y);
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
-		//position.x -= 1;
-		velocity = b2Vec2(-10, -GRAVITY_Y);
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
-		//position.x -= 1;
-		velocity = b2Vec2(10, -GRAVITY_Y);
-	}
-
-	if (remainingJumpSteps > 0)
-	{
-			pbody->body->ApplyLinearImpulse(b2Vec2(0, -6), pbody->body->GetPosition(), true);
-			remainingJumpSteps--;
-	}
-
-	else 
-	{
-		pbody->body->SetLinearVelocity(velocity);
-	}
 	
+	currentAnimation = &idle;
 
+	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+		pbody->body->SetLinearVelocity(b2Vec2(-10, 0));
+		
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+			pbody->body->ApplyLinearImpulse(b2Vec2(-10, -6), pbody->body->GetPosition(), true);
+		}
+	}
 
-
+	else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+		pbody->body->SetLinearVelocity(b2Vec2(10, 0));
+		
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+			pbody->body->ApplyLinearImpulse(b2Vec2(0, -6), pbody->body->GetPosition(), true);
+		}
+	}
+	else if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+		pbody->body->ApplyLinearImpulse(b2Vec2(0, -6), pbody->body->GetPosition(), true);
+	}
+	else
+	{
+		b2Vec2 v = pbody->body->GetLinearVelocity();
+		v.x = 10;
+		pbody->body->SetLinearVelocity(v);
+	}
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
 
-	app->render->DrawTexture(texture, position.x, position.y);
+	if (velocity == b2Vec2(0, -GRAVITY_Y))	currentAnimation = &idle;
 
+	currentAnimation->Update();
+	
+	SDL_Rect rect = currentAnimation->GetCurrentFrame();
+
+	app->render->DrawTexture(texture, position.x, position.y, &rect);
 	return true;
 }
 

@@ -190,13 +190,7 @@ bool Map::Load()
     {
         ret = LoadAllLayers(mapFileXML.child("map"));
     }
-    
-    // L07 TODO 3: Create colliders
-    //app->physics->CreateRectangle(272, 416, 544, 128 , STATIC);
-    //app->physics->CreateRectangle(272, 736, 544, 64, STATIC);
-    //app->physics->CreateRectangle(272, 736, 544, 64, STATIC);
-    // Later you can create a function here to load and create the colliders from the map
-    
+        
 
     if(ret == true)
     {
@@ -230,8 +224,6 @@ bool Map::Load()
     }
 
     LoadObjectGroups(mapFileXML.child("map"));
-
-
 
     if(mapFileXML) mapFileXML.reset();
 
