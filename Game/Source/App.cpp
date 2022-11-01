@@ -25,7 +25,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	render = new Render();
 	tex = new Textures();
 	audio = new Audio();
-	//L07 TODO 2: Add Physics module
+	
+	// L07 TODO 2: Add Physics module
 	physics = new Physics();
 	scene = new Scene();
 	entityManager = new EntityManager();

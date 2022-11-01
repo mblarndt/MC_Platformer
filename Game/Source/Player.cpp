@@ -31,7 +31,10 @@ bool Player::Awake() {
 	width = 30;
 	height = 30;
 
+	// Sprite rectangle inside the keys of the function
+	// Input the animation steps in order
 	movement.PushBack({});
+	movement.loop = false;
 
 	return true;
 }
