@@ -29,9 +29,16 @@ public:
 	bool Update();
 
 	bool CleanUp();
-
-	Animation movement;
+	
 	Animation idle;
+	Animation movement;
+	Animation jumpStart;
+	Animation jumpEnd;
+	Animation jumpUp;
+	Animation jumpDown;
+
+	int jumpStart_counter = 4;
+	int frameCounter;
 
 	// Current animation check
 	Animation* currentAnimation = nullptr;

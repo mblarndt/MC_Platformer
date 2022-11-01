@@ -50,6 +50,32 @@ bool Player::Start() {
 	idle.PushBack({75, 8, 30, 32});
 	movement.loop = true;
 
+	jumpStart.PushBack({135, 48, 30, 32});
+	jumpStart.PushBack({191, 48, 34, 32});
+	jumpStart.PushBack({});
+	jumpStart.PushBack({});
+	jumpStart.PushBack({});
+	jumpStart.PushBack({});
+	jumpStart.PushBack({});
+	jumpStart.loop = false;
+	
+	jumpEnd.PushBack({});
+	jumpEnd.PushBack({});
+	jumpEnd.PushBack({});
+	jumpEnd.PushBack({});
+	jumpEnd.PushBack({});
+	jumpEnd.PushBack({});
+	jumpEnd.PushBack({});
+	jumpEnd.loop = false;
+
+	jumpUp.PushBack({13, 48, 31, 32});
+	jumpUp.loop = true;
+
+	jumpDown.PushBack({75, 48, 31, 32});
+	jumpDown.loop = true;
+
+	
+	
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, bodyType::DYNAMIC);
 
@@ -85,32 +111,36 @@ bool Player::Update()
 
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 		pbody->body->SetLinearVelocity(b2Vec2(-10, 0));
-		
-		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-			pbody->body->ApplyLinearImpulse(b2Vec2(-10, -6), pbody->body->GetPosition(), true);
-		}
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
 		pbody->body->SetLinearVelocity(b2Vec2(10, 0));
-		
-		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-			pbody->body->ApplyLinearImpulse(b2Vec2(0, -6), pbody->body->GetPosition(), true);
-		}
 	}
-	else if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-		pbody->body->ApplyLinearImpulse(b2Vec2(0, -6), pbody->body->GetPosition(), true);
-	}
+	
+	// if not pressing anything
 	else
 	{
 		b2Vec2 v = pbody->body->GetLinearVelocity();
 		v.x = 10;
 		pbody->body->SetLinearVelocity(v);
+	}	
+	
+	//jump
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+		pbody->body->ApplyLinearImpulse(b2Vec2(0, -6), pbody->body->GetPosition(), true);
 	}
+	
+	b2Vec2 v = pbody->body->GetLinearVelocity();
+	
+	if (v.y > 0) currentAnimation = &jumpDown;
+	if (v.y < 0) currentAnimation = &jumpUp;
+
+
+
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
 
-	if (velocity == b2Vec2(0, -GRAVITY_Y))	currentAnimation = &idle;
+	//if (velocity == b2Vec2(0, -GRAVITY_Y))	currentAnimation = &idle;
 
 	currentAnimation->Update();
 	
