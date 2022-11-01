@@ -11,4 +11,7 @@
 	<renderer>
 		<camera x="338" y="0" />
 	</renderer>
+	<player>
+		<position x="192" y="322"/>
+	</player>
 </save_state>

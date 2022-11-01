@@ -65,6 +65,8 @@
     <ClInclude Include="Source\Map.h" />
     <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="ContactListener.h" />
+    <ClInclude Include="Source\Animation.h" />
+    
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

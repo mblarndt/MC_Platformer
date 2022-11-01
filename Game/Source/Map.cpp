@@ -37,18 +37,7 @@ void Map::Draw()
     if(mapLoaded == false)
         return;
 
-    /*
-    // L04: DONE 6: Iterate all tilesets and draw all their 
-    // images in 0,0 (you should have only one tileset for now)
 
-    ListItem<TileSet*>* tileset;
-    tileset = mapData.tilesets.start;
-
-    while (tileset != NULL) {
-        app->render->DrawTexture(tileset->data->texture,0,0);
-        tileset = tileset->next;
-    }
-    */
 
     // L05: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
 
@@ -57,7 +46,7 @@ void Map::Draw()
 
     while (mapLayerItem != NULL) {
 
-        //L06: DONE 7: use GetProperty method to ask each layer if your “Draw” property is true.
+        //L06: DONE 7: use GetProperty method to ask each layer if your â€œDrawâ€ property is true.
         if (mapLayerItem->data->properties.GetProperty("Draw") != NULL && mapLayerItem->data->properties.GetProperty("Draw")->value) {
 
             for (int x = 0; x < mapLayerItem->data->width; x++)
@@ -190,7 +179,7 @@ bool Map::Load()
     {
         ret = LoadAllLayers(mapFileXML.child("map"));
     }
-        
+
 
     if(ret == true)
     {
@@ -357,8 +346,10 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
 
 
     //Iterate over all the obects and assign the values
-    pugi::xml_node object;
+    int cnr = 1;
+    SString cstr;
 
+    pugi::xml_node object;
     for (object = node.child("object"); object && ret; object = object.next_sibling("object"))
     {
         Object* newObject = new Object();
@@ -383,9 +374,15 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         
         newObject->name = object.attribute("name").as_string();
 
-        app->physics->CreateRectangle(newObject->x + (newObject->width)/2, newObject->y + (newObject->height)/2, newObject->width, newObject->height, STATIC);
+        cstr = "c" + cnr;
+
+        PhysBody* cstr  = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
+        cstr->ctype = ColliderType::FLOOR;
+
 
         group->object.Add(newObject);
+
+        cnr++;
     }
 
     return ret;
