@@ -32,6 +32,10 @@ public:
 	bool LoadState(pugi::xml_node&);
 	bool SaveState(pugi::xml_node&);
 
+	void OnCollision(PhysBody* physA, PhysBody* physB) {
+
+	};
+
 private:
 
 	//L02: DONE 1: Declare player parameters
