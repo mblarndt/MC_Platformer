@@ -45,8 +45,8 @@ bool Player::Start() {
 	
 	// Sprite rectangle inside the keys of the function
 	// Input the animation steps in order
-	movement.PushBack({  1, 120, 44, 30 });
-	movement.PushBack({ 60, 120, 44, 30 });
+	movement.PushBack({  1, 90, 44, 30 });
+	movement.PushBack({ 60, 90, 44, 30 });
 	movement.loop = true;
 
 	idle.PushBack({15, 8, 30, 32});
@@ -101,12 +101,20 @@ bool Player::Update()
 
 	// L07 TODO 5: Add physics to the player - updated player position using physics
 	pbody->body->SetFixedRotation(true);
-	b2Vec2 vel = pbody->body->GetLinearVelocity();
+	
+	b2Vec2 v = pbody->body->GetLinearVelocity();
 
 	//L02: DONE 4: modify the position of the player using arrow keys and render the texture
-
+	if (v.y == 0) {
+		if(v.x <  0)	currentAnimation = &movement;
+		
+		if(v.x >  0)	currentAnimation = &movement;
+		
+		if(v.x == 0)	currentAnimation = &idle;
+	}
+	if (v.y > 0) currentAnimation = &jumpDown;
 	
-	currentAnimation = &idle;
+	if (v.y < 0) currentAnimation = &jumpUp;
 
 /*----------------------------Player Movement Variation 2--------------------------*/
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
@@ -161,16 +169,10 @@ bool Player::Update()
 	}
 /*----------------------------End of Variation 2---------------------------------*/
 
-	b2Vec2 v = pbody->body->GetLinearVelocity();
-	
-	if (v.y > 0) currentAnimation = &jumpDown;
-	if (v.y < 0) currentAnimation = &jumpUp;
-  
-
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
 
-	if (v == b2Vec2(0, -GRAVITY_Y))	currentAnimation = &idle;
+//	if (v == b2Vec2(0, -GRAVITY_Y))	currentAnimation = &idle;
 
 	currentAnimation->Update();
 	
