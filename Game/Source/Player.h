@@ -14,6 +14,15 @@
 
 struct SDL_Texture;
 
+enum class PlayerState {
+	IDLE,
+	JUMPING,
+	FALLING,
+	LANDING,
+	MOVE_RIGHT,
+	MOVE_LEFT
+};
+
 class Player : public Entity
 {
 public:
@@ -37,8 +46,11 @@ public:
 	Animation jumpUp;
 	Animation jumpDown;
 
+
+
 	int jumpStart_counter = 4;
 	int frameCounter;
+
 
 	// Current animation check
 	Animation* currentAnimation = nullptr;
@@ -50,6 +62,14 @@ public:
 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 
+	void Jump(int jumpSteps);
+
+	bool isjumping;
+
+	
+
+
+
 private:
 
 	//L02: DONE 1: Declare player parameters
@@ -58,10 +78,9 @@ private:
 
 	// L07 TODO 5: Add physics to the player - declare a Physics body
 	PhysBody* pbody;
+	PlayerState playerState;
 
 	int pickCoinFxId;
-
-	bool isjumping;
 	int jumpcount = 0;
 
 	int width;
@@ -70,6 +89,10 @@ private:
 	float jumpforce;
 	int jumpsteps;
 	int remainingJumpSteps;
+
+	
+	
+
 
 };
 
