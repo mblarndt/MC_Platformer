@@ -108,27 +108,59 @@ bool Player::Update()
 	
 	currentAnimation = &idle;
 
+/*----------------------------Player Movement Variation 2--------------------------*/
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		pbody->body->SetLinearVelocity(b2Vec2(-10, 0));
+		pbody->body->SetLinearVelocity(b2Vec2(-speed, 0));
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-		pbody->body->SetLinearVelocity(b2Vec2(10, 0));
+		pbody->body->SetLinearVelocity(b2Vec2(speed, 0));
 	}
 	
 	// if not pressing anything
 	else
 	{
 		b2Vec2 v = pbody->body->GetLinearVelocity();
-		v.x = 10;
+		v.x = speed;
 		pbody->body->SetLinearVelocity(v);
 	}	
 	
 	//jump
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-		pbody->body->ApplyLinearImpulse(b2Vec2(0, -6), pbody->body->GetPosition(), true);
+		pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
 	}
-	
+
+
+/*----------------------------Player Movement Variation 2--------------------------/
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+		
+		remainingJumpSteps = jumpsteps;
+
+	}
+
+	else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
+		velocitx = b2Vec2(speed * (-1), -GRAVITY_Y);
+	}
+
+	else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
+		velocitx = b2Vec2(-speed, -GRAVITY_Y);
+	}
+
+	else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
+		//position.x -= 1;
+		velocitx = b2Vec2(speed, -GRAVITY_Y);
+	}
+
+	if (remainingJumpSteps > 0) {
+		vel.y = -jumpforce;//upwards - don't change x velocity
+		pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
+		remainingJumpSteps--;
+	}
+	else {
+		pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, velocitx.y));
+	}
+/*----------------------------End of Variation 2---------------------------------*/
+
 	b2Vec2 v = pbody->body->GetLinearVelocity();
 	
 	if (v.y > 0) currentAnimation = &jumpDown;
@@ -138,7 +170,7 @@ bool Player::Update()
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
 
-	//if (velocity == b2Vec2(0, -GRAVITY_Y))	currentAnimation = &idle;
+	if (v == b2Vec2(0, -GRAVITY_Y))	currentAnimation = &idle;
 
 	currentAnimation->Update();
 	
