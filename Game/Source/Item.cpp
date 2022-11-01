@@ -37,6 +37,8 @@ bool Item::Start() {
 	// L07 TODO 4: Add a physics to an item - initialize the physics body
 	pbody = app->physics->CreateCircle(position.x+(width/2), position.y+(height/2), radius, DYNAMIC);
 
+	pbody->ctype = ColliderType::ITEM;
+
 	return true;
 }
 

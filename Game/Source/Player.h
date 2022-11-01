@@ -45,6 +45,11 @@ public:
 
 public:
 
+	bool LoadState(pugi::xml_node&);
+	bool SaveState(pugi::xml_node&);
+
+	void OnCollision(PhysBody* physA, PhysBody* physB);
+
 private:
 
 	//L02: DONE 1: Declare player parameters
@@ -54,9 +59,16 @@ private:
 	// L07 TODO 5: Add physics to the player - declare a Physics body
 	PhysBody* pbody;
 
+	int pickCoinFxId;
+
+	bool isjumping;
+	int jumpcount = 0;
+
 	int width;
 	int height;
-
+	float speed;
+	float jumpforce;
+	int jumpsteps;
 	int remainingJumpSteps;
 
 };
