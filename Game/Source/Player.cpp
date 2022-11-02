@@ -111,6 +111,8 @@ bool Player::Update()
 		if(v.x >  0)	currentAnimation = &movement;
 		
 		if(v.x == 0)	currentAnimation = &idle;
+
+		jumpcount = 2;
 	}
 	if (v.y > 0) currentAnimation = &jumpDown;
 	
@@ -118,11 +120,11 @@ bool Player::Update()
 
 /*----------------------------Player Movement Variation 2--------------------------*/
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-		pbody->body->SetLinearVelocity(b2Vec2(-speed, 0));
+		pbody->body->SetLinearVelocity(b2Vec2(-speed, v.y));
 	}
 
 	else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-		pbody->body->SetLinearVelocity(b2Vec2(speed, 0));
+		pbody->body->SetLinearVelocity(b2Vec2(speed, v.y));
 	}
 	
 	// if not pressing anything
@@ -135,7 +137,10 @@ bool Player::Update()
 	
 	//jump
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-		pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
+		if (jumpcount > 0) {
+			pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
+			jumpcount--;
+		}
 	}
 
 

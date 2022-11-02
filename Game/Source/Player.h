@@ -62,7 +62,7 @@ private:
 	int pickCoinFxId;
 
 	bool isjumping;
-	int jumpcount = 0;
+	int jumpcount = 2;
 
 	int width;
 	int height;
