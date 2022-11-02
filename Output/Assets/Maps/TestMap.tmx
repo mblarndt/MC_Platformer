@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.5" orientation="orthogonal" renderorder="right-down" width="100" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="72">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="100" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="80">
  <tileset firstgid="1" name="Minecraft Tileset" tilewidth="32" tileheight="32" tilecount="100" columns="10">
   <image source="Minecraft Tileset.png" width="320" height="320"/>
  </tileset>
@@ -7542,79 +7542,86 @@
   </data>
  </layer>
  <objectgroup id="8" name="Colliders">
-  <object id="1" name="Ground" x="0" y="352" width="800" height="128"/>
-  <object id="4" name="Ground" x="416" y="320" width="224" height="32"/>
-  <object id="7" name="Ground" x="-38" y="-10" width="36" height="510"/>
-  <object id="9" name="Ground" x="864" y="320" width="416" height="160"/>
-  <object id="10" name="Ground" x="992" y="288" width="128" height="32"/>
-  <object id="11" name="Ground" x="1280" y="352" width="160" height="128"/>
-  <object id="12" name="Ground" type="solid" x="1408" y="256" width="96" height="32"/>
-  <object id="13" name="Ground" x="1600" y="192" width="128" height="32"/>
-  <object id="14" name="Ground" x="1504" y="352" width="352" height="128"/>
-  <object id="15" name="Death" x="1440" y="416" width="64" height="64">
+  <object id="1" name="Ground" class="solid" x="0" y="352" width="800" height="128"/>
+  <object id="4" name="Ground" class="solid" x="416" y="320" width="224" height="32"/>
+  <object id="7" name="Ground" class="solid" x="-38" y="-10" width="36" height="510"/>
+  <object id="9" name="Ground" class="solid" x="864" y="320" width="416" height="160"/>
+  <object id="10" name="Ground" class="solid" x="992" y="288" width="128" height="32"/>
+  <object id="11" name="Ground" class="solid" x="1280" y="352" width="160" height="128"/>
+  <object id="12" name="Ground" class="solid" x="1408" y="256" width="96" height="32"/>
+  <object id="13" name="Ground" class="solid" x="1600" y="192" width="128" height="32"/>
+  <object id="14" name="Ground" class="solid" x="1504" y="352" width="352" height="128"/>
+  <object id="15" name="Death" class="death" x="1440" y="416" width="64" height="64">
    <properties>
     <property name="MapToLoad" value="TestMap.tmx"/>
    </properties>
   </object>
-  <object id="16" name="Death" x="800" y="416" width="64" height="64">
+  <object id="16" name="Death" class="death" x="800" y="416" width="64" height="64">
    <properties>
     <property name="MapToLoad" value="TestMap.tmx"/>
    </properties>
   </object>
-  <object id="17" name="Ground" x="3200" y="0" width="32" height="480"/>
+  <object id="17" name="Ground" class="solid" x="3200" y="0" width="32" height="480"/>
   <object id="18" name="Player" x="240.899" y="297.528">
    <properties>
     <property name="EntitityType" value="PLAYER"/>
    </properties>
   </object>
-  <object id="19" name="Ground" type="solid" x="1792" y="160" width="32" height="32"/>
-  <object id="20" type="solid" x="1920" y="288" width="128" height="192"/>
-  <object id="21" type="solid" x="2048" y="320" width="224" height="160"/>
+  <object id="19" name="Ground" class="solid" x="1792" y="160" width="32" height="32"/>
+  <object id="20" class="solid" x="1920" y="288" width="128" height="192"/>
+  <object id="21" class="solid" x="2048" y="320" width="224" height="160"/>
   <object id="22" x="2088" y="661.333" width="1.33333" height="1.33333"/>
-  <object id="23" type="solid" x="2048" y="160" width="32" height="96"/>
-  <object id="24" type="solid" x="2080" y="192" width="32" height="96"/>
-  <object id="25" type="solid" x="2112" y="224" width="32" height="64"/>
-  <object id="26" type="solid" x="2144" y="256" width="32" height="32"/>
-  <object id="28" type="solid" x="2336" y="352" width="192" height="32"/>
-  <object id="29" type="solid" x="2496" y="320" width="64" height="32"/>
-  <object id="30" type="solid" x="2272" y="448" width="160" height="32"/>
-  <object id="31" type="solid" x="2496" y="448" width="256" height="32"/>
-  <object id="33" type="solid" x="2688" y="288" width="64" height="128"/>
-  <object id="34" type="solid" x="2656" y="320" width="32" height="96"/>
-  <object id="35" type="solid" x="2624" y="352" width="32" height="64"/>
-  <object id="36" type="solid" x="2592" y="384" width="32" height="32"/>
-  <object id="37" type="solid" x="1920" y="0" width="128" height="64"/>
-  <object id="38" type="solid" x="2048" y="0" width="1152" height="32"/>
-  <object id="39" type="solid" x="2720" y="32" width="480" height="32"/>
-  <object id="40" type="solid" x="2848" y="64" width="352" height="32"/>
-  <object id="41" type="solid" x="3008" y="96" width="192" height="32"/>
-  <object id="42" type="solid" x="3072" y="128" width="128" height="64"/>
-  <object id="43" type="solid" x="3136" y="192" width="64" height="160"/>
-  <object id="44" type="solid" x="3168" y="352" width="32" height="32"/>
-  <object id="45" type="solid" x="2112" y="96" width="32" height="32"/>
-  <object id="46" type="solid" x="2144" y="128" width="32" height="32"/>
-  <object id="47" type="solid" x="2176" y="160" width="576" height="32"/>
-  <object id="48" type="solid" x="2208" y="192" width="544" height="32"/>
-  <object id="49" type="solid" x="2240" y="224" width="32" height="32"/>
-  <object id="50" type="solid" x="2240" y="128" width="32" height="32"/>
-  <object id="51" type="solid" x="2368" y="128" width="32" height="32"/>
-  <object id="52" type="solid" x="2496" y="128" width="32" height="32"/>
-  <object id="53" type="solid" x="2624" y="128" width="96" height="32"/>
-  <object id="54" type="solid" x="2816" y="160" width="160" height="64"/>
-  <object id="55" type="solid" x="2976" y="192" width="32" height="32"/>
-  <object id="56" type="solid" x="2976" y="224" width="64" height="32"/>
-  <object id="57" type="solid" x="3008" y="256" width="96" height="32"/>
-  <object id="58" type="solid" x="2816" y="256" width="128" height="224"/>
-  <object id="59" type="solid" x="2944" y="288" width="32" height="192"/>
-  <object id="60" type="solid" x="2976" y="320" width="96" height="160"/>
-  <object id="61" type="solid" x="3072" y="320" width="32" height="32"/>
-  <object id="62" type="solid" x="3072" y="448" width="128" height="32"/>
-  <object id="63" type="solid" x="0" y="-32" width="1920" height="32"/>
-  <object id="65" type="solid" x="1920" y="128" width="128" height="128"/>
-  <object id="67" type="solid" x="2336" y="320" width="64" height="32"/>
-  <object id="68" type="solid" x="1312" y="288" width="32" height="32"/>
-  <object id="69" type="solid" x="1536" y="224" width="32" height="32"/>
-  <object id="70" type="solid" x="1856" y="416" width="64" height="64"/>
-  <object id="71" type="solid" x="1888" y="128" width="32" height="32"/>
+  <object id="23" class="solid" x="2048" y="160" width="32" height="96"/>
+  <object id="24" class="solid" x="2080" y="192" width="32" height="96"/>
+  <object id="25" class="solid" x="2112" y="224" width="32" height="64"/>
+  <object id="26" class="solid" x="2144" y="256" width="32" height="32"/>
+  <object id="28" class="solid" x="2336" y="352" width="192" height="32"/>
+  <object id="29" class="solid" x="2496" y="320" width="64" height="32"/>
+  <object id="30" class="solid" x="2272" y="448" width="160" height="32"/>
+  <object id="31" class="solid" x="2496" y="448" width="256" height="32"/>
+  <object id="33" class="solid" x="2688" y="288" width="64" height="128"/>
+  <object id="34" class="solid" x="2656" y="320" width="32" height="96"/>
+  <object id="35" class="solid" x="2624" y="352" width="32" height="64"/>
+  <object id="36" class="solid" x="2592" y="384" width="32" height="32"/>
+  <object id="37" class="solid" x="1920" y="0" width="128" height="64"/>
+  <object id="38" class="solid" x="2048" y="0" width="1152" height="32"/>
+  <object id="39" class="solid" x="2720" y="32" width="480" height="32"/>
+  <object id="40" class="solid" x="2848" y="64" width="352" height="32"/>
+  <object id="41" class="solid" x="3008" y="96" width="192" height="32"/>
+  <object id="42" class="solid" x="3072" y="128" width="128" height="64"/>
+  <object id="43" class="solid" x="3136" y="192" width="64" height="160"/>
+  <object id="44" class="solid" x="3168" y="352" width="32" height="32"/>
+  <object id="45" class="solid" x="2112" y="96" width="32" height="32"/>
+  <object id="46" class="solid" x="2144" y="128" width="32" height="32"/>
+  <object id="47" class="solid" x="2176" y="160" width="576" height="32"/>
+  <object id="48" class="solid" x="2208" y="192" width="544" height="32"/>
+  <object id="49" class="solid" x="2240" y="224" width="32" height="32"/>
+  <object id="50" class="solid" x="2240" y="128" width="32" height="32"/>
+  <object id="51" class="solid" x="2368" y="128" width="32" height="32"/>
+  <object id="52" class="solid" x="2496" y="128" width="32" height="32"/>
+  <object id="53" class="solid" x="2624" y="128" width="96" height="32"/>
+  <object id="54" class="solid" x="2816" y="160" width="160" height="64"/>
+  <object id="55" class="solid" x="2976" y="192" width="32" height="32"/>
+  <object id="56" class="solid" x="2976" y="224" width="64" height="32"/>
+  <object id="57" class="solid" x="3008" y="256" width="96" height="32"/>
+  <object id="58" class="solid" x="2816" y="256" width="128" height="224"/>
+  <object id="59" class="solid" x="2944" y="288" width="32" height="192"/>
+  <object id="60" class="solid" x="2976" y="320" width="96" height="160"/>
+  <object id="61" class="solid" x="3072" y="320" width="32" height="32"/>
+  <object id="62" class="solid" x="3072" y="448" width="128" height="32"/>
+  <object id="63" class="solid" x="0" y="-32" width="1920" height="32"/>
+  <object id="65" class="solid" x="1920" y="128" width="128" height="128"/>
+  <object id="67" class="solid" x="2336" y="320" width="64" height="32"/>
+  <object id="68" class="solid" x="1312" y="288" width="32" height="32"/>
+  <object id="69" class="solid" x="1536" y="224" width="32" height="32"/>
+  <object id="70" class="death" x="1856" y="416" width="64" height="64"/>
+  <object id="71" class="solid" x="1888" y="128" width="32" height="32"/>
+  <object id="73" class="death" x="2176.67" y="128.667" width="63.3333" height="32"/>
+  <object id="74" class="death" x="2401.67" y="128.667" width="94" height="32"/>
+  <object id="75" class="death" x="2273.67" y="128.667" width="94" height="32"/>
+  <object id="76" class="death" x="2529.67" y="128" width="94" height="32"/>
+  <object id="77" class="death" x="2402.33" y="320.667" width="94" height="32"/>
+  <object id="78" class="death" x="2433" y="448.667" width="63.3333" height="32"/>
+  <object id="79" class="death" x="2753.67" y="448.667" width="63.3333" height="32"/>
  </objectgroup>
 </map>

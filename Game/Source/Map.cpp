@@ -358,13 +358,16 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         
         newObject->stringType = object.attribute("class").as_string();
         if (newObject->stringType == "solid") {
-            newObject->type = OBJECTTYPE_SOLID;
+            newObject->type = ObjectTypes::OBJECTTYPE_SOLID;
         }
         else if (newObject->stringType == "warp") {
-            newObject->type = OBJECTTYPE_WARP;
+            newObject->type = ObjectTypes::OBJECTTYPE_WARP;
+        }
+        else if (newObject->stringType == "death") {
+            newObject->type = ObjectTypes::OBJECTTYPE_DEATH;
         }
         else
-            newObject->type = OBJECTTYPE_ENTITY;
+            newObject->type = ObjectTypes::OBJECTTYPE_ENTITY;
 
         newObject->height = object.attribute("height").as_int();
         newObject->width = object.attribute("width").as_int();
@@ -376,8 +379,14 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
 
         cstr = "c" + cnr;
 
-        PhysBody* cstr  = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
-        cstr->ctype = ColliderType::FLOOR;
+        if (newObject->type == ObjectTypes::OBJECTTYPE_SOLID) {
+            PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
+            cstr->ctype = ColliderType::FLOOR;
+        }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_DEATH) {
+            PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
+            cstr->ctype = ColliderType::DEATH;
+        }
 
 
         group->object.Add(newObject);
