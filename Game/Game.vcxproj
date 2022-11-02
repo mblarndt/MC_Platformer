@@ -50,6 +50,9 @@
     <OutDir>$(SolutionDir)Build\$(Configuration)</OutDir>
     <IntDir>$(SolutionDir)Build\$(Configuration)\Obj\</IntDir>
   </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnabled>false</VcpkgEnabled>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>

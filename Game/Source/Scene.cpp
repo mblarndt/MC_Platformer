@@ -8,6 +8,7 @@
 #include "EntityManager.h"
 #include "Map.h"
 #include "Physics.h"
+#include "Player.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -75,16 +76,16 @@ bool Scene::Update(float dt)
 {
 
 	//Load First Level
-	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	//if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 
 	//Load Second Level
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	//if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 
 	//Load Startposition of Level
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	//if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 
 	//Enable Debug
-	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+	//if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
 		
 
 
@@ -98,21 +99,20 @@ bool Scene::Update(float dt)
 
 	//Camera Movement
 	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		app->render->camera.y += 1;
+		app->render->camera.y += 3;
 
 	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		app->render->camera.y -= 1;
+		app->render->camera.y -= 3;
 
 	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		app->render->camera.x += 1;
+		app->render->camera.x += 3;
 
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x -= 1;
+		app->render->camera.x -= 3;
 
-	if(player->position.x > 400 && player->position.x < 2576)
-		app->render->camera.x = -(player->position.x) + 400;
+	//if(player->position.x > 400 && player->position.x < (app->map->mapData.width-400))
+	//app->render->camera.x = -(player->position.x) + 400;
 
-	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 
 	// Draw map
 	app->map->Draw();

@@ -49,6 +49,9 @@ bool Render::Awake(pugi::xml_node& config)
 		camera.y = 0;
 	}
 
+	playerOffset = config.child("camera").attribute("playerOffset").as_int();
+
+
 	return ret;
 }
 

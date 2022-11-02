@@ -62,6 +62,15 @@ private:
 	int pickCoinFxId;
 	int hurtFxId;
 
+	bool spawnStart;
+
+	iPoint spawn;
+	iPoint menu;
+	bool startGame = false;
+	bool camMoved = false;
+
+	int remainingPixels = 0;
+
 	bool isjumping;
 	int jumpcount = 2;
 
