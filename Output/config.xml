@@ -25,7 +25,7 @@
   <!-- L02: DONE: Add an element for the entity manager and add the player parameters -->
   <scene>
 	  <player>
-		  <menu x="0" y="322"/>
+		  <menu x="0" y="0"/>
 		  <cam offset="300"/>
 		  <startpos x="1216" y="322"/>
 		  <texture path="Assets/Textures/Slime_Spritesheet.png" width="30" height="30"/>

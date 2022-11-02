@@ -118,33 +118,34 @@ b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
 
 bool Player::Update()
 {
-	// L07 TODO 5: Add physics to the player - updated player position using physics
-	
-	
+	//Check Velocity of Physical Body
 	b2Vec2 v = pbody->body->GetLinearVelocity();
 	b2Vec2 vel = pbody->body->GetLinearVelocity();
 
-
+	//Activate Game
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 		startGame = true;
 	}
 
 	if (startGame == true) {
 
+		//Camera Transition from StartScreen to Player
 		if (camMoved == false) {
 			currentAnimation = &idle;
 			if (remainingPixels < (spawn.x - (app->render->playerOffset))) {
 				remainingPixels += 10;
 				app->render->camera.x = -(remainingPixels);
 			}
-			else {
-					camMoved = true;
-			}
+			else {camMoved = true;}
 		}
+
+		//When Camera Transition has played it will start in normal Loop
 		else {
 
 
 			app->render->camera.x = -(position.x) + app->render->playerOffset;
+			app->render->camera.y = menu.y;
+
 			//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 			if (v.y == 0) {
 				if (v.x < 0)	currentAnimation = &movement;
@@ -201,10 +202,10 @@ bool Player::Update()
 			}
 
 			else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
-				//position.x -= 1;
 				velocitx = b2Vec2(speed, -GRAVITY_Y);
 			}
 
+			//Jump Action
 			if (remainingJumpSteps > 0) {
 				vel.y = -jumpforce;//upwards - don't change x velocity
 				pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
@@ -220,21 +221,20 @@ bool Player::Update()
 			position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
 
 
-
+			//When Player collides with Lava he spawns at start again
 			if (spawnStart == true) {
-				position.x = PIXEL_TO_METERS(spawn.x);
-				position.y = PIXEL_TO_METERS(spawn.y);
-				pbody->body->SetTransform(b2Vec2(position.x, position.y), 0);
-				app->render->camera.x = position.x;
-				app->render->camera.y = position.y;
+				position.x = spawn.x;
+				position.y = spawn.y;
+				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+
 				velocitx.x = 0;
 				spawnStart = false;
 			}
 
 			
 		}
-		currentAnimation->Update();
 
+		currentAnimation->Update();
 		SDL_Rect rect = currentAnimation->GetCurrentFrame();
 		app->render->DrawTexture(texture, position.x, position.y, &rect);
 	}
@@ -291,8 +291,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		LOG("Collision FLOOR");
 		app->audio->PlayFx(hurtFxId);
 		spawnStart = true;
-		
-
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
