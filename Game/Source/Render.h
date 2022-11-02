@@ -53,7 +53,6 @@ public:
 	SDL_Rect viewport;
 	SDL_Color background;
 
-	int playerOffset;
 };
 
 #endif // __RENDER_H__

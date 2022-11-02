@@ -68,6 +68,7 @@ private:
 	iPoint menu;
 	bool startGame = false;
 	bool camMoved = false;
+	int camOffset;
 
 	int remainingPixels = 0;
 

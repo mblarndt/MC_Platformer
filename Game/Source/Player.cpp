@@ -35,6 +35,7 @@ bool Player::Awake() {
 	spawn.y = parameters.child("startpos").attribute("y").as_int();
 
 	//Camera Offset from Player
+	camOffset = parameters.child("cam").attribute("offset").as_int();
 
 	//Texture Variables
 	texturePath = parameters.child("texture").attribute("path").as_string();
@@ -132,7 +133,7 @@ bool Player::Update()
 		//Camera Transition from StartScreen to Player
 		if (camMoved == false) {
 			currentAnimation = &idle;
-			if (remainingPixels < (spawn.x - (app->render->playerOffset))) {
+			if (remainingPixels < (spawn.x - (camOffset))) {
 				remainingPixels += 10;
 				app->render->camera.x = -(remainingPixels);
 			}
@@ -142,9 +143,11 @@ bool Player::Update()
 		//When Camera Transition has played it will start in normal Loop
 		else {
 
-
-			app->render->camera.x = -(position.x) + app->render->playerOffset;
-			app->render->camera.y = menu.y;
+			//Camera follow
+			if (position.x > (camOffset) && position.x < (4160 - (1024-camOffset))) {
+				app->render->camera.x = -(position.x) + camOffset;
+				app->render->camera.y = menu.y;
+			}
 
 			//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 			if (v.y == 0) {

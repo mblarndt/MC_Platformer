@@ -6,7 +6,6 @@
 
   <renderer>
     <vsync value="true"/>
-	<camera playerOffset ="300"/>
   </renderer>
 
   <window>
