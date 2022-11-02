@@ -144,7 +144,7 @@ bool Player::Update()
 		else {
 
 			//Camera follow
-			if (position.x > (camOffset) && position.x < (4160 - (1024-camOffset))) {
+			if (position.x > (camOffset) && position.x < (4160 - (1024-camOffset)) || position.x >(4160) && position.x < (5440 - (1024 - camOffset))) {
 				app->render->camera.x = -(position.x) + camOffset;
 				app->render->camera.y = menu.y;
 			}
