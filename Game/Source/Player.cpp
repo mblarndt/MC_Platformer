@@ -186,29 +186,28 @@ bool Player::Update()
 			//if (v.y == 0 && v.x != 0) currentAnimation = &idle;
 
 			/*----------------------------Player Movement Variation 2--------------------------*/
-				if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+				if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
 					pbody->body->SetLinearVelocity(b2Vec2(-speed, v.y));
 				}
 
-				else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+				else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
 					pbody->body->SetLinearVelocity(b2Vec2(speed, v.y));
 				}
 
 				// if not pressing anything
-				else
-				{
-					b2Vec2 v = pbody->body->GetLinearVelocity();
-					v.x = speed;
-					pbody->body->SetLinearVelocity(v);
-				}
+				// else
+				// {
+				// 	b2Vec2 v = pbody->body->GetLinearVelocity();
+				// 	pbody->body->SetLinearVelocity(v);
+				// }
 
 				//jump
-				if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+				if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 					if (jumpcount > 0) {
-						/////*if (currentAnimation != &jumpStart)
-						////	jumpStart.Reset();
-						////
-						////currentAnimation = &jumpStart;*/
+						///*if (currentAnimation != &jumpStart)
+						//	jumpStart.Reset();
+						//
+						//currentAnimation = &jumpStart;*/
 
 						pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
 						jumpcount--;
