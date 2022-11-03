@@ -6,16 +6,15 @@ Our submission for the class platformer project, based on Mojang's Minecraft eas
 
 ## Key Features
 
- - {Feature01}
- - {Feature02}
- - {Feature03}
- - {Feature04}
+ - Slime
+ - Slimey
+ - Slime
  
 ## Controls
 
- - A ➡ Move Left
- - D ➡ Move Right (Right movement is automated)
- - SPACE ➡ Jump
+ - A: Move Left
+ - D: Move Right (Right movement is automated)
+ - SPACE: Jump
  - F1 ➡ Show colliders
 
 ## Developers
