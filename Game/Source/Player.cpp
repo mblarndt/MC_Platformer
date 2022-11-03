@@ -61,16 +61,13 @@ bool Player::Start() {
 	movement.PushBack({ 15, 90, 30, 30 });
 	movement.PushBack({ 74, 90, 30, 30 });
 	movement.loop = true;
-	movement.speed = 0.005f;
+	movement.speed = 0.1f;
 
 	idle.PushBack({15, 8, 44, 32});
 	idle.PushBack({75, 8, 44, 32});
 	idle.loop = true;
 	idle.speed = 0.1f;
 
-	//jumpStart.PushBack({118, 48, 64, 32});
-	//jumpStart.PushBack({178, 48, 64, 32});
-	//jumpStart.PushBack({238, 48, 64, 32});
 	jumpStart.PushBack({298, 48, 64, 32});
 	jumpStart.PushBack({358, 48, 64, 32});
 	jumpStart.PushBack({418, 48, 64, 32});
@@ -78,14 +75,10 @@ bool Player::Start() {
 	jumpStart.loop = false;
 	jumpStart.speed = 0.2f;
 
-	
-	jumpEnd.PushBack({});
-	jumpEnd.PushBack({});
-	jumpEnd.PushBack({});
-	jumpEnd.PushBack({});
-	jumpEnd.PushBack({});
-	jumpEnd.PushBack({});
-	jumpEnd.PushBack({});
+	jumpEnd.PushBack({118, 48, 64, 32});
+	jumpEnd.PushBack({178, 48, 64, 32});
+	jumpEnd.PushBack({238, 48, 64, 32});
+	jumpEnd.PushBack({298, 48, 64, 32});
 	jumpEnd.loop = false;
 	jumpStart.speed = 0.2f;
 
