@@ -12,11 +12,18 @@ Our submission for the class platformer project, based on Mojang's "Minecraft" e
  
 ## Controls
 
- - A: Move Left
- - D: Move Right (Right movement is automated)
+ - A: Move Left*
+ - D: Move Right*
  - SPACE: Jump
- - F1: Show colliders
-
+ 
+ *Movement is automated, just need to press it once to go left or right.
+### Debug Keys
+  - F1: Move to the start of level 1
+  - F3: Move to the start of the level (the one you are on)
+  - F5: Save State
+  - F6: Load State
+  - F9: Show colliders
+  
 ## Developers
 
  - Ben - Programming
