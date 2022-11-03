@@ -59,13 +59,17 @@ private:
 	// L07 TODO 5: Add physics to the player - declare a Physics body
 	PhysBody* pbody;
 
+
+
+	//SoundIDs
 	int pickCoinFxId;
 	int hurtFxId;
 
+	
 	bool spawnStart;
-
 	iPoint spawn;
 	iPoint menu;
+
 	bool startGame = false;
 	bool camMoved = false;
 	int camOffset;
