@@ -29,6 +29,8 @@ public:
 	bool Update();
 
 	bool CleanUp();
+
+	void Debug();
 	
 	Animation idle;
 	Animation movement;

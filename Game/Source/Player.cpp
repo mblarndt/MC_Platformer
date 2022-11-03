@@ -259,9 +259,9 @@ bool Player::Update()
 				velocitx.x = 0;
 				spawnStart = false;
 			}
-
-			
 		}
+
+		Debug();
 
 		currentAnimation->Update();
 		SDL_Rect rect = currentAnimation->GetCurrentFrame();
@@ -269,12 +269,10 @@ bool Player::Update()
 	}
 
 	return true;
-	
 }
 
 bool Player::CleanUp()
 {
-
 	return true;
 }
 
@@ -294,7 +292,6 @@ bool Player::SaveState(pugi::xml_node& data)
 
 	player.append_attribute("x") = position.x;
 	player.append_attribute("y") = position.y;
-
 
 	return true;
 }
@@ -326,5 +323,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		LOG("Collision UNKNOWN");
 		break;
 	}
+}
 
+void Player::Debug() {
+	if (app->input->GetKey(SDL_SCANCODE_F1) || app->input->GetKey(SDL_SCANCODE_F3)) {
+		pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+		spawnStart = true;
+
+	}
 }
