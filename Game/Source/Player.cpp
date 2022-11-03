@@ -59,7 +59,7 @@ bool Player::Start() {
 	// Sprite rectangle inside the keys of the function
 	// Input the animation steps in order
 
-  movement.PushBack({ 15, 90, 30, 30 });
+	movement.PushBack({ 15, 90, 30, 30 });
 	movement.PushBack({ 74, 90, 30, 30 });
 
 	movement.loop = true;
@@ -125,10 +125,7 @@ bool Player::Start() {
 	return true;
 }
 
-
 b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
-
-
 
 bool Player::Update()
 {
@@ -139,10 +136,11 @@ bool Player::Update()
 	//Activate Game
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 		startGame = true;
+		app->audio->PlayMusic("Assets/Audio/Music/Sweden - C418.ogg");
 	}
 
 	if (startGame == true) {
-
+		
 		//Camera Transition from StartScreen to Player
 		if (camMoved == false) {
 			currentAnimation = &idle;
