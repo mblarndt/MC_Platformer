@@ -58,56 +58,60 @@ bool Player::Start() {
 	
 	// Sprite rectangle inside the keys of the function
 	// Input the animation steps in order
-	movement.PushBack({ 1, 90, 44, 30 });
-	movement.PushBack({ 60, 90, 44, 30 });
-	movement.loop = true;
-
-	idle.PushBack({15, 8, 30, 32});
-	idle.PushBack({75, 8, 30, 32});
-	idle.loop = true;
-
-	jumpStart.PushBack({135, 48, 30, 32});
-	jumpStart.PushBack({191, 48, 34, 32});
-	jumpStart.PushBack({});
-	jumpStart.PushBack({});
-	jumpStart.PushBack({});
-	jumpStart.PushBack({});
-	jumpStart.PushBack({});
-	jumpStart.loop = false;
 	
-	jumpEnd.PushBack({});
-	jumpEnd.PushBack({});
-	jumpEnd.PushBack({});
-	jumpEnd.PushBack({});
-	jumpEnd.PushBack({});
-	jumpEnd.PushBack({});
-	jumpEnd.PushBack({});
-	jumpEnd.loop = false;
 
-	jumpUp.PushBack({13, 48, 31, 32});
+
+
+    movement.PushBack({ 0, 80, 60, 40 });
+	movement.PushBack({ 60, 80, 60, 40 });
+	movement.loop = true;
+	movement.speed = 0.1f;
+
+
+	idle.PushBack({ 0, 0, 60, 40 });
+	idle.PushBack({ 60, 40, 60, 40 });
+	idle.loop = true;
+	idle.speed = 0.1f;
+
+
+
+	jumpStart.PushBack({298, 48, 60, 40});
+	jumpStart.PushBack({358, 48, 60, 40});
+	jumpStart.PushBack({418, 48, 60, 40});
+	jumpStart.PushBack({478, 48, 60, 40});
+	jumpStart.loop = false;
+	jumpStart.speed = 0.2f;
+
+	jumpEnd.PushBack({118, 48, 60, 40});
+	jumpEnd.PushBack({178, 48, 60, 40});
+	jumpEnd.PushBack({238, 48, 60, 40});
+	jumpEnd.PushBack({298, 48, 60, 40});
+	jumpEnd.loop = false;
+	jumpStart.speed = 0.2f;
+
+	jumpUp.PushBack({0, 40, 60, 40});
 	jumpUp.loop = true;
 
-	jumpDown.PushBack({75, 48, 31, 32});
+	jumpDown.PushBack({60, 40, 60, 40});
 	jumpDown.loop = true;
-
 	
 	
 	// L07 TODO 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, bodyType::DYNAMIC);
+	pbody = app->physics->CreateRectangle(position.x + (width/2), position.y + (height/2), width, height, bodyType::DYNAMIC);
 
 	//Add Fixtures to detect collision direction
-	b2FixtureDef myFixR;
-	b2FixtureDef myFixL;
-	b2PolygonShape polyL;
-	b2PolygonShape polyR;
-	myFixR.density = 0;
-	myFixL.density = 0;
-	polyL.SetAsBox(0.01, 0.01, b2Vec2(0.3,0),0);
-	polyR.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
-	myFixR.shape = &polyL;
-	myFixL.shape = &polyR;
-	pbody->body->CreateFixture(&myFixR);
-	pbody->body->CreateFixture(&myFixL);
+	//b2FixtureDef myFixR;
+	//b2FixtureDef myFixL;
+	//b2PolygonShape polyL;
+	//b2PolygonShape polyR;
+	//myFixR.density = 0;
+	//myFixL.density = 0;
+	//polyL.SetAsBox(0.01, 0.01, b2Vec2(0.3,0),0);
+	//polyR.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
+	//myFixR.shape = &polyL;
+	//myFixL.shape = &polyR;
+	//pbody->body->CreateFixture(&myFixR);
+	//pbody->body->CreateFixture(&myFixL);
   
 	// L07 DONE 7: Assign collider type
 	pbody->ctype = ColliderType::PLAYER;
@@ -122,6 +126,7 @@ bool Player::Start() {
 
 	app->render->camera.x = menu.x;
 
+	currentAnimation = &idle;
 
 	return true;
 }
@@ -173,11 +178,22 @@ bool Player::Update()
 
 				jumpcount = 2;
 			}
-			if (v.y > 0) currentAnimation = &jumpDown;
+			if (v.y > 0) {
+				//if (jumpStart.HasFinished()) {
+					currentAnimation = &jumpDown;
+					jumpStart.Reset();
+				//}
+			}
 
-			if (v.y < 0) currentAnimation = &jumpUp;
+			if (v.y < 0) {
+				//if (jumpStart.HasFinished()) {
+					currentAnimation = &jumpUp;
+					jumpStart.Reset();
+				//}
+			}
+			//if (v.y == 0 && v.x != 0) currentAnimation = &idle;
 
-			/*----------------------------Player Movement Variation 2--------------------------*
+			/*----------------------------Player Movement Variation 2--------------------------*/
 				if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 					pbody->body->SetLinearVelocity(b2Vec2(-speed, v.y));
 				}
@@ -197,13 +213,18 @@ bool Player::Update()
 				//jump
 				if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
 					if (jumpcount > 0) {
+						/////*if (currentAnimation != &jumpStart)
+						////	jumpStart.Reset();
+						////
+						////currentAnimation = &jumpStart;*/
+
 						pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
 						jumpcount--;
 					}
 				}
 
 
-			/*----------------------------Player Movement Variation 2--------------------------*/
+			/*----------------------------Player Movement Variation 2--------------------------*
 			if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
 				if (jumpcount <= 3)
 					remainingJumpSteps = jumpsteps;
@@ -253,8 +274,9 @@ bool Player::Update()
 
 		currentAnimation->Update();
 		SDL_Rect rect = currentAnimation->GetCurrentFrame();
-		app->render->DrawTexture(texture, position.x, position.y, &rect);
+		app->render->DrawTexture(texture, position.x-15, position.y-10, &rect);
 	}
+
 	return true;
 	
 }
