@@ -58,8 +58,10 @@ bool Player::Start() {
 	
 	// Sprite rectangle inside the keys of the function
 	// Input the animation steps in order
-	movement.PushBack({ 15, 90, 30, 30 });
+
+  movement.PushBack({ 15, 90, 30, 30 });
 	movement.PushBack({ 74, 90, 30, 30 });
+
 	movement.loop = true;
 	movement.speed = 0.1f;
 
@@ -268,6 +270,7 @@ bool Player::Update()
 		SDL_Rect rect = currentAnimation->GetCurrentFrame();
 		app->render->DrawTexture(texture, position.x, position.y, &rect);
 	}
+
 	return true;
 	
 }
