@@ -24,12 +24,14 @@
   <!-- L02: DONE: Add an element for the entity manager and add the player parameters -->
   <scene>
 	  <player>
-		  <startpos x="192" y="322"/>
+		  <menu x="0" y="0"/>
+		  <cam offset="300"/>
+		  <startpos x="1216" y="322"/>
 		  <texture path="Assets/Textures/Slime_Spritesheet.png" width="30" height="30"/>
-		  <movement speed="7" jumpforce="3" jumpsteps="7"/>
+		  <movement speed="4" jumpforce="2" jumpsteps="8"/>
 	  </player>
-    <item x="250" y="322" texturepath="Assets/Textures/goldCoin.png"/>
-	  <!--<item x="416" y="512" texturepath="Assets/Textures/goldCoin.png"/>
+	<!--<item x="250" y="322" texturepath="Assets/Textures/goldCoin.png"/>
+	<item x="416" y="512" texturepath="Assets/Textures/goldCoin.png"/>
     <item x="384" y="352" texturepath="Assets/Textures/goldCoin.png"/>
     <item x="200" y="672" texturepath="Assets/Textures/goldCoin.png"/>
     <item x="500" y="672" texturepath="Assets/Textures/goldCoin.png"/>-->

@@ -59,7 +59,19 @@ private:
 	// L07 TODO 5: Add physics to the player - declare a Physics body
 	PhysBody* pbody;
 
+	//SoundIDs
 	int pickCoinFxId;
+	int hurtFxId;
+	
+	bool spawnStart;
+	iPoint spawn;
+	iPoint menu;
+
+	bool startGame = false;
+	bool camMoved = false;
+	int camOffset;
+
+	int remainingPixels = 0;
 
 	bool isjumping;
 	int jumpcount = 2;
@@ -68,8 +80,8 @@ private:
 	int height;
 	float speed;
 	float jumpforce;
-	int jumpsteps;
-	int remainingJumpSteps;
+	int jumpsteps = 3;
+	int remainingJumpSteps = jumpsteps;
 
 };
 
