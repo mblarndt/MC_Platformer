@@ -13,10 +13,10 @@ Our submission for the class platformer project, based on Mojang's Minecraft eas
  
 ## Controls
 
- - A --> Move Left
- - D --> Move Right (Right movement is automated)
- - SPACE -->Jump
- - F1 -->Show colliders
+ - A -> Move Left
+ - D -> Move Right (Right movement is automated)
+ - SPACE ->Jump
+ - F1 ->Show colliders
 
 ## Developers
 
