@@ -41,6 +41,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(win);
 	AddModule(tex);
 	AddModule(audio);
+
 	//L07 TODO 2: Add Physics module
 	AddModule(physics);
 	AddModule(scene);
@@ -48,7 +49,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(fadeBlack);
 
-	AddModule(logo);
+	// AddModule(logo);
 
 	// Render last to swap buffer
 	AddModule(render);

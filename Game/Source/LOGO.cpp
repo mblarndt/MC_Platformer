@@ -11,6 +11,7 @@
 
 Logo::Logo() : Module()
 {
+	textureLogo = NULL;
 	name.Create("Logo screen");
 }
 

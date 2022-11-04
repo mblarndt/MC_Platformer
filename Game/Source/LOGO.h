@@ -1,5 +1,7 @@
 #ifndef __LOGO_H__
-#define LOGO_H
+#define __LOGO_H__
+
+#include "Module.h"
 
 class Logo : public Module {
 	Logo();
@@ -26,5 +28,5 @@ private:
 };
 
 
-#endif // !__LOGO_H__
+#endif // __LOGO_H__
 
