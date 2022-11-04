@@ -124,6 +124,7 @@ bool Player::Start() {
 	pbody->listener = this;
 
 	pbody->body->SetFixedRotation(true);
+	
 	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
 	pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
 	hurtFxId = app->audio->LoadFx("Assets/Audio/Fx/hurt.ogg");
@@ -149,6 +150,7 @@ bool Player::Update()
 	//Activate Game
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 		startGame = true;
+		v.x = 0;
 	}
 
 	if (startGame == true) {
@@ -198,41 +200,33 @@ bool Player::Update()
 				}
 				//if (v.y == 0 && v.x != 0) currentAnimation = &idle;
 
-				/*----------------------------Player Movement Variation 2--------------------------*
+				/*----------------------------Player Movement Variation 2--------------------------*/
 					if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-						pbody->body->SetLinearVelocity(b2Vec2(-speed, v.y));
+						velocitx.x = -speed;
 					}
 
 					else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-						pbody->body->SetLinearVelocity(b2Vec2(speed, v.y));
-					}
-
-					// if not pressing anything
-					else
-					{
-						b2Vec2 v = pbody->body->GetLinearVelocity();
-						v.x = speed;
-						pbody->body->SetLinearVelocity(v);
+						velocitx.x = speed;
 					}
 
 					//jump
-					if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-						if (jumpcount > 0) {
-							/////*if (currentAnimation != &jumpStart)
-							////	jumpStart.Reset();
-							////
-							////currentAnimation = &jumpStart;
-
+					else if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+						if (jumpcount <= 3) {
 							pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
-							jumpcount--;
+							jumpcount++;
 						}
 					}
+					else {
+						velocitx.y = pbody->body->GetLinearVelocity().y;
+						pbody->body->SetLinearVelocity(velocitx);
+					}
+					
 
 
-				/*----------------------------Player Movement Variation 2--------------------------*/
+				/*----------------------------Player Movement Variation 2--------------------------*
 				if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-					if (jumpcount <= 3)
-						remainingJumpSteps = jumpsteps;
+					if (jumpcount > 0)
+						pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
 					jumpcount++;
 				}
 
@@ -249,11 +243,11 @@ bool Player::Update()
 				}
 
 				//Jump Action
-				if (remainingJumpSteps > 0) {
-					vel.y = -jumpforce;//upwards - don't change x velocity
-					pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
-					remainingJumpSteps--;
-				}
+				//if (remainingJumpSteps > 0) {
+				//	vel.y = -jumpforce;//upwards - don't change x velocity
+				//	pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
+				//	remainingJumpSteps--;
+				//}
 				else {
 					pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, velocitx.y));
 				}
@@ -347,6 +341,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::FLOOR:
 		LOG("Collision FLOOR");
 		jumpcount = 0;
+		floor = true;
 		break;
 	case ColliderType::DEATH:
 		LOG("Collision DEATH");

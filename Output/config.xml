@@ -28,7 +28,7 @@
 		  <cam offset="300"/>
 		  <startpos x="1216" y="322"/>
 		  <texture path="Assets/Textures/Slime_Spritesheet.png" width="30" height="30"/>
-		  <movement speed="4" jumpforce="15" jumpsteps="8"/>
+		  <movement speed="4" jumpforce="3" jumpsteps="8"/>
 	  </player>
 	<!--<item x="250" y="322" texturepath="Assets/Textures/goldCoin.png"/>
 	<item x="416" y="512" texturepath="Assets/Textures/goldCoin.png"/>

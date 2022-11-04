@@ -77,6 +77,7 @@ private:
 	int remainingPixels = 0;
 
 	bool isjumping;
+	bool floor;
 	int jumpcount;;
 
 
