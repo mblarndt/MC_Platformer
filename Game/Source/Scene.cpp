@@ -74,21 +74,6 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-
-	//Load First Level
-	//if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-
-	//Load Second Level
-	//if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-
-	//Load Startposition of Level
-	//if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
-
-	//Enable Debug
-	//if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
-		
-
-
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		app->SaveGameRequest();

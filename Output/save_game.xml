@@ -8,10 +8,9 @@
 	<scene />
 	<entitymanager />
 	<map />
+	<:anonymous />
 	<renderer>
-		<camera x="338" y="0" />
+		<camera x="-1045" y="0" />
+		<player />
 	</renderer>
-	<player>
-		<position x="192" y="322"/>
-	</player>
 </save_state>

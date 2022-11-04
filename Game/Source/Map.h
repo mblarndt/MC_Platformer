@@ -138,8 +138,6 @@ struct MapData
 	List<ObjectGroups*> objectgroups;
 };
 
-
-
 class Map : public Module
 {
 public:

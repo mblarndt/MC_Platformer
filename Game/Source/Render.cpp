@@ -2,6 +2,8 @@
 #include "Window.h"
 #include "Render.h"
 
+#include "EntityManager.h"
+
 #include "Defs.h"
 #include "Log.h"
 
@@ -233,6 +235,8 @@ bool Render::LoadState(pugi::xml_node& data)
 {
 	camera.x = data.child("camera").attribute("x").as_int();
 	camera.y = data.child("camera").attribute("y").as_int();
+
+	
 
 	return true;
 }

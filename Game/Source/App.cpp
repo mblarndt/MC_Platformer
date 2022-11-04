@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "Physics.h"
 #include "FadeToBlack.h"
+#include "LOGO.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -46,6 +47,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(entityManager);
 	AddModule(map);
 	AddModule(fadeBlack);
+
+	AddModule(logo);
 
 	// Render last to swap buffer
 	AddModule(render);
