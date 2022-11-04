@@ -47,6 +47,9 @@ bool Player::Awake() {
 	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
 	jumpsteps = parameters.child("movement").attribute("jumpsteps").as_int();
 
+	//Dead Texture
+	deathPath = "Assets/Textures/dead3.png";
+
 
 	return true;
 }
@@ -55,6 +58,7 @@ bool Player::Start() {
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);
+	texDeath = app->tex->Load(deathPath);
 	
 	// Sprite rectangle inside the keys of the function
 	// Input the animation steps in order
@@ -159,122 +163,140 @@ bool Player::Update()
 			else {camMoved = true;}
 		}
 
-		//When Camera Transition has played it will start in normal Loop
+		//Main Loop After Transition
 		else {
 
-			//Camera follow
-			if (position.x > (camOffset) && position.x < (4160 - (1024-camOffset)) || position.x >(4160) && position.x < (5440 - (1024 - camOffset))) {
-				app->render->camera.x = -(position.x) + camOffset;
-				app->render->camera.y = menu.y;
-			}
+			if (playerDeath == false) {
+				//Camera follow
+				if (position.x > (camOffset) && position.x < (4160 - (1024 - camOffset)) || position.x >(4160) && position.x < (5440 - (1024 - camOffset))) {
+					app->render->camera.x = -(position.x) + camOffset;
+					app->render->camera.y = menu.y;
+				}
 
-			//L02: DONE 4: modify the position of the player using arrow keys and render the texture
-			if (v.y == 0) {
-				if (v.x < 0)	currentAnimation = &movement;
+				//L02: DONE 4: modify the position of the player using arrow keys and render the texture
+				if (v.y == 0) {
+					if (v.x < 0)	currentAnimation = &movement;
 
-				if (v.x > 0)	currentAnimation = &movement;
+					if (v.x > 0)	currentAnimation = &movement;
 
-				if (v.x == 0)	currentAnimation = &idle;
+					if (v.x == 0)	currentAnimation = &idle;
 
-				jumpcount = 2;
-			}
-			if (v.y > 0) {
-				//if (jumpStart.HasFinished()) {
+					jumpcount = 2;
+				}
+				if (v.y > 0) {
+					//if (jumpStart.HasFinished()) {
 					currentAnimation = &jumpDown;
 					jumpStart.Reset();
-				//}
-			}
+					//}
+				}
 
-			if (v.y < 0) {
-				//if (jumpStart.HasFinished()) {
+				if (v.y < 0) {
+					//if (jumpStart.HasFinished()) {
 					currentAnimation = &jumpUp;
 					jumpStart.Reset();
-				//}
-			}
-			//if (v.y == 0 && v.x != 0) currentAnimation = &idle;
-
-			/*----------------------------Player Movement Variation 2--------------------------*/
-				if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-					pbody->body->SetLinearVelocity(b2Vec2(-speed, v.y));
+					//}
 				}
+				//if (v.y == 0 && v.x != 0) currentAnimation = &idle;
 
-				else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-					pbody->body->SetLinearVelocity(b2Vec2(speed, v.y));
-				}
-
-				// if not pressing anything
-				else
-				{
-					b2Vec2 v = pbody->body->GetLinearVelocity();
-					v.x = speed;
-					pbody->body->SetLinearVelocity(v);
-				}
-
-				//jump
-				if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-					if (jumpcount > 0) {
-						/////*if (currentAnimation != &jumpStart)
-						////	jumpStart.Reset();
-						////
-						////currentAnimation = &jumpStart;*/
-
-						pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
-						jumpcount--;
+				/*----------------------------Player Movement Variation 2--------------------------*
+					if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+						pbody->body->SetLinearVelocity(b2Vec2(-speed, v.y));
 					}
+
+					else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+						pbody->body->SetLinearVelocity(b2Vec2(speed, v.y));
+					}
+
+					// if not pressing anything
+					else
+					{
+						b2Vec2 v = pbody->body->GetLinearVelocity();
+						v.x = speed;
+						pbody->body->SetLinearVelocity(v);
+					}
+
+					//jump
+					if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+						if (jumpcount > 0) {
+							/////*if (currentAnimation != &jumpStart)
+							////	jumpStart.Reset();
+							////
+							////currentAnimation = &jumpStart;
+
+							pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
+							jumpcount--;
+						}
+					}
+
+
+				/*----------------------------Player Movement Variation 2--------------------------*/
+				if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+					if (jumpcount <= 3)
+						remainingJumpSteps = jumpsteps;
+					jumpcount++;
 				}
 
+				else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
+					velocitx = b2Vec2(speed * (-1), -GRAVITY_Y);
+				}
 
-			/*----------------------------Player Movement Variation 2--------------------------*
-			if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-				if (jumpcount <= 3)
-					remainingJumpSteps = jumpsteps;
-				jumpcount++;
+				else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
+					velocitx = b2Vec2(-speed, -GRAVITY_Y);
+				}
+
+				else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
+					velocitx = b2Vec2(speed, -GRAVITY_Y);
+				}
+
+				//Jump Action
+				if (remainingJumpSteps > 0) {
+					vel.y = -jumpforce;//upwards - don't change x velocity
+					pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
+					remainingJumpSteps--;
+				}
+				else {
+					pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, velocitx.y));
+				}
+
+				/*----------------------------End of Variation 2---------------------------------*/
+
+				position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
+				position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
+
+				currentAnimation->Update();
+				SDL_Rect rect = currentAnimation->GetCurrentFrame();
+				app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect);
 			}
-
-			else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
-				velocitx = b2Vec2(speed * (-1), -GRAVITY_Y);
-			}
-
-			else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
-				velocitx = b2Vec2(-speed, -GRAVITY_Y);
-			}
-
-			else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
-				velocitx = b2Vec2(speed, -GRAVITY_Y);
-			}
-
-			//Jump Action
-			if (remainingJumpSteps > 0) {
-				vel.y = -jumpforce;//upwards - don't change x velocity
-				pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
-				remainingJumpSteps--;
-			}
-			else {
-				pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, velocitx.y));
-			}
-
-			/*----------------------------End of Variation 2---------------------------------*/
-
-			position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
-			position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
-
 
 			//When Player collides with Lava he spawns at start again
-			if (spawnStart == true) {
-				position.x = spawn.x;
-				position.y = spawn.y;
-				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
-
-				velocitx.x = 0;
-				spawnStart = false;
+			if (playerDeath == true) {
+				currentAnimation = &jumpStart;
+				if (frameCounter < 30) {
+					SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
+					app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
+					frameCounter++;
+				}
+				else {
+					SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
+					app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
+					SDL_Rect rect = { 0, 0, 1024, 480 };
+					app->render->DrawTexture(texDeath, position.x - camOffset, 0, &rect);
+					//frameCounter++;
+					if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+						position.x = spawn.x;
+						position.y = spawn.y;
+						pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+						velocitx.x = 0;
+						playerDeath = false;
+					}
+				}
 			}
 
 			
 		}
 
-		currentAnimation->Update();
-		SDL_Rect rect = currentAnimation->GetCurrentFrame();
-		app->render->DrawTexture(texture, position.x-15, position.y-10, &rect);
+
+
 	}
 
 	return true;
@@ -327,9 +349,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		jumpcount = 0;
 		break;
 	case ColliderType::DEATH:
-		LOG("Collision FLOOR");
+		LOG("Collision DEATH");
+		frameCounter = 0;
 		app->audio->PlayFx(hurtFxId);
-		spawnStart = true;
+
+		playerDeath = true;
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
