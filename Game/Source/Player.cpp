@@ -94,18 +94,18 @@ bool Player::Start() {
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, bodyType::DYNAMIC);
 
 	//Add Fixtures to detect collision direction
-	b2FixtureDef myFixR;
-	b2FixtureDef myFixL;
-	b2PolygonShape polyL;
-	b2PolygonShape polyR;
-	myFixR.density = 0;
-	myFixL.density = 0;
-	polyL.SetAsBox(0.01, 0.01, b2Vec2(0.3,0),0);
-	polyR.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
-	myFixR.shape = &polyL;
-	myFixL.shape = &polyR;
-	pbody->body->CreateFixture(&myFixR);
-	pbody->body->CreateFixture(&myFixL);
+	//b2FixtureDef myFixR;
+	//b2FixtureDef myFixL;
+	//b2PolygonShape polyL;
+	//b2PolygonShape polyR;
+	//myFixR.density = 0;
+	//myFixL.density = 0;
+	//polyL.SetAsBox(0.01, 0.01, b2Vec2(0.3,0),0);
+	//polyR.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
+	//myFixR.shape = &polyL;
+	//myFixL.shape = &polyR;
+	//pbody->body->CreateFixture(&myFixR);
+	//pbody->body->CreateFixture(&myFixL);
   
 	// L07 DONE 7: Assign collider type
 	pbody->ctype = ColliderType::PLAYER;
@@ -171,19 +171,18 @@ bool Player::Update()
 				jumpcount = 2;
 			}
 			if (v.y > 0) {
-				//if (jumpStart.HasFinished()) {
+				if (jumpStart.HasFinished()) {
 					currentAnimation = &jumpDown;
 					jumpStart.Reset();
-				//}
+				}
 			}
 
 			if (v.y < 0) {
-				//if (jumpStart.HasFinished()) {
+				if (jumpStart.HasFinished()) {
 					currentAnimation = &jumpUp;
 					jumpStart.Reset();
-				//}
+				}
 			}
-			//if (v.y == 0 && v.x != 0) currentAnimation = &idle;
 
 			/*----------------------------Player Movement Variation 2--------------------------*/
 				if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
@@ -204,10 +203,10 @@ bool Player::Update()
 				//jump
 				if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 					if (jumpcount > 0) {
-						///*if (currentAnimation != &jumpStart)
-						//	jumpStart.Reset();
-						//
-						//currentAnimation = &jumpStart;*/
+						if (currentAnimation != &jumpStart)
+							jumpStart.Reset();
+						
+						currentAnimation = &jumpStart;
 
 						pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
 						jumpcount--;
