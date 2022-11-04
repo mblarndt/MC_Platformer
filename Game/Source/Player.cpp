@@ -59,11 +59,16 @@ bool Player::Start() {
 	// Sprite rectangle inside the keys of the function
 	// Input the animation steps in order
 
-	movement.PushBack({ 15, 90, 30, 30 });
-	movement.PushBack({ 74, 90, 30, 30 });
+	movementRight.PushBack({ 15, 90, 30, 30 });
+	movementRight.PushBack({ 74, 90, 30, 30 });
+	movementRight.loop = true;
+	movementRight.speed = 0.1f;
 
-	movement.loop = true;
-	movement.speed = 0.1f;
+	movementLeft.PushBack({ 135, 90, 30, 30 });
+	movementLeft.PushBack({ 194, 90, 30, 30 });
+	movementLeft.loop = true;
+	movementLeft.speed = 0.1f;
+	
 
 	idle.PushBack({15, 8, 44, 32});
 	idle.PushBack({75, 8, 44, 32});
@@ -162,9 +167,9 @@ bool Player::Update()
 
 			//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 			if (v.y == 0) {
-				if (v.x < 0)	currentAnimation = &movement;
+				if (v.x < 0)	currentAnimation = &movementLeft;
 
-				if (v.x > 0)	currentAnimation = &movement;
+				if (v.x > 0)	currentAnimation = &movementRight;
 
 				if (v.x == 0)	currentAnimation = &idle;
 
