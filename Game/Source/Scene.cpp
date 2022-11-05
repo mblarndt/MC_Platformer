@@ -82,6 +82,7 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		app->LoadGameRequest();
 
+
 	//Camera Movement
 	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		//moveCamy += 3;

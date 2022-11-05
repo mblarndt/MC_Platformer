@@ -285,7 +285,7 @@ bool Player::LoadState(pugi::xml_node& data)
 	position.x = data.child("player").attribute("x").as_int();
 	position.y = data.child("player").attribute("y").as_int();
 
-	pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+	//pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 	velocitx.x = 0;
 
 	return true;
@@ -336,8 +336,5 @@ void Player::Debug() {
 	if (app->input->GetKey(SDL_SCANCODE_F1) || app->input->GetKey(SDL_SCANCODE_F3)) {
 		pbody->body->SetLinearVelocity(b2Vec2(0, 0));
 		spawnStart = true;
-	}
-	if (app->input->GetKey(SDL_SCANCODE_F6)) {
-
 	}
 }

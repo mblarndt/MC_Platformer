@@ -5,14 +5,15 @@
 	<textures />
 	<audio />
 	<:anonymous />
+	<Logo screen />
 	<scene />
 	<entitymanager>
-		<position x="2051" y="257" />
+		<position x="1216" y="321" />
 	</entitymanager>
 	<map />
 	<:anonymous />
 	<renderer>
-		<camera x="-1747" y="0" />
+		<camera x="-916" y="0" />
 		<player />
 	</renderer>
 </save_state>

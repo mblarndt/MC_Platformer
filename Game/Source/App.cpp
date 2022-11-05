@@ -324,7 +324,7 @@ bool App::LoadFromFile()
 		ListItem<Module*>* item;
 		item = modules.start;
 
-		while (item != NULL && ret == true)
+		while (item != NULL && ret)
 		{
 			ret = item->data->LoadState(gameStateFile.child("save_state").child(item->data->name.GetString()));
 			item = item->next;
