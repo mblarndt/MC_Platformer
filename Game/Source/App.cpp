@@ -22,18 +22,21 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 {
 	frames = 0;
 
-	input = new Input();
-	win = new Window();
-	render = new Render();
-	tex = new Textures();
-	audio = new Audio();
+	input = new Input(true);
+	win = new Window(true);
+	render = new Render(true);
+	tex = new Textures(true);
+	audio = new Audio(true);
 	
 	// L07 TODO 2: Add Physics module
-	physics = new Physics();
-	scene = new Scene();
-	entityManager = new EntityManager();
-	map = new Map();
-	fadeBlack = new FadeToBlack();
+	physics = new Physics(true);
+	scene = new Scene(false);
+	entityManager = new EntityManager(true);
+	map = new Map(true);
+	logo = new Logo(true);
+	fadeBlack = new FadeToBlack(true);
+
+	
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -49,7 +52,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(fadeBlack);
 
-	// AddModule(logo);
+	AddModule(logo);
 
 	// Render last to swap buffer
 	AddModule(render);

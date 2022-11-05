@@ -3,8 +3,10 @@
 
 #include "Module.h"
 
-class Logo : public Module {
-	Logo();
+class Logo : public Module
+{
+public:
+	Logo(bool isEnabled);
 	
 	virtual ~Logo();
 	
@@ -25,6 +27,8 @@ class Logo : public Module {
 
 private:
 	SDL_Texture* textureLogo;
+	
+	int framectr = 120;
 };
 
 

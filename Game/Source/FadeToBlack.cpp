@@ -8,7 +8,8 @@
 
 #include "SDL/include/SDL_render.h"
 
-FadeToBlack::FadeToBlack() : Module()
+FadeToBlack::FadeToBlack(bool isEnabled) : Module(isEnabled)
+//FadeToBlack::FadeToBlack()
 {
 
 }

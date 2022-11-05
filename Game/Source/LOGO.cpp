@@ -6,10 +6,11 @@
 #include "Window.h"
 #include "Scene.h"
 #include "Map.h"
+#include "FadeToBlack.h"
 
 #include "LOGO.h"
 
-Logo::Logo() : Module()
+Logo::Logo(bool isEnabled) : Module(isEnabled)
 {
 	textureLogo = NULL;
 	name.Create("Logo screen");
@@ -42,7 +43,14 @@ bool Logo::Update(float dt)
 	rect.w = 1024;
 	rect.h = 480;
 	app->render->DrawTexture(textureLogo, 0, 0, &rect);
+	
+	if (framectr == 0) {
+		app->fadeBlack->Fade(this, app->scene);
+	}
+
+	framectr--;
 	return true;
+
 }
 
 bool Logo::PostUpdate()

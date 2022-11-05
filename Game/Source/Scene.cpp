@@ -13,7 +13,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-Scene::Scene() : Module()
+Scene::Scene(bool isEnabled) : Module(isEnabled)
 {
 	name.Create("scene");
 }
