@@ -26,7 +26,7 @@ bool Logo::Awake()
 
 bool Logo::Start()
 {
-	textureLogo = app->tex->Load("Assetes/Textures/test.png");
+	textureLogo = app->tex->Load("Assets/Textures/test.png");
 	return true;
 }
 
@@ -40,17 +40,16 @@ bool Logo::Update(float dt)
 	SDL_Rect rect;
 	rect.x = 0;
 	rect.y = 0;
-	rect.w = 1024;
-	rect.h = 480;
+	rect.w = 538;
+	rect.h = 381;
 	app->render->DrawTexture(textureLogo, 0, 0, &rect);
 	
 	if (framectr == 0) {
-		app->fadeBlack->Fade(this, app->scene);
+		app->fadeBlack->Fade(this, (Module*)app->scene, 120);
 	}
 
 	framectr--;
 	return true;
-
 }
 
 bool Logo::PostUpdate()

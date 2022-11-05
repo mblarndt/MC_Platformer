@@ -4,6 +4,7 @@
 #include "Textures.h"
 #include "Map.h"
 #include "Physics.h"
+#include "Scene.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -32,12 +33,15 @@ bool Map::Awake(pugi::xml_node& config)
     return ret;
 }
 
+bool Map::Start()
+{
+    return true; 
+}
+
 void Map::Draw()
 {
     if(mapLoaded == false)
         return;
-
-
 
     // L05: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
 

@@ -29,14 +29,15 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	audio = new Audio(true);
 	
 	// L07 TODO 2: Add Physics module
-	physics = new Physics(true);
+	physics = new Physics(false);
+	entityManager = new EntityManager(false);
 	scene = new Scene(false);
-	entityManager = new EntityManager(true);
-	map = new Map(true);
-	logo = new Logo(true);
-	fadeBlack = new FadeToBlack(true);
 
+	map = new Map(false);
 	
+	logo = new Logo(true);
+	
+	fadeBlack = new FadeToBlack(true);
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -44,16 +45,15 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(win);
 	AddModule(tex);
 	AddModule(audio);
-
-	//L07 TODO 2: Add Physics module
 	AddModule(physics);
+	
+	AddModule(logo);
 	AddModule(scene);
+
 	AddModule(entityManager);
 	AddModule(map);
 	AddModule(fadeBlack);
-
-	AddModule(logo);
-
+	
 	// Render last to swap buffer
 	AddModule(render);
 }
@@ -358,4 +358,18 @@ bool App::SaveToFile()
 	saveGameRequested = false;
 
 	return ret;
+}
+
+pugi::xml_node App::getNodetoVar() {
+	
+	// L01: DONE 3: Load config.xml file using load_file() method from the xml_document class
+	pugi::xml_parse_result parseResult = configFile.load_file("config.xml");
+
+	// L01: DONE 3: Check result for loading errors
+	if (parseResult) {
+		return configFile.child("config");
+	}
+	else {
+		LOG("Error in App::LoadConfig(): %s", parseResult.description());
+	}
 }
