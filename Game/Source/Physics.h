@@ -5,7 +5,7 @@
 #include "Box2D/Box2D/Box2D.h"
 
 #define GRAVITY_X 0.0f
-#define GRAVITY_Y -8.0f
+#define GRAVITY_Y -12.0f
 
 #define PIXELS_PER_METER 50.0f // if touched change METER_PER_PIXEL too
 #define METER_PER_PIXEL 0.02f // this is 1 / PIXELS_PER_METER !
@@ -60,7 +60,7 @@ class Physics : public Module, public b2ContactListener // TODO
 public:
 
 	// Constructors & Destructors
-	Physics();
+	Physics(bool isEnabled);
 	~Physics();
 
 	// Main module steps

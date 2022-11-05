@@ -29,9 +29,12 @@ public:
 	bool Update();
 
 	bool CleanUp();
+
+	void Debug();
 	
 	Animation idle;
-	Animation movement;
+	Animation movementRight;
+	Animation movementLeft;
 	Animation jumpStart;
 	Animation jumpEnd;
 	Animation jumpUp;

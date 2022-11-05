@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "Physics.h"
 #include "FadeToBlack.h"
+#include "LOGO.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -21,18 +22,22 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 {
 	frames = 0;
 
-	input = new Input();
-	win = new Window();
-	render = new Render();
-	tex = new Textures();
-	audio = new Audio();
+	input = new Input(true);
+	win = new Window(true);
+	render = new Render(true);
+	tex = new Textures(true);
+	audio = new Audio(true);
 	
 	// L07 TODO 2: Add Physics module
-	physics = new Physics();
-	scene = new Scene();
-	entityManager = new EntityManager();
-	map = new Map();
-	fadeBlack = new FadeToBlack();
+	physics = new Physics(false);
+	entityManager = new EntityManager(false);
+	scene = new Scene(false);
+
+	map = new Map(false);
+	
+	logo = new Logo(true);
+	
+	fadeBlack = new FadeToBlack(true);
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -40,13 +45,16 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(win);
 	AddModule(tex);
 	AddModule(audio);
-	//L07 TODO 2: Add Physics module
 	AddModule(physics);
+	
+	AddModule(logo);
 	AddModule(scene);
+
 	AddModule(entityManager);
 	AddModule(map);
+	
 	AddModule(fadeBlack);
-
+	
 	// Render last to swap buffer
 	AddModule(render);
 }
@@ -316,7 +324,7 @@ bool App::LoadFromFile()
 		ListItem<Module*>* item;
 		item = modules.start;
 
-		while (item != NULL && ret == true)
+		while (item != NULL && ret)
 		{
 			ret = item->data->LoadState(gameStateFile.child("save_state").child(item->data->name.GetString()));
 			item = item->next;
@@ -351,4 +359,18 @@ bool App::SaveToFile()
 	saveGameRequested = false;
 
 	return ret;
+}
+
+pugi::xml_node App::getNodetoVar() {
+	
+	// L01: DONE 3: Load config.xml file using load_file() method from the xml_document class
+	pugi::xml_parse_result parseResult = configFile.load_file("config.xml");
+
+	// L01: DONE 3: Check result for loading errors
+	if (parseResult) {
+		return configFile.child("config");
+	}
+	else {
+		LOG("Error in App::LoadConfig(): %s", parseResult.description());
+	}
 }

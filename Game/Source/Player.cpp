@@ -59,11 +59,16 @@ bool Player::Start() {
 	// Sprite rectangle inside the keys of the function
 	// Input the animation steps in order
 
-  movement.PushBack({ 15, 90, 30, 30 });
-	movement.PushBack({ 74, 90, 30, 30 });
+	movementRight.PushBack({ 15, 90, 30, 30 });
+	movementRight.PushBack({ 74, 90, 30, 30 });
+	movementRight.loop = true;
+	movementRight.speed = 0.1f;
 
-	movement.loop = true;
-	movement.speed = 0.1f;
+	movementLeft.PushBack({ 135, 90, 30, 30 });
+	movementLeft.PushBack({ 194, 90, 30, 30 });
+	movementLeft.loop = true;
+	movementLeft.speed = 0.1f;
+	
 
 	idle.PushBack({15, 8, 44, 32});
 	idle.PushBack({75, 8, 44, 32});
@@ -94,18 +99,18 @@ bool Player::Start() {
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, bodyType::DYNAMIC);
 
 	//Add Fixtures to detect collision direction
-	b2FixtureDef myFixR;
-	b2FixtureDef myFixL;
-	b2PolygonShape polyL;
-	b2PolygonShape polyR;
-	myFixR.density = 0;
-	myFixL.density = 0;
-	polyL.SetAsBox(0.01, 0.01, b2Vec2(0.3,0),0);
-	polyR.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
-	myFixR.shape = &polyL;
-	myFixL.shape = &polyR;
-	pbody->body->CreateFixture(&myFixR);
-	pbody->body->CreateFixture(&myFixL);
+	//b2FixtureDef myFixR;
+	//b2FixtureDef myFixL;
+	//b2PolygonShape polyL;
+	//b2PolygonShape polyR;
+	//myFixR.density = 0;
+	//myFixL.density = 0;
+	//polyL.SetAsBox(0.01, 0.01, b2Vec2(0.3,0),0);
+	//polyR.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
+	//myFixR.shape = &polyL;
+	//myFixL.shape = &polyR;
+	//pbody->body->CreateFixture(&myFixR);
+	//pbody->body->CreateFixture(&myFixL);
   
 	// L07 DONE 7: Assign collider type
 	pbody->ctype = ColliderType::PLAYER;
@@ -125,10 +130,7 @@ bool Player::Start() {
 	return true;
 }
 
-
 b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
-
-
 
 bool Player::Update()
 {
@@ -139,10 +141,11 @@ bool Player::Update()
 	//Activate Game
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 		startGame = true;
+		app->audio->PlayMusic("Assets/Audio/Music/Sweden - C418.ogg");
 	}
 
 	if (startGame == true) {
-
+		
 		//Camera Transition from StartScreen to Player
 		if (camMoved == false) {
 			currentAnimation = &idle;
@@ -164,53 +167,51 @@ bool Player::Update()
 
 			//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 			if (v.y == 0) {
-				if (v.x < 0)	currentAnimation = &movement;
+				if (v.x < 0)	currentAnimation = &movementLeft;
 
-				if (v.x > 0)	currentAnimation = &movement;
+				if (v.x > 0)	currentAnimation = &movementRight;
 
 				if (v.x == 0)	currentAnimation = &idle;
 
 				jumpcount = 2;
 			}
 			if (v.y > 0) {
-				//if (jumpStart.HasFinished()) {
+				if (jumpStart.HasFinished()) {
 					currentAnimation = &jumpDown;
 					jumpStart.Reset();
-				//}
+				}
 			}
 
 			if (v.y < 0) {
-				//if (jumpStart.HasFinished()) {
+				if (jumpStart.HasFinished()) {
 					currentAnimation = &jumpUp;
 					jumpStart.Reset();
-				//}
+				}
 			}
-			//if (v.y == 0 && v.x != 0) currentAnimation = &idle;
 
 			/*----------------------------Player Movement Variation 2--------------------------*/
-				if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+				if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
 					pbody->body->SetLinearVelocity(b2Vec2(-speed, v.y));
 				}
 
-				else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+				else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
 					pbody->body->SetLinearVelocity(b2Vec2(speed, v.y));
 				}
 
 				// if not pressing anything
-				else
-				{
-					b2Vec2 v = pbody->body->GetLinearVelocity();
-					v.x = speed;
-					pbody->body->SetLinearVelocity(v);
-				}
+				// else
+				// {
+				// 	b2Vec2 v = pbody->body->GetLinearVelocity();
+				// 	pbody->body->SetLinearVelocity(v);
+				// }
 
 				//jump
-				if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+				if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 					if (jumpcount > 0) {
-						/////*if (currentAnimation != &jumpStart)
-						////	jumpStart.Reset();
-						////
-						////currentAnimation = &jumpStart;*/
+						if (currentAnimation != &jumpStart)
+							jumpStart.Reset();
+						
+						currentAnimation = &jumpStart;
 
 						pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
 						jumpcount--;
@@ -262,9 +263,9 @@ bool Player::Update()
 				velocitx.x = 0;
 				spawnStart = false;
 			}
-
-			
 		}
+
+		Debug();
 
 		currentAnimation->Update();
 		SDL_Rect rect = currentAnimation->GetCurrentFrame();
@@ -272,19 +273,20 @@ bool Player::Update()
 	}
 
 	return true;
-	
 }
 
 bool Player::CleanUp()
 {
-
 	return true;
 }
 
 bool Player::LoadState(pugi::xml_node& data)
 {
-	position.x = data.child("camera").attribute("x").as_int();
-	position.y = data.child("camera").attribute("y").as_int();
+	position.x = data.child("player").attribute("x").as_int();
+	position.y = data.child("player").attribute("y").as_int();
+
+	//pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+	velocitx.x = 0;
 
 	return true;
 }
@@ -297,7 +299,6 @@ bool Player::SaveState(pugi::xml_node& data)
 
 	player.append_attribute("x") = position.x;
 	player.append_attribute("y") = position.y;
-
 
 	return true;
 }
@@ -321,7 +322,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		jumpcount = 0;
 		break;
 	case ColliderType::DEATH:
-		LOG("Collision FLOOR");
+		LOG("Collision DEATH");
 		app->audio->PlayFx(hurtFxId);
 		spawnStart = true;
 		break;
@@ -329,5 +330,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		LOG("Collision UNKNOWN");
 		break;
 	}
+}
 
+void Player::Debug() {
+	if (app->input->GetKey(SDL_SCANCODE_F1) || app->input->GetKey(SDL_SCANCODE_F3)) {
+		pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+		spawnStart = true;
+	}
 }
