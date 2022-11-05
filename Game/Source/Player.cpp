@@ -47,8 +47,9 @@ bool Player::Awake() {
 	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
 	jumpsteps = parameters.child("movement").attribute("jumpsteps").as_int();
 
-	//Dead Texture
+	//Dead/Finish Texture
 	deathPath = "Assets/Textures/dead3.png";
+	finishPath = "Assets/Textures/finish.png";
 
 
 	return true;
@@ -59,6 +60,7 @@ bool Player::Start() {
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 	texDeath = app->tex->Load(deathPath);
+	texFinish = app->tex->Load(finishPath);
 	
 	// Sprite rectangle inside the keys of the function
 	// Input the animation steps in order
@@ -283,6 +285,22 @@ bool Player::Update()
 				}
 			}
 
+			//If Player finished Level
+			if (levelFinish) {
+				SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
+				app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
+				SDL_Rect rect = { 0, 0, 1024, 480 };
+				app->render->DrawTexture(texFinish, position.x - camOffset, 0, &rect);
+
+				if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+					position.x = spawn.x;
+					position.y = spawn.y;
+					pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+					velocitx.x = 0;
+					playerDeath = false;
+				}
+			}
+
 			
 		}
 
@@ -343,8 +361,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		LOG("Collision DEATH");
 		frameCounter = 0;
 		app->audio->PlayFx(hurtFxId);
-
 		playerDeath = true;
+		break;
+	case ColliderType::FINISH:
+		LOG("Collision FINISH");
+		levelFinish = true;
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");

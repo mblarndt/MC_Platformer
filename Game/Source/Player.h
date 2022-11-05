@@ -59,6 +59,9 @@ private:
 	SDL_Texture* texDeath;
 	const char* deathPath;
 
+	SDL_Texture* texFinish;
+	const char* finishPath;
+
 	// L07 TODO 5: Add physics to the player - declare a Physics body
 	PhysBody* pbody;
 
@@ -67,6 +70,7 @@ private:
 	int hurtFxId;
 	
 	bool playerDeath;
+	bool levelFinish;
 	iPoint spawn;
 	iPoint menu;
 

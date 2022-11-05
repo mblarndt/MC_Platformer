@@ -387,6 +387,10 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
             PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
             cstr->ctype = ColliderType::DEATH;
         }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_FINISH) {
+            PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
+            cstr->ctype = ColliderType::FINISH;
+        }
 
 
         group->object.Add(newObject);
