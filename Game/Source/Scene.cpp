@@ -84,19 +84,23 @@ bool Scene::Update(float dt)
 
 	//Camera Movement
 	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		//moveCamy += 3;
 		app->render->camera.y += 3;
 
 	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		//moveCamy -= 3;
 		app->render->camera.y -= 3;
 
 	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		//moveCamx += 3;
 		app->render->camera.x += 3;
 
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		//moveCamx -= 3;
 		app->render->camera.x -= 3;
 
-	//if(player->position.x > 400 && player->position.x < (app->map->mapData.width-400))
-	//app->render->camera.x = -(player->position.x) + 400;
+	//app->render->camera.y += moveCamy;
+	//app->render->camera.x += moveCamx;
 
 
 	// Draw map
