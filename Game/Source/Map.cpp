@@ -4,7 +4,6 @@
 #include "Textures.h"
 #include "Map.h"
 #include "Physics.h"
-#include "Scene.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -12,7 +11,7 @@
 #include <math.h>
 #include "SDL_image/include/SDL_image.h"
 
-Map::Map(bool isEnabled) : Module(isEnabled)
+Map::Map() : Module(), mapLoaded(false)
 {
     name.Create("map");
 }
@@ -33,15 +32,12 @@ bool Map::Awake(pugi::xml_node& config)
     return ret;
 }
 
-bool Map::Start()
-{
-    return true; 
-}
-
 void Map::Draw()
 {
     if(mapLoaded == false)
         return;
+
+
 
     // L05: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
 

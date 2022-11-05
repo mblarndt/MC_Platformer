@@ -29,12 +29,9 @@ public:
 	bool Update();
 
 	bool CleanUp();
-
-	void Debug();
 	
 	Animation idle;
-	Animation movementRight;
-	Animation movementLeft;
+	Animation movement;
 	Animation jumpStart;
 	Animation jumpEnd;
 	Animation jumpUp;
@@ -59,6 +56,9 @@ private:
 	SDL_Texture* texture;
 	const char* texturePath;
 
+	SDL_Texture* texDeath;
+	const char* deathPath;
+
 	// L07 TODO 5: Add physics to the player - declare a Physics body
 	PhysBody* pbody;
 
@@ -66,7 +66,7 @@ private:
 	int pickCoinFxId;
 	int hurtFxId;
 	
-	bool spawnStart;
+	bool playerDeath;
 	iPoint spawn;
 	iPoint menu;
 
@@ -77,7 +77,8 @@ private:
 	int remainingPixels = 0;
 
 	bool isjumping;
-	int jumpcount = 2;
+	int jumpcount;;
+
 
 	int width;
 	int height;
@@ -85,6 +86,7 @@ private:
 	float jumpforce;
 	int jumpsteps = 3;
 	int remainingJumpSteps = jumpsteps;
+
 
 };
 

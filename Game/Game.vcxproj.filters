@@ -22,7 +22,6 @@
     <ClCompile Include="Source\Physics.cpp" />
     <ClCompile Include="ContactListener.cpp" />
     <ClCompile Include="Source\FadeToBlack.cpp" />
-    <ClCompile Include="Source\LOGO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -69,7 +68,6 @@
     <ClInclude Include="ContactListener.h" />
     <ClInclude Include="Source\Animation.h" />
     <ClInclude Include="Source\FadeToBlack.h" />
-    <ClInclude Include="Source\LOGO.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

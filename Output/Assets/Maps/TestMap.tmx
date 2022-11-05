@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="200" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="90">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="200" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="109">
  <tileset firstgid="1" name="Minecraft Tileset" tilewidth="32" tileheight="32" tilecount="120" columns="10">
   <image source="Minecraft Tileset.png" width="320" height="384"/>
  </tileset>
@@ -11183,7 +11183,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -11574,6 +11574,10 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="10"/>
+   <tile/>
+   <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -11592,11 +11596,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -11783,7 +11783,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -11964,41 +11964,41 @@
    <tile gid="10"/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="10"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="10"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="10"/>
+   <tile gid="10"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="10"/>
+   <tile gid="10"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="10"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="10"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
+   <tile gid="47"/>
    <tile/>
    <tile/>
    <tile/>
@@ -15044,7 +15044,7 @@
  <objectgroup id="8" name="Colliders">
   <object id="1" name="Ground" class="solid" x="960" y="352" width="800" height="128"/>
   <object id="4" name="Ground" class="solid" x="1376" y="320" width="224" height="32"/>
-  <object id="7" name="Ground" class="solid" x="922" y="353" width="36" height="147"/>
+  <object id="7" class="solid" x="922" y="64" width="38" height="436"/>
   <object id="9" name="Ground" class="solid" x="1824" y="320" width="416" height="160"/>
   <object id="10" name="Ground" class="solid" x="1952" y="288" width="128" height="32"/>
   <object id="11" name="Ground" class="solid" x="2240" y="352" width="160" height="128"/>
@@ -15106,7 +15106,7 @@
   <object id="59" class="solid" x="3904" y="288" width="32" height="192"/>
   <object id="60" class="solid" x="3936" y="320" width="96" height="160"/>
   <object id="61" class="solid" x="4032" y="320" width="32" height="32"/>
-  <object id="62" class="solid" x="4032" y="448" width="128" height="32"/>
+  <object id="62" class="solid" x="4032" y="448" width="192" height="32"/>
   <object id="63" class="solid" x="960" y="-32" width="1920" height="32"/>
   <object id="65" class="solid" x="2880" y="128" width="128" height="94"/>
   <object id="67" class="solid" x="3296" y="320" width="64" height="32"/>
@@ -15123,7 +15123,6 @@
   <object id="79" class="death" x="3713.67" y="456.667" width="63.3333" height="24"/>
   <object id="80" class="solid" x="0" y="351.5" width="922.667" height="128.5"/>
   <object id="81" class="solid" x="-34" y="-5" width="33" height="501"/>
-  <object id="82" class="solid" x="4160" y="448" width="1280" height="32"/>
   <object id="83" class="solid" x="5408" y="64" width="32" height="384"/>
   <object id="84" class="solid" x="5344" y="352" width="64" height="32"/>
   <object id="85" class="solid" x="4192" y="288" width="1088" height="32"/>
@@ -15131,6 +15130,25 @@
   <object id="87" class="solid" x="4192" y="0" width="1248" height="32"/>
   <object id="88" class="solid" x="4320" y="160" width="1088" height="32"/>
   <object id="89" class="solid" x="4192" y="224" width="64" height="32"/>
+  <object id="90" class="death" x="4224" y="448" width="96" height="32"/>
+  <object id="91" class="death" x="4352" y="448" width="96" height="32"/>
+  <object id="92" class="death" x="4480" y="448" width="256" height="32"/>
+  <object id="93" class="death" x="4800" y="448" width="96" height="32"/>
+  <object id="94" class="death" x="4960" y="448" width="64" height="32"/>
+  <object id="95" class="death" x="5056" y="448" width="96" height="32"/>
+  <object id="96" class="death" x="5184" y="448" width="160" height="32"/>
+  <object id="97" class="solid" x="4832" y="320" width="32" height="32"/>
+  <object id="98" class="solid" x="4832" y="416" width="32" height="32"/>
+  <object id="99" class="solid" x="5248" y="384" width="32" height="32"/>
+  <object id="100" class="solid" x="5152" y="448" width="32" height="32"/>
+  <object id="101" class="solid" x="5024" y="448" width="32" height="32"/>
+  <object id="102" class="solid" x="4896" y="448" width="64" height="32"/>
+  <object id="103" class="solid" x="4736" y="448" width="64" height="32"/>
+  <object id="104" class="solid" x="4640" y="384" width="32" height="32"/>
+  <object id="105" class="solid" x="4544" y="384" width="32" height="32"/>
+  <object id="106" class="solid" x="4448" y="448" width="32" height="32"/>
+  <object id="107" class="solid" x="4320" y="448" width="32" height="32"/>
+  <object id="108" class="solid" x="5344" y="448" width="96" height="32"/>
  </objectgroup>
  <layer id="9" name="Text" width="200" height="15">
   <properties>

@@ -138,19 +138,19 @@ struct MapData
 	List<ObjectGroups*> objectgroups;
 };
 
+
+
 class Map : public Module
 {
 public:
 
-	Map(bool isEnabled);
+    Map();
 
     // Destructor
     virtual ~Map();
 
-    // Called before render is available<
+    // Called before render is available
     bool Awake(pugi::xml_node& conf);
-
-	bool Start();
 
     // Called each loop iteration
     void Draw();

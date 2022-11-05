@@ -8,7 +8,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-EntityManager::EntityManager(bool isEnabled) : Module(isEnabled)
+EntityManager::EntityManager() : Module()
 {
 	name.Create("entitymanager");
 }
@@ -129,41 +129,6 @@ bool EntityManager::Update(float dt)
 
 		if (pEntity->active == false) continue;
 		ret = item->data->Update();
-	}
-
-	return ret;
-}
-
-bool EntityManager::SaveState(pugi::xml_node&data)
-{
-	bool ret = true;
-	ListItem<Entity*>* item;
-	Entity* pEntity = NULL;
-	
-	for (item = entities.start; item != NULL && ret == true; item = item->next)
-	{
-		pEntity = item->data;
-		pugi::xml_node player = data.append_child("position");
-
-		player.append_attribute("x") = pEntity->position.x;
-		player.append_attribute("y") = pEntity->position.y;
-	}
-
-	return ret;
-}
-
-bool EntityManager::LoadState(pugi::xml_node& data)
-{
-	bool ret = true;
-	ListItem<Entity*>* item;
-	Entity* pEntity = NULL;
-
-	for (item = entities.start; item != NULL && ret == true; item = item->next)
-	{
-		pEntity = item->data;
-
-		pEntity->position.x = data.child("position").attribute("x").as_int();
-		pEntity->position.y = data.child("position").attribute("y").as_int();
 	}
 
 	return ret;
