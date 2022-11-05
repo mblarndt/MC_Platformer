@@ -52,6 +52,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 
 	AddModule(entityManager);
 	AddModule(map);
+	
 	AddModule(fadeBlack);
 	
 	// Render last to swap buffer
