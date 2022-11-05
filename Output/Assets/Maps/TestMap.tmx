@@ -11964,9 +11964,9 @@
    <tile gid="10"/>
    <tile/>
    <tile/>
-   <tile gid="47"/>
-   <tile gid="47"/>
-   <tile gid="47"/>
+   <tile gid="10"/>
+   <tile gid="10"/>
+   <tile gid="10"/>
    <tile gid="10"/>
    <tile gid="47"/>
    <tile gid="47"/>
@@ -15106,7 +15106,7 @@
   <object id="59" class="solid" x="3904" y="288" width="32" height="192"/>
   <object id="60" class="solid" x="3936" y="320" width="96" height="160"/>
   <object id="61" class="solid" x="4032" y="320" width="32" height="32"/>
-  <object id="62" class="solid" x="4032" y="448" width="192" height="32"/>
+  <object id="62" class="solid" x="4032" y="448" width="319.362" height="32"/>
   <object id="63" class="solid" x="960" y="-32" width="1920" height="32"/>
   <object id="65" class="solid" x="2880" y="128" width="128" height="94"/>
   <object id="67" class="solid" x="3296" y="320" width="64" height="32"/>
@@ -15130,13 +15130,12 @@
   <object id="87" class="solid" x="4192" y="0" width="1248" height="32"/>
   <object id="88" class="solid" x="4320" y="160" width="1088" height="32"/>
   <object id="89" class="solid" x="4192" y="224" width="64" height="32"/>
-  <object id="90" class="death" x="4224" y="448" width="96" height="32"/>
-  <object id="91" class="death" x="4352" y="448" width="96" height="32"/>
-  <object id="92" class="death" x="4480" y="448" width="256" height="32"/>
-  <object id="93" class="death" x="4800" y="448" width="96" height="32"/>
-  <object id="94" class="death" x="4960" y="448" width="64" height="32"/>
-  <object id="95" class="death" x="5056" y="448" width="96" height="32"/>
-  <object id="96" class="death" x="5184" y="448" width="160" height="32"/>
+  <object id="91" class="death" x="4352" y="455" width="96" height="32"/>
+  <object id="92" class="death" x="4480" y="455" width="256" height="32"/>
+  <object id="93" class="death" x="4800" y="455" width="96" height="32"/>
+  <object id="94" class="death" x="4960" y="455" width="64" height="32"/>
+  <object id="95" class="death" x="5056" y="455" width="96" height="32"/>
+  <object id="96" class="death" x="5184" y="453.478" width="160" height="26.522"/>
   <object id="97" class="solid" x="4832" y="320" width="32" height="32"/>
   <object id="98" class="solid" x="4832" y="416" width="32" height="32"/>
   <object id="99" class="solid" x="5248" y="384" width="32" height="32"/>
@@ -15147,7 +15146,6 @@
   <object id="104" class="solid" x="4640" y="384" width="32" height="32"/>
   <object id="105" class="solid" x="4544" y="384" width="32" height="32"/>
   <object id="106" class="solid" x="4448" y="448" width="32" height="32"/>
-  <object id="107" class="solid" x="4320" y="448" width="32" height="32"/>
   <object id="108" class="solid" x="5344" y="448" width="96" height="32"/>
  </objectgroup>
  <layer id="9" name="Text" width="200" height="15">
