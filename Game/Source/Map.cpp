@@ -366,6 +366,9 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->stringType == "death") {
             newObject->type = ObjectTypes::OBJECTTYPE_DEATH;
         }
+        else if (newObject->stringType == "finish") {
+            newObject->type = ObjectTypes::OBJECTTYPE_FINISH;
+        }
         else
             newObject->type = ObjectTypes::OBJECTTYPE_ENTITY;
 

@@ -170,7 +170,7 @@ bool Player::Update()
 
 			if (playerDeath == false) {
 				//Camera follow
-				if (position.x > (camOffset) && position.x < (4160 - (1024 - camOffset)) || position.x >(4160) && position.x < (5440 - (1024 - camOffset))) {
+				if (position.x > (camOffset) && position.x < (4222 - (1024 - camOffset))) {
 					app->render->camera.x = -(position.x) + camOffset;
 					app->render->camera.y = menu.y;
 				}
@@ -290,14 +290,14 @@ bool Player::Update()
 				SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 				app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
 				SDL_Rect rect = { 0, 0, 1024, 480 };
-				app->render->DrawTexture(texFinish, position.x - camOffset, 0, &rect);
+				app->render->DrawTexture(texFinish, position.x - 965, 0, &rect);
 
 				if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 					position.x = spawn.x;
 					position.y = spawn.y;
 					pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 					velocitx.x = 0;
-					playerDeath = false;
+					levelFinish = false;
 				}
 			}
 
