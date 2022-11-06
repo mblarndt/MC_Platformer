@@ -2,12 +2,14 @@
 #include "Window.h"
 #include "Render.h"
 
+#include "EntityManager.h"
+
 #include "Defs.h"
 #include "Log.h"
 
 #define VSYNC true
 
-Render::Render() : Module()
+Render::Render(bool isEnabled) : Module(isEnabled)
 {
 	name.Create("renderer");
 	background.r = 0;
