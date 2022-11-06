@@ -82,10 +82,15 @@ bool Player::Start() {
 	remainingJumpSteps = jumpsteps;
     jumpStart_counter = 4;
 	
-    movement.PushBack({ 0, 80, 60, 40 });
-	movement.PushBack({ 60, 80, 60, 40 });
-	movement.loop = true;
-	movement.speed = 0.1f;
+    movementRight.PushBack({ 0, 80, 60, 40 });
+	movementRight.PushBack({ 60, 80, 60, 40 });
+	movementRight.loop = true;
+	movementRight.speed = 0.1f;
+	
+	movementLeft.PushBack({ 120, 80, 60, 40 });
+	movementLeft.PushBack({ 180, 80, 60, 40 });
+	movementLeft.loop = true;
+	movementLeft.speed = 0.1f;
 
 
 	idle.PushBack({ 0, 0, 60, 40 });
@@ -185,9 +190,9 @@ bool Player::Update()
 
 				//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 				if (v.y == 0) {
-					if (v.x < 0)	currentAnimation = &movement;
+					if (v.x < 0)	currentAnimation = &movementLeft;
 
-					if (v.x > 0)	currentAnimation = &movement;
+					if (v.x > 0)	currentAnimation = &movementRight;
 
 					if (v.x == 0)	currentAnimation = &idle;
 
@@ -281,7 +286,8 @@ bool Player::Update()
 					SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 					app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
 					SDL_Rect rect = { 0, 0, 1024, 480 };
-					app->render->DrawTexture(texDeath, position.x - camOffset, 0, &rect);
+					if (position.x < 2944)	app->render->DrawTexture(texDeath, position.x - camOffset, 0, &rect);
+					else app->render->DrawTexture(texDeath, 3196, 0, &rect);
 					//frameCounter++;
 					if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 						position.x = spawn.x;

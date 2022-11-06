@@ -7,12 +7,12 @@
 	<physics />
 	<logoScreen />
 	<scene>
-		<player x="1216" y="321" />
+		<player x="3197" y="289" />
 	</scene>
 	<entitymanager />
 	<map />
 	<fadeBlack />
 	<renderer>
-		<camera x="-916" y="0" />
+		<camera x="-2900" y="0" />
 	</renderer>
 </save_state>

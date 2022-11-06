@@ -32,7 +32,8 @@ public:
 	bool CleanUp();
 	
 	Animation idle;
-	Animation movement;
+	Animation movementRight;
+	Animation movementLeft;
 	Animation jumpStart;
 	Animation jumpEnd;
 	Animation jumpUp;
