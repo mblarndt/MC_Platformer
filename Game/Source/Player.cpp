@@ -188,15 +188,14 @@ bool Player::Update()
 					jumpStart.Reset();
 				}
 			}
+				/*----------------------------Player Movement Variation 2--------------------------*/
+					if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
+						velocitx.x = -speed;
+					}
 
-			/*----------------------------Player Movement Variation 2--------------------------*/
-				if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
-					pbody->body->SetLinearVelocity(b2Vec2(-speed, v.y));
-				}
-
-				else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
-					pbody->body->SetLinearVelocity(b2Vec2(speed, v.y));
-				}
+					else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
+						velocitx.x = speed;
+					}
 
 				// if not pressing anything
 				// else
