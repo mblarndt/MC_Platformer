@@ -41,7 +41,6 @@ enum ObjectTypes
 	OBJECTTYPE_SOLID,
 	OBJECTTYPE_WARP,
 	OBJECTTYPE_DEATH,
-	OBJECTTYPE_FINISH,
 	OBJECTTYPE_ENTITY
 };
 
@@ -139,19 +138,19 @@ struct MapData
 	List<ObjectGroups*> objectgroups;
 };
 
-
-
 class Map : public Module
 {
 public:
 
-    Map();
+	Map(bool isEnabled);
 
     // Destructor
     virtual ~Map();
 
-    // Called before render is available
+    // Called before render is available<
     bool Awake(pugi::xml_node& conf);
+
+	bool Start();
 
     // Called each loop iteration
     void Draw();

@@ -13,7 +13,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-Scene::Scene() : Module()
+Scene::Scene(bool isEnabled) : Module(isEnabled)
 {
 	name.Create("scene");
 }
@@ -30,28 +30,29 @@ bool Scene::Awake(pugi::xml_node& config)
 
 	// iterate all objects in the scene
 	// Check https://pugixml.org/docs/quickstart.html#access
-	for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
+	/*for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
 	{
 		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
 		item->parameters = itemNode;
-	}
+	}*/
 
 	//L02: DONE 3: Instantiate the player using the entity manager
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 	player->parameters = config.child("player");
-
+	
 	return ret;
 }
 
 // Called before the first frame
 bool Scene::Start()
 {
-	//img = app->tex->Load("Assets/Textures/test.png");
-	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
-	
+	app->entityManager->Enable();
+	app->physics->Enable();
+	app->map->Enable();
+
 	// L03: DONE: Load map
 	app->map->Load();
-
+   
 	// L04: DONE 7: Set the window title with map/tileset info
 	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 		app->map->mapData.width,
@@ -74,21 +75,6 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-
-	//Load First Level
-	//if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-
-	//Load Second Level
-	//if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-
-	//Load Startposition of Level
-	//if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
-
-	//Enable Debug
-	//if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
-		
-
-
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		app->SaveGameRequest();
@@ -99,19 +85,23 @@ bool Scene::Update(float dt)
 
 	//Camera Movement
 	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		//moveCamy += 3;
 		app->render->camera.y += 3;
 
 	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		//moveCamy -= 3;
 		app->render->camera.y -= 3;
 
 	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		//moveCamx += 3;
 		app->render->camera.x += 3;
 
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		//moveCamx -= 3;
 		app->render->camera.x -= 3;
 
-	//if(player->position.x > 400 && player->position.x < (app->map->mapData.width-400))
-	//app->render->camera.x = -(player->position.x) + 400;
+	//app->render->camera.y += moveCamy;
+	//app->render->camera.x += moveCamx;
 
 
 	// Draw map
