@@ -6,9 +6,11 @@ Our submission for the class platformer project, based on Mojang's "Minecraft" e
 
 ## Key Features
 
- - Slime
- - Slimey
- - Slime
+ - Double jump
+ - Save/Load in/from xml file
+ - Configuration variables set in xml file (different from save/load)
+ - SFX and Music
+ - Animations
 
 ## Controls
 
@@ -26,7 +28,7 @@ Our submission for the class platformer project, based on Mojang's "Minecraft" e
 
 ## Developers
 
- - Ben - Programming
+ - Ben - Programming and Art&Animations
  - Pau Fusco - Programming
 
 ## License
