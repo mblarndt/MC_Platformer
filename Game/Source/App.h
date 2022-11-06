@@ -61,7 +61,6 @@ public:
 	bool LoadFromFile();
 	bool SaveToFile() ;
 
-	pugi::xml_node getNodetoVar();
 private:
 
 	// Load config file
@@ -82,8 +81,6 @@ private:
 	// Call modules after each loop iteration
 	bool PostUpdate();
 
-	
-
 public:
 
 	// Modules
@@ -95,7 +92,6 @@ public:
 	Scene* scene;
 	EntityManager* entityManager;
 	Map* map;
-	
 	//L07 TODO 2: Add Physics module
 	Physics* physics;
 
@@ -122,8 +118,8 @@ private:
 	float dt;
 
 	// L03: DONE 1: Create control variables to control that the real Load and Save happens at the end of the frame
-    bool saveGameRequested;
-	bool loadGameRequested;
+    bool saveGameRequested = false;
+	bool loadGameRequested = false;
 };
 
 extern App* app;

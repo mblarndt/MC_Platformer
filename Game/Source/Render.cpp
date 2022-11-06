@@ -1,7 +1,6 @@
 #include "App.h"
 #include "Window.h"
 #include "Render.h"
-
 #include "EntityManager.h"
 
 #include "Defs.h"
@@ -236,6 +235,8 @@ bool Render::LoadState(pugi::xml_node& data)
 	camera.x = data.child("camera").attribute("x").as_int();
 	camera.y = data.child("camera").attribute("y").as_int();
 
+	app->entityManager->LoadState(data);
+
 	return true;
 }
 
@@ -248,7 +249,6 @@ bool Render::SaveState(pugi::xml_node& data)
 
 	cam.append_attribute("x") = camera.x;
 	cam.append_attribute("y") = camera.y;
-
 
 	return true;
 }

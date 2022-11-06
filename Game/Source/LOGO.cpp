@@ -13,7 +13,7 @@
 Logo::Logo(bool isEnabled) : Module(isEnabled)
 {
 	textureLogo = NULL;
-	name.Create("Logo screen");
+	name.Create("logoScreen");
 }
 
 Logo::~Logo()
@@ -26,7 +26,7 @@ bool Logo::Awake()
 
 bool Logo::Start()
 {
-	textureLogo = app->tex->Load("Assets/Textures/test.png");
+	textureLogo = app->tex->Load("Assets/Textures/logo.png");
 	return true;
 }
 
@@ -38,14 +38,16 @@ bool Logo::PreUpdate()
 bool Logo::Update(float dt)
 {
 	SDL_Rect rect;
+
 	rect.x = 0;
 	rect.y = 0;
-	rect.w = 538;
-	rect.h = 381;
-	app->render->DrawTexture(textureLogo, 0, 0, &rect);
+	rect.w = 480;
+	rect.h = 250;
+
+	app->render->DrawTexture(textureLogo, 1024/2 - rect.w/2, 480/2 - rect.h/2, &rect);
 	
 	if (framectr == 0) {
-		app->fadeBlack->Fade(this, (Module*)app->scene, 120);
+		app->fadeBlack->Fade(this, (Module*)app->scene, 60);
 	}
 
 	framectr--;

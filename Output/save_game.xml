@@ -4,14 +4,14 @@
 	<window />
 	<textures />
 	<audio />
-	<:anonymous />
-	<Logo screen />
-	<scene />
-	<entitymanager>
-		<position x="1216" y="321" />
-	</entitymanager>
+	<physics />
+	<logoScreen />
+	<scene>
+		<player x="1216" y="321" />
+	</scene>
+	<entitymanager />
 	<map />
-	<:anonymous />
+	<fadeBlack />
 	<renderer>
 		<camera x="-916" y="0" />
 		<player />

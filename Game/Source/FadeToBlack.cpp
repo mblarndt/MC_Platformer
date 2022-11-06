@@ -9,9 +9,8 @@
 #include "SDL/include/SDL_render.h"
 
 FadeToBlack::FadeToBlack(bool isEnabled) : Module(isEnabled)
-//FadeToBlack::FadeToBlack()
 {
-
+	name.Create("fadeBlack");
 }
 
 FadeToBlack::~FadeToBlack()

@@ -4,7 +4,6 @@
 #include "Textures.h"
 #include "Map.h"
 #include "Physics.h"
-#include "Scene.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -12,7 +11,7 @@
 #include <math.h>
 #include "SDL_image/include/SDL_image.h"
 
-Map::Map(bool isEnabled) : Module(isEnabled)
+Map::Map(bool isEnabled) : Module(isEnabled), mapLoaded(false)
 {
     name.Create("map");
 }
@@ -33,15 +32,12 @@ bool Map::Awake(pugi::xml_node& config)
     return ret;
 }
 
-bool Map::Start()
-{
-    return true; 
-}
-
 void Map::Draw()
 {
     if(mapLoaded == false)
         return;
+
+
 
     // L05: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
 
@@ -370,6 +366,9 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->stringType == "death") {
             newObject->type = ObjectTypes::OBJECTTYPE_DEATH;
         }
+        else if (newObject->stringType == "finish") {
+            newObject->type = ObjectTypes::OBJECTTYPE_FINISH;
+        }
         else
             newObject->type = ObjectTypes::OBJECTTYPE_ENTITY;
 
@@ -390,6 +389,10 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->type == ObjectTypes::OBJECTTYPE_DEATH) {
             PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
             cstr->ctype = ColliderType::DEATH;
+        }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_FINISH) {
+            PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
+            cstr->ctype = ColliderType::FINISH;
         }
 
 
