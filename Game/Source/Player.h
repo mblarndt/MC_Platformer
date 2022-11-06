@@ -29,13 +29,19 @@ public:
 	bool Update();
 
 	bool CleanUp();
+
+	void Debug();
 	
 	Animation idle;
-	Animation movement;
+	Animation movementRight;
+	Animation movementLeft;
 	Animation jumpStart;
 	Animation jumpEnd;
 	Animation jumpUp;
 	Animation jumpDown;
+
+	int jumpStart_counter = 4;
+	int frameCounter;
 
 	// Current animation check
 	Animation* currentAnimation = nullptr;
@@ -49,54 +55,37 @@ public:
 
 private:
 
-	//Texture Variables
+	//L02: DONE 1: Declare player parameters
 	SDL_Texture* texture;
 	const char* texturePath;
-	int width;
-	int height;
 
-	SDL_Texture* texDeath;
-	const char* deathPath;
-	int deathWidth;
-	int deathHeight;
-	
-	SDL_Texture* texFinish;
-	const char* finishPath;
-	int finishWidth;
-	int finishHeight;
-
-
-	//Player Physics Body
+	// L07 TODO 5: Add physics to the player - declare a Physics body
 	PhysBody* pbody;
 
-	//FX-Sound Variables
-	int hitFxId;
+	//SoundIDs
 	int pickCoinFxId;
-	const char* pickCoinFxPath;
-	const char* hitFxPath;
+	int hurtFxId;
 	
-	//Player, Camera and Game States
-	bool playerDeath;
-	bool levelFinish;
-	bool startGame;
-	bool camMoved;
-
-	//Position Variables
+	bool spawnStart;
 	iPoint spawn;
 	iPoint menu;
-	int camOffset;
-	int remainingPixels;
-	int frameCounter;
 
-	//Player Movement Variables
+	bool startGame = false;
+	bool camMoved = false;
+	int camOffset;
+
+	int remainingPixels = 0;
+
+	bool isjumping;
+	int jumpcount = 2;
+
+	int width;
+	int height;
 	float speed;
 	float jumpforce;
-	int jumpsteps;
-	int jumpcount;
-	int remainingJumpSteps;
-	bool isjumping;
-	int jumpStart_counter;
-	
+	int jumpsteps = 3;
+	int remainingJumpSteps = jumpsteps;
+
 };
 
 #endif // __PLAYER_H__
