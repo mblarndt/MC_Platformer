@@ -1,4 +1,4 @@
-# Minecraft Platformer
+# Slime Jumper
 
 ## Description
 
