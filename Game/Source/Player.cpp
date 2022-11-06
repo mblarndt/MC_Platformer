@@ -38,18 +38,30 @@ bool Player::Awake() {
 	camOffset = parameters.child("cam").attribute("offset").as_int();
 
 	//Texture Variables
-	texturePath = parameters.child("texture").attribute("path").as_string();
-	width = parameters.child("texture").attribute("width").as_int();
-	height = parameters.child("texture").attribute("height").as_int();
+	texturePath = parameters.child("textures").child("player").attribute("path").as_string();
+	width = parameters.child("textures").child("player").attribute("width").as_int();
+	height = parameters.child("textures").child("player").attribute("height").as_int();
+
+	deathPath = parameters.child("textures").child("death").attribute("path").as_string();
+	deathWidth = parameters.child("textures").child("death").attribute("width").as_int();
+	deathHeight = parameters.child("textures").child("death").attribute("height").as_int();
+
+	finishPath = parameters.child("textures").child("finish").attribute("path").as_string();
+	finishWidth = parameters.child("textures").child("finish").attribute("width").as_int();
+	finishHeight = parameters.child("textures").child("finish").attribute("height").as_int();
+
+	//Audio Variables
+	hitFxPath = parameters.child("audio").child("hit").attribute("path").as_string();
+	pickCoinFxPath = parameters.child("audio").child("pickcoin").attribute("path").as_string();
+
 
 	//Player Variables
 	speed = parameters.child("movement").attribute("speed").as_int();
 	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
 	jumpsteps = parameters.child("movement").attribute("jumpsteps").as_int();
+	
 
-	//Dead/Finish Texture
-	deathPath = "Assets/Textures/dead3.png";
-	finishPath = "Assets/Textures/finish.png";
+
 
 
 	return true;
@@ -62,8 +74,17 @@ bool Player::Start() {
 	texDeath = app->tex->Load(deathPath);
 	texFinish = app->tex->Load(finishPath);
 	
-	// Sprite rectangle inside the keys of the function
-	// Input the animation steps in order
+
+	//Initialize Audio Fx
+	hitFxId = app->audio->LoadFx(hitFxPath);
+
+	//Initialize States and Values 
+	startGame = false;
+	camMoved = false;
+	remainingPixels = 0;
+	jumpsteps = 3;
+	remainingJumpSteps = jumpsteps;
+    jumpStart_counter = 4;
 	
 
 
@@ -126,9 +147,7 @@ bool Player::Start() {
 	pbody->listener = this;
 
 	pbody->body->SetFixedRotation(true);
-	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
-	pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
-	hurtFxId = app->audio->LoadFx("Assets/Audio/Fx/hurt.ogg");
+
 
 	app->render->camera.x = menu.x;
 
@@ -360,7 +379,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::DEATH:
 		LOG("Collision DEATH");
 		frameCounter = 0;
-		app->audio->PlayFx(hurtFxId);
+		app->audio->PlayFx(hitFxId);
 		playerDeath = true;
 		break;
 	case ColliderType::FINISH:

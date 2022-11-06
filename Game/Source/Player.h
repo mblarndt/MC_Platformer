@@ -37,9 +37,6 @@ public:
 	Animation jumpUp;
 	Animation jumpDown;
 
-	int jumpStart_counter = 4;
-	int frameCounter;
-
 	// Current animation check
 	Animation* currentAnimation = nullptr;
 
@@ -52,46 +49,54 @@ public:
 
 private:
 
-	//L02: DONE 1: Declare player parameters
+	//Texture Variables
 	SDL_Texture* texture;
 	const char* texturePath;
+	int width;
+	int height;
 
 	SDL_Texture* texDeath;
 	const char* deathPath;
-
+	int deathWidth;
+	int deathHeight;
+	
 	SDL_Texture* texFinish;
 	const char* finishPath;
+	int finishWidth;
+	int finishHeight;
 
-	// L07 TODO 5: Add physics to the player - declare a Physics body
+
+	//Player Physics Body
 	PhysBody* pbody;
 
-	//SoundIDs
+	//FX-Sound Variables
+	int hitFxId;
 	int pickCoinFxId;
-	int hurtFxId;
+	const char* pickCoinFxPath;
+	const char* hitFxPath;
 	
+	//Player, Camera and Game States
 	bool playerDeath;
 	bool levelFinish;
+	bool startGame;
+	bool camMoved;
+
+	//Position Variables
 	iPoint spawn;
 	iPoint menu;
-
-	bool startGame = false;
-	bool camMoved = false;
 	int camOffset;
+	int remainingPixels;
+	int frameCounter;
 
-	int remainingPixels = 0;
-
-	bool isjumping;
-	int jumpcount;;
-
-
-	int width;
-	int height;
+	//Player Movement Variables
 	float speed;
 	float jumpforce;
-	int jumpsteps = 3;
-	int remainingJumpSteps = jumpsteps;
-
-
+	int jumpsteps;
+	int jumpcount;
+	int remainingJumpSteps;
+	bool isjumping;
+	int jumpStart_counter;
+	
 };
 
 #endif // __PLAYER_H__
