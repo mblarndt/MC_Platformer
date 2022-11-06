@@ -220,11 +220,11 @@ bool Player::Update()
 				//if (v.y == 0 && v.x != 0) currentAnimation = &idle;
 
 				/*----------------------------Player Movement Variation 2--------------------------*/
-					if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+					if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
 						velocitx.x = -speed;
 					}
 
-					else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+					else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
 						velocitx.x = speed;
 					}
 
