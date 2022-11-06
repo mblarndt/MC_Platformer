@@ -14,6 +14,5 @@
 	<fadeBlack />
 	<renderer>
 		<camera x="-916" y="0" />
-		<player />
 	</renderer>
 </save_state>
