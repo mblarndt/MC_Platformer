@@ -11,7 +11,7 @@ class Scene : public Module
 {
 public:
 
-	Scene(bool isEanabled);
+	Scene();
 
 	// Destructor
 	virtual ~Scene();
@@ -41,9 +41,6 @@ public:
 
 private:
 	SDL_Texture* img;
-
-	int moveCamx = 0;
-	int moveCamy = 0;
 
 };
 

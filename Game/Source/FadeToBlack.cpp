@@ -8,8 +8,7 @@
 
 #include "SDL/include/SDL_render.h"
 
-FadeToBlack::FadeToBlack(bool isEnabled) : Module(isEnabled)
-//FadeToBlack::FadeToBlack()
+FadeToBlack::FadeToBlack() : Module()
 {
 
 }
@@ -40,7 +39,7 @@ bool FadeToBlack::Start()
 	return true;
 }
 
-bool FadeToBlack::Update(float dt)
+bool FadeToBlack::Update()
 {
 	// Exit this function if we are not performing a fade
 	if (currentStep == Fade_Step::NONE) return true;

@@ -8,8 +8,7 @@ class FadeToBlack : public Module
 {
 public:
 	//Constructor
-	FadeToBlack(bool isEanabled);
-	//FadeToBlack();
+	FadeToBlack();
 
 	//Destructor
 	~FadeToBlack();
@@ -22,7 +21,7 @@ public:
 
 	// Called at the middle of the application loop
 	// Updates the fade logic
-	bool Update(float dt);
+	bool Update();
 
 	// Called at the end of the application loop
 	// Performs the render call of a black rectangle with transparency
