@@ -26,9 +26,12 @@ public:
 	bool CleanUp();
 
 private:
+	SDL_Rect rect;
 	SDL_Texture* textureLogo;
 	
 	int framectr = 120;
+
+	float accumulatedTime = 0.0f;
 };
 
 

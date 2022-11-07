@@ -41,8 +41,8 @@ bool Logo::Update(float dt)
 
 	rect.x = 0;
 	rect.y = 0;
-	rect.w = 480;
-	rect.h = 250;
+	rect.w = 1024;
+	rect.h = 480;
 
 	app->render->DrawTexture(textureLogo, 1024/2 - rect.w/2, 480/2 - rect.h/2, &rect);
 	
