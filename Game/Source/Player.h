@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include "Point.h"
+#include "Physics.h"
 
 #include "Animation.h"
 
@@ -31,14 +32,12 @@ public:
 	bool CleanUp();
 	
 	Animation idle;
-	Animation movement;
+	Animation movementRight;
+	Animation movementLeft;
 	Animation jumpStart;
 	Animation jumpEnd;
 	Animation jumpUp;
 	Animation jumpDown;
-
-	int jumpStart_counter = 4;
-	int frameCounter;
 
 	// Current animation check
 	Animation* currentAnimation = nullptr;
@@ -50,45 +49,59 @@ public:
 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 
+	void Debug();
+	
+	//Player Physics Body
+	PhysBody* pbody;
+
+	b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
 private:
 
-	//L02: DONE 1: Declare player parameters
+	//Texture Variables
 	SDL_Texture* texture;
 	const char* texturePath;
+	int width;
+	int height;
 
 	SDL_Texture* texDeath;
 	const char* deathPath;
-
-	// L07 TODO 5: Add physics to the player - declare a Physics body
-	PhysBody* pbody;
-
-	//SoundIDs
-	int pickCoinFxId;
-	int hurtFxId;
+	int deathWidth;
+	int deathHeight;
 	
+	SDL_Texture* texFinish;
+	const char* finishPath;
+	int finishWidth;
+	int finishHeight;
+
+	//FX-Sound Variables
+	int hitFxId;
+	int pickCoinFxId;
+	const char* pickCoinFxPath;
+	const char* hitFxPath;
+	const char* backmusicPath;
+	
+	//Player, Camera and Game States
 	bool playerDeath;
+	bool levelFinish;
+	bool startGame;
+	bool camMoved;
+
+	//Position Variables
 	iPoint spawn;
 	iPoint menu;
-
-	bool startGame = false;
-	bool camMoved = false;
 	int camOffset;
+	int remainingPixels;
+	int frameCounter;
 
-	int remainingPixels = 0;
-
-	bool isjumping;
-	bool floor;
-	int jumpcount;;
-
-
-	int width;
-	int height;
+	//Player Movement Variables
 	float speed;
 	float jumpforce;
-	int jumpsteps = 3;
-	int remainingJumpSteps = jumpsteps;
-
-
+	int jumpsteps;
+	int jumpcount;
+	int remainingJumpSteps;
+	bool isjumping;
+	int jumpStart_counter;
+	
 };
 
 #endif // __PLAYER_H__

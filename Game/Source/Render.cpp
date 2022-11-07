@@ -1,13 +1,14 @@
 #include "App.h"
 #include "Window.h"
 #include "Render.h"
+#include "EntityManager.h"
 
 #include "Defs.h"
 #include "Log.h"
 
 #define VSYNC true
 
-Render::Render() : Module()
+Render::Render(bool isEnabled) : Module(isEnabled)
 {
 	name.Create("renderer");
 	background.r = 0;
@@ -234,6 +235,8 @@ bool Render::LoadState(pugi::xml_node& data)
 	camera.x = data.child("camera").attribute("x").as_int();
 	camera.y = data.child("camera").attribute("y").as_int();
 
+	app->entityManager->LoadState(data);
+
 	return true;
 }
 
@@ -242,11 +245,9 @@ bool Render::LoadState(pugi::xml_node& data)
 bool Render::SaveState(pugi::xml_node& data)
 {
 	pugi::xml_node cam = data.append_child("camera");
-	pugi::xml_node player = data.append_child("player");
 
 	cam.append_attribute("x") = camera.x;
 	cam.append_attribute("y") = camera.y;
-
 
 	return true;
 }

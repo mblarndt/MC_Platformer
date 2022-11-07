@@ -29,6 +29,7 @@ enum class ColliderType {
 	PLATFORM,
 	FLOOR,
 	DEATH,
+	FINISH,
 	UNKNOWN
 	// ..
 };
@@ -60,7 +61,7 @@ class Physics : public Module, public b2ContactListener // TODO
 public:
 
 	// Constructors & Destructors
-	Physics();
+	Physics(bool isEnabled);
 	~Physics();
 
 	// Main module steps

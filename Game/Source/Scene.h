@@ -11,7 +11,7 @@ class Scene : public Module
 {
 public:
 
-	Scene();
+	Scene(bool isEnabled);
 
 	// Destructor
 	virtual ~Scene();
@@ -34,10 +34,14 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	bool SaveState(pugi::xml_node& data);
+
+	bool LoadState(pugi::xml_node& data);
+
 public:
 
 	//L02: DONE 3: Declare a Player attribute 
-	Player* player;
+	Player* playerptr;
 
 private:
 	SDL_Texture* img;

@@ -13,7 +13,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-Scene::Scene() : Module()
+Scene::Scene(bool isEnabled) : Module(isEnabled)
 {
 	name.Create("scene");
 }
@@ -37,8 +37,8 @@ bool Scene::Awake(pugi::xml_node& config)
 	}
 
 	//L02: DONE 3: Instantiate the player using the entity manager
-	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
-	player->parameters = config.child("player");
+	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
+	playerptr->parameters = config.child("player");
 
 	return ret;
 }
@@ -46,6 +46,10 @@ bool Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Scene::Start()
 {
+	app->entityManager->Enable();
+	app->physics->Enable();
+	app->map->Enable();
+
 	//img = app->tex->Load("Assets/Textures/test.png");
 	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
 	
@@ -74,28 +78,12 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-
-	//Load First Level
-	//if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-
-	//Load Second Level
-	//if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-
-	//Load Startposition of Level
-	//if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
-
-	//Enable Debug
-	//if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
-		
-
-
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		app->SaveGameRequest();
 
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		app->LoadGameRequest();
-
 
 	//Camera Movement
 	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
@@ -109,10 +97,6 @@ bool Scene::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x -= 3;
-
-	//if(player->position.x > 400 && player->position.x < (app->map->mapData.width-400))
-	//app->render->camera.x = -(player->position.x) + 400;
-
 
 	// Draw map
 	app->map->Draw();
@@ -135,6 +119,30 @@ bool Scene::PostUpdate()
 bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
+
+	return true;
+}
+
+bool Scene::SaveState(pugi::xml_node &data)
+{
+	pugi::xml_node player = data.append_child("player");
+
+	player.append_attribute("x") = playerptr->position.x;
+	player.append_attribute("y") = playerptr->position.y;
+
+	return true;
+}
+
+bool Scene::LoadState(pugi::xml_node& data)
+{
+	playerptr->position.x = data.child("player").attribute("x").as_int();
+	playerptr->position.y = data.child("player").attribute("y").as_int();
+
+	playerptr->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(playerptr->position.x),
+												PIXEL_TO_METERS(playerptr->position.y)),0);
+
+	playerptr->velocitx.x = 0;
+	app->entityManager->LoadState(data);
 
 	return true;
 }

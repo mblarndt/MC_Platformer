@@ -27,9 +27,20 @@
 		  <menu x="0" y="0"/>
 		  <cam offset="300"/>
 		  <startpos x="1216" y="322"/>
-		  <texture path="Assets/Textures/Slime_Spritesheet.png" width="30" height="30"/>
-		  <movement speed="4" jumpforce="3" jumpsteps="8"/>
+		  <textures>
+			  <player path="Assets/Textures/Slime_Spritesheet.png" width="30" height="30"/>
+			  <death path="Assets/Textures/dead3.png" width="1024" height="480"/>
+			  <finish path="Assets/Textures/finish.png" width="1024" height="480"/>
+		  </textures>
+		  <audio>
+			  <hit path="Assets/Audio/Fx/hurt.ogg"/>
+			  <pickcoin path="Assets/Audio/Fx/pickcoin.ogg"/>
+			  <music path="Assets/Audio/Music/Sweden - C418.ogg"/>
+		  </audio>
+		  
+		  <movement speed="4.5" jumpforce="2.5" jumpsteps="8"/>
 	  </player>
+
 	<!--<item x="250" y="322" texturepath="Assets/Textures/goldCoin.png"/>
 	<item x="416" y="512" texturepath="Assets/Textures/goldCoin.png"/>
     <item x="384" y="352" texturepath="Assets/Textures/goldCoin.png"/>
@@ -39,7 +50,7 @@
 
   <map>
     <mapfolder path="Assets/Maps/"/>
-    <mapfile path="Assets/Maps/TestMap.tmx"/>
+    <mapfile path="Assets/Maps/Level1.tmx"/>
   </map>
   
 </config>

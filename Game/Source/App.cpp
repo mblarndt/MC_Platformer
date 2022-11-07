@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "Physics.h"
 #include "FadeToBlack.h"
+#include "LOGO.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -21,18 +22,19 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 {
 	frames = 0;
 
-	input = new Input();
-	win = new Window();
-	render = new Render();
-	tex = new Textures();
-	audio = new Audio();
+	input = new Input(true);
+	win = new Window(true);
+	render = new Render(true);
+	tex = new Textures(true);
+	audio = new Audio(true);
 	
 	// L07 TODO 2: Add Physics module
-	physics = new Physics();
-	scene = new Scene();
-	entityManager = new EntityManager();
-	map = new Map();
-	fadeBlack = new FadeToBlack();
+	physics = new Physics(false);
+	scene = new Scene(false);
+	entityManager = new EntityManager(false);
+	map = new Map(false);
+	fadeBlack = new FadeToBlack(true);
+	logo = new Logo(true);
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -40,11 +42,14 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(win);
 	AddModule(tex);
 	AddModule(audio);
-	//L07 TODO 2: Add Physics module
 	AddModule(physics);
+	
+	AddModule(logo);
 	AddModule(scene);
+	
 	AddModule(entityManager);
 	AddModule(map);
+	
 	AddModule(fadeBlack);
 
 	// Render last to swap buffer

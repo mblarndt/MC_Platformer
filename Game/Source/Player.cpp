@@ -38,18 +38,28 @@ bool Player::Awake() {
 	camOffset = parameters.child("cam").attribute("offset").as_int();
 
 	//Texture Variables
-	texturePath = parameters.child("texture").attribute("path").as_string();
-	width = parameters.child("texture").attribute("width").as_int();
-	height = parameters.child("texture").attribute("height").as_int();
+	texturePath = parameters.child("textures").child("player").attribute("path").as_string();
+	width = parameters.child("textures").child("player").attribute("width").as_int();
+	height = parameters.child("textures").child("player").attribute("height").as_int();
+
+	deathPath = parameters.child("textures").child("death").attribute("path").as_string();
+	deathWidth = parameters.child("textures").child("death").attribute("width").as_int();
+	deathHeight = parameters.child("textures").child("death").attribute("height").as_int();
+
+	finishPath = parameters.child("textures").child("finish").attribute("path").as_string();
+	finishWidth = parameters.child("textures").child("finish").attribute("width").as_int();
+	finishHeight = parameters.child("textures").child("finish").attribute("height").as_int();
+
+	//Audio Variables
+	hitFxPath = parameters.child("audio").child("hit").attribute("path").as_string();
+	pickCoinFxPath = parameters.child("audio").child("pickcoin").attribute("path").as_string();
+	backmusicPath = parameters.child("audio").child("music").attribute("path").as_string();
 
 	//Player Variables
 	speed = parameters.child("movement").attribute("speed").as_int();
 	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
 	jumpsteps = parameters.child("movement").attribute("jumpsteps").as_int();
-
-	//Dead Texture
-	deathPath = "Assets/Textures/dead3.png";
-
+	
 
 	return true;
 }
@@ -59,17 +69,28 @@ bool Player::Start() {
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 	texDeath = app->tex->Load(deathPath);
+	texFinish = app->tex->Load(finishPath);
 	
-	// Sprite rectangle inside the keys of the function
-	// Input the animation steps in order
+	//Initialize Audio Fx
+	hitFxId = app->audio->LoadFx(hitFxPath);
+
+	//Initialize States and Values 
+	startGame = false;
+	camMoved = false;
+	remainingPixels = 0;
+	jumpsteps = 3;
+	remainingJumpSteps = jumpsteps;
+    jumpStart_counter = 4;
 	
-
-
-
-    movement.PushBack({ 0, 80, 60, 40 });
-	movement.PushBack({ 60, 80, 60, 40 });
-	movement.loop = true;
-	movement.speed = 0.1f;
+    movementRight.PushBack({ 0, 80, 60, 40 });
+	movementRight.PushBack({ 60, 80, 60, 40 });
+	movementRight.loop = true;
+	movementRight.speed = 0.1f;
+	
+	movementLeft.PushBack({ 120, 80, 60, 40 });
+	movementLeft.PushBack({ 180, 80, 60, 40 });
+	movementLeft.loop = true;
+	movementLeft.speed = 0.1f;
 
 
 	idle.PushBack({ 0, 0, 60, 40 });
@@ -124,10 +145,7 @@ bool Player::Start() {
 	pbody->listener = this;
 
 	pbody->body->SetFixedRotation(true);
-	
-	//initialize audio effect - !! Path is hardcoded, should be loaded from config.xml
-	pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
-	hurtFxId = app->audio->LoadFx("Assets/Audio/Fx/hurt.ogg");
+
 
 	app->render->camera.x = menu.x;
 
@@ -135,11 +153,6 @@ bool Player::Start() {
 
 	return true;
 }
-
-
-b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
-
-
 
 bool Player::Update()
 {
@@ -149,8 +162,8 @@ bool Player::Update()
 
 	//Activate Game
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+		app->audio->PlayMusic(backmusicPath);
 		startGame = true;
-		v.x = 0;
 	}
 
 	if (startGame == true) {
@@ -170,16 +183,16 @@ bool Player::Update()
 
 			if (playerDeath == false) {
 				//Camera follow
-				if (position.x > (camOffset) && position.x < (4160 - (1024 - camOffset)) || position.x >(4160) && position.x < (5440 - (1024 - camOffset))) {
+				if (position.x > (camOffset) && position.x < (4222 - (1024 - camOffset))) {
 					app->render->camera.x = -(position.x) + camOffset;
 					app->render->camera.y = menu.y;
 				}
 
 				//L02: DONE 4: modify the position of the player using arrow keys and render the texture
 				if (v.y == 0) {
-					if (v.x < 0)	currentAnimation = &movement;
+					if (v.x < 0)	currentAnimation = &movementLeft;
 
-					if (v.x > 0)	currentAnimation = &movement;
+					if (v.x > 0)	currentAnimation = &movementRight;
 
 					if (v.x == 0)	currentAnimation = &idle;
 
@@ -201,16 +214,16 @@ bool Player::Update()
 				//if (v.y == 0 && v.x != 0) currentAnimation = &idle;
 
 				/*----------------------------Player Movement Variation 2--------------------------*/
-					if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+					if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
 						velocitx.x = -speed;
 					}
 
-					else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+					else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
 						velocitx.x = speed;
 					}
 
 					//jump
-					else if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+					else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 						if (jumpcount <= 3) {
 							pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
 							jumpcount++;
@@ -220,13 +233,12 @@ bool Player::Update()
 						velocitx.y = pbody->body->GetLinearVelocity().y;
 						pbody->body->SetLinearVelocity(velocitx);
 					}
-					
 
 
 				/*----------------------------Player Movement Variation 2--------------------------*
 				if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-					if (jumpcount > 0)
-						pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
+					if (jumpcount <= 3)
+						remainingJumpSteps = jumpsteps;
 					jumpcount++;
 				}
 
@@ -243,11 +255,11 @@ bool Player::Update()
 				}
 
 				//Jump Action
-				//if (remainingJumpSteps > 0) {
-				//	vel.y = -jumpforce;//upwards - don't change x velocity
-				//	pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
-				//	remainingJumpSteps--;
-				//}
+				if (remainingJumpSteps > 0) {
+					vel.y = -jumpforce;//upwards - don't change x velocity
+					pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
+					remainingJumpSteps--;
+				}
 				else {
 					pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, velocitx.y));
 				}
@@ -274,7 +286,8 @@ bool Player::Update()
 					SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 					app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
 					SDL_Rect rect = { 0, 0, 1024, 480 };
-					app->render->DrawTexture(texDeath, position.x - camOffset, 0, &rect);
+					if (position.x < 2944)	app->render->DrawTexture(texDeath, position.x - camOffset, 0, &rect);
+					else app->render->DrawTexture(texDeath, 3196, 0, &rect);
 					//frameCounter++;
 					if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 						position.x = spawn.x;
@@ -286,15 +299,27 @@ bool Player::Update()
 				}
 			}
 
+			//If Player finished Level
+			if (levelFinish) {
+				SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
+				app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
+				SDL_Rect rect = { 0, 0, 1024, 480 };
+				app->render->DrawTexture(texFinish, position.x - 965, 0, &rect);
+
+				if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+					position.x = spawn.x;
+					position.y = spawn.y;
+					pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+					velocitx.x = 0;
+					levelFinish = false;
+				}
+			}
 			
+			Debug();
 		}
-
-
-
 	}
 
 	return true;
-	
 }
 
 bool Player::CleanUp()
@@ -341,18 +366,30 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::FLOOR:
 		LOG("Collision FLOOR");
 		jumpcount = 0;
-		floor = true;
 		break;
 	case ColliderType::DEATH:
 		LOG("Collision DEATH");
 		frameCounter = 0;
-		app->audio->PlayFx(hurtFxId);
-
+		app->audio->PlayFx(hitFxId);
 		playerDeath = true;
+		break;
+	case ColliderType::FINISH:
+		LOG("Collision FINISH");
+		levelFinish = true;
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Collision UNKNOWN");
 		break;
 	}
 
+}
+
+void Player::Debug() {
+	if (app->input->GetKey(SDL_SCANCODE_F1) || app->input->GetKey(SDL_SCANCODE_F3)) {
+		pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+		position.x = spawn.x;
+		position.y = spawn.y;
+		pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+		velocitx.x = 0;
+	}
 }

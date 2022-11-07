@@ -8,9 +8,9 @@
 
 #include "SDL/include/SDL_render.h"
 
-FadeToBlack::FadeToBlack() : Module()
+FadeToBlack::FadeToBlack(bool isEnabled) : Module(isEnabled)
 {
-
+	name.Create("fadeBlack");
 }
 
 FadeToBlack::~FadeToBlack()
@@ -39,7 +39,7 @@ bool FadeToBlack::Start()
 	return true;
 }
 
-bool FadeToBlack::Update()
+bool FadeToBlack::Update(float dt)
 {
 	// Exit this function if we are not performing a fade
 	if (currentStep == Fade_Step::NONE) return true;
