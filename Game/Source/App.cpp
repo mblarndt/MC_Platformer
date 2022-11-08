@@ -9,7 +9,7 @@
 #include "Map.h"
 #include "Physics.h"
 #include "FadeToBlack.h"
-#include "LOGO.h"
+#include "LogoScene.h"
 
 #include "Defs.h"
 #include "Log.h"
