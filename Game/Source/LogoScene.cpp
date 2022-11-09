@@ -48,6 +48,8 @@ bool LogoScene::Update(float dt)
 	
 	if (framectr == 0) {
 		app->fadeBlack->Fade(this, (Module*)app->scene, 60);
+		app->logoScene->active = false;
+		app->scene->active = true;
 	}
 
 	framectr--;
