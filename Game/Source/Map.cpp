@@ -79,8 +79,37 @@ iPoint Map::MapToWorld(int x, int y) const
 {
     iPoint ret;
 
-    ret.x = x * mapData.tileWidth;
-    ret.y = y * mapData.tileHeight;
+    // L08: TODO 1: Add isometric map to world coordinates
+    switch (mapData.type) {
+    case MAPTYPE_ORTHOGONAL:
+        ret.x = x * mapData.tileWidth;
+        ret.y = y * mapData.tileHeight;
+        break;
+    case MAPTYPE_ISOMETRIC:
+        ret.x = (x - y) * (mapData.tileWidth * 0.5f);
+        ret.y = (x + y) * (mapData.tileHeight * 0.5f);
+        break;
+    }
+
+
+    return ret;
+}
+
+// L08: TODO 3: Add method WorldToMap to obtain  map coordinates from screen coordinates
+iPoint Map::WorldToMap(int x, int y)
+{
+    iPoint ret(0, 0);
+
+    switch (mapData.type) {
+    case MAPTYPE_ORTHOGONAL:
+        ret.x = mapData.tileWidth / x;
+        ret.y = mapData.tileHeight / y;
+        break;
+    case MAPTYPE_ISOMETRIC:
+        ret.x = (mapData.tileWidth / 0.5f) / (x - y);
+        ret.y = (mapData.tileHeight / 0.5f) / (x + y);
+        break;
+    }
 
     return ret;
 }
@@ -239,6 +268,19 @@ bool Map::LoadMap(pugi::xml_node mapFile)
         mapData.width = map.attribute("width").as_int();
         mapData.tileHeight = map.attribute("tileheight").as_int();
         mapData.tileWidth = map.attribute("tilewidth").as_int();
+        mapData.orientation = map.attribute("orientation").as_string();
+
+
+        // L08: TODO 2: Read the orientation of the map
+        if (mapData.orientation == "orthogonal") {
+            mapData.type = MAPTYPE_ORTHOGONAL;
+        }
+        else if (mapData.orientation == "isometric") {
+            mapData.type = MAPTYPE_ISOMETRIC;
+        }
+        else {
+            mapData.type = MAPTYPE_UNKNOWN;
+        }
     }
 
     return ret;

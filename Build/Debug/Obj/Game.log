@@ -1,3 +1,35 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(499,5): warning MSB8004: Das Output-Verzeichnis endet nicht mit einem nachstehenden Schrägstrich. Der Schrägstrich wird in dieser Buildinstanz hinzugefügt, da er für die ordnungsgemäße Auswertung des Output-Verzeichnisses erforderlich ist.
+  App.cpp
+C:\Users\benarndt\Desktop\MC_Platformer\Game\Source\Animation.h(54,19): warning C4244: "Initialisierung": Konvertierung von "const float" in "int", möglicher Datenverlust
+C:\Users\benarndt\Desktop\MC_Platformer\Game\Source\Animation.h(56,30): warning C4244: "=": Konvertierung von "float" in "int", möglicher Datenverlust
+  LogoScene.cpp
+C:\Users\benarndt\Desktop\MC_Platformer\Game\Source\Animation.h(54,19): warning C4244: "Initialisierung": Konvertierung von "const float" in "int", möglicher Datenverlust
+C:\Users\benarndt\Desktop\MC_Platformer\Game\Source\Animation.h(56,30): warning C4244: "=": Konvertierung von "float" in "int", möglicher Datenverlust
+  Map.cpp
+C:\Users\benarndt\Desktop\MC_Platformer\Game\Source\Map.cpp(89,25): warning C4244: "=": Konvertierung von "float" in "TYPE", möglicher Datenverlust
+          with
+          [
+              TYPE=int
+          ]
+C:\Users\benarndt\Desktop\MC_Platformer\Game\Source\Map.cpp(90,25): warning C4244: "=": Konvertierung von "float" in "TYPE", möglicher Datenverlust
+          with
+          [
+              TYPE=int
+          ]
+C:\Users\benarndt\Desktop\MC_Platformer\Game\Source\Map.cpp(109,44): warning C4244: "=": Konvertierung von "float" in "TYPE", möglicher Datenverlust
+          with
+          [
+              TYPE=int
+          ]
+C:\Users\benarndt\Desktop\MC_Platformer\Game\Source\Map.cpp(110,45): warning C4244: "=": Konvertierung von "float" in "TYPE", möglicher Datenverlust
+          with
+          [
+              TYPE=int
+          ]
+  Scene.cpp
+C:\Users\benarndt\Desktop\MC_Platformer\Game\Source\Animation.h(54,19): warning C4244: "Initialisierung": Konvertierung von "const float" in "int", möglicher Datenverlust
+C:\Users\benarndt\Desktop\MC_Platformer\Game\Source\Animation.h(56,30): warning C4244: "=": Konvertierung von "float" in "int", möglicher Datenverlust
+  Code wird generiert...
+  LINK : C:\Users\benarndt\Desktop\MC_Platformer\Build\Debug\Game.exe wurde nicht gefunden oder beim letzten inkrementellen Linkvorgang nicht erstellt; vollständiger Link wird durchgeführt.
   Game.vcxproj -> C:\Users\benarndt\Desktop\MC_Platformer\Build\Debug\Game.exe
           1 Datei(en) kopiert.

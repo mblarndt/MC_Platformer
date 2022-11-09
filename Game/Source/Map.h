@@ -130,12 +130,10 @@ struct MapData
 	int	height;
 	int	tileWidth;
 	int	tileHeight;
+	SString orientation;
 	List<TileSet*> tilesets;
 	MapTypes type;
-
-	// L05: DONE 2: Add a list/array of layers to the map
 	List<MapLayer*> maplayers;
-
 	List<ObjectGroups*> objectgroups;
 };
 
@@ -164,6 +162,8 @@ public:
 
 	// L05: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
 	iPoint MapToWorld(int x, int y) const;
+
+	iPoint WorldToMap(int x, int y);
 
 private:
 
