@@ -21,7 +21,7 @@ class Map;
 //L07 TODO 2: Add Physics module
 class Physics;
 class FadeToBlack;
-class Logo;
+class LogoScene;
 
 
 class App
@@ -97,7 +97,7 @@ public:
 
 	FadeToBlack* fadeBlack;
 
-	Logo* logo;
+	LogoScene* logoScene;
 
 private:
 

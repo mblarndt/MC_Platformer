@@ -3,12 +3,12 @@
 
 #include "Module.h"
 
-class Logo : public Module
+class LogoScene : public Module
 {
 public:
-	Logo(bool isEnabled);
+	LogoScene(bool isEnabled);
 	
-	virtual ~Logo();
+	virtual ~LogoScene();
 	
 	bool Awake();
 
@@ -35,5 +35,5 @@ private:
 };
 
 
-#endif // __LOGO_H__
+#endif // __LOGOSCENE_H__
 

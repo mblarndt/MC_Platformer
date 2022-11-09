@@ -10,32 +10,32 @@
 
 #include "LogoScene.h"
 
-Logo::Logo(bool isEnabled) : Module(isEnabled)
+LogoScene::LogoScene(bool isEnabled) : Module(isEnabled)
 {
 	textureLogo = NULL;
-	name.Create("logoScreen");
+	name.Create("LogoScene");
 }
 
-Logo::~Logo()
+LogoScene::~LogoScene()
 {}
 
-bool Logo::Awake()
+bool LogoScene::Awake()
 {
 	return true;
 }
 
-bool Logo::Start()
+bool LogoScene::Start()
 {
 	textureLogo = app->tex->Load("Assets/Textures/logo.png");
 	return true;
 }
 
-bool Logo::PreUpdate()
+bool LogoScene::PreUpdate()
 {
 	return true;
 }
 
-bool Logo::Update(float dt)
+bool LogoScene::Update(float dt)
 {
 	SDL_Rect rect;
 
@@ -54,12 +54,12 @@ bool Logo::Update(float dt)
 	return true;
 }
 
-bool Logo::PostUpdate()
+bool LogoScene::PostUpdate()
 {
 	return true;
 }
 
-bool Logo::CleanUp() {
+bool LogoScene::CleanUp() {
 	textureLogo = nullptr;
 	return true;
 }

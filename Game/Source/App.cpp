@@ -34,7 +34,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	entityManager = new EntityManager(false);
 	map = new Map(false);
 	fadeBlack = new FadeToBlack(true);
-	logo = new Logo(true);
+	logoScene = new LogoScene(true);
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -44,7 +44,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	AddModule(physics);
 	
-	AddModule(logo);
+	AddModule(logoScene);
 	AddModule(scene);
 	
 	AddModule(entityManager);
