@@ -5,63 +5,133 @@
 #include "Render.h"
 #include "Window.h"
 #include "Scene.h"
+#include "EntityManager.h"
 #include "Map.h"
+#include "Physics.h"
 #include "FadeToBlack.h"
+#include "TitleScene.h"
 
+#include "Defs.h"
+#include "Log.h"
 #include "LogoScene.h"
 
-LogoScene::LogoScene(bool isEnabled) : Module(isEnabled)
+LogoScene::LogoScene() : Module()
 {
-	textureLogo = NULL;
-	name.Create("LogoScene");
+	name.Create("logoScene");
 }
 
+// Destructor
 LogoScene::~LogoScene()
 {}
 
-bool LogoScene::Awake()
+
+
+// Called before render is available
+bool LogoScene::Awake(pugi::xml_node& config)
 {
-	return true;
+	LOG("Loading Scene");
+	bool ret = true;
+
+	//logoRect.x = config.child("logorect").attribute("x").as_int();
+	//logoRect.y = config.child("logorect").attribute("y").as_int();
+	//logoRect.h = config.child("logorect").attribute("h").as_int();
+	//logoRect.w = config.child("logorect").attribute("w").as_int();
+
+	//duration = config.child("duration").attribute("value").as_float();
+
+	//texturePath = config.child("path").attribute("value").as_string();
+
+	logoRect.x = 0;
+	logoRect.y = 0;
+	logoRect.h = 480;
+	logoRect.w = 1024;
+
+	duration = 5.0f;
+
+	texturePath = "Assets/Textures/logo.png";
+
+
+
+
+	return ret;
 }
 
+// Called before the first frame
 bool LogoScene::Start()
 {
-	textureLogo = app->tex->Load("Assets/Textures/logo.png");
+	app->titleScene->active = false;
+	app->scene->active = false;
+	app->map->active = false;
+	app->physics->active = false;
+	app->fadeToBlack->activeScene = "LogoScene";
+
+	accumulatedTime = 0.0f;
+
+	logo = app->tex->Load(texturePath);
+
+	app->render->camera.x = 0;
+	app->render->camera.y = 0;
+
 	return true;
 }
 
+// Called each loop iteration
 bool LogoScene::PreUpdate()
 {
 	return true;
 }
 
+// Called each loop iteration
 bool LogoScene::Update(float dt)
 {
-	SDL_Rect rect;
+	app->render->camera.x = 0;
+	app->render->camera.y = 0;
 
-	rect.x = 0;
-	rect.y = 0;
-	rect.w = 1024;
-	rect.h = 480;
+	//SDL_SetTextureAlphaMod(logo, accumulatedTime * 10.0f);
+	app->render->DrawTexture(logo, 0, 0, &logoRect);
 
-	app->render->DrawTexture(textureLogo, 1024/2 - rect.w/2, 480/2 - rect.h/2, &rect);
-	
-	if (framectr == 0) {
-		app->fadeBlack->Fade(this, (Module*)app->scene, 60);
-		app->logoScene->active = false;
-		app->scene->active = true;
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	{
+
+
+
+		app->fadeToBlack->FadeToBlackScene("TitleScene");
+	}
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		app->fadeToBlack->FadeToBlackScene("Scene");
 	}
 
-	framectr--;
 	return true;
 }
 
+// Called each loop iteration
 bool LogoScene::PostUpdate()
 {
+	bool ret = true;
+
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		ret = false;
+
+	AutomaticTransition();
+
+	return ret;
+}
+
+// Called before quitting
+bool LogoScene::CleanUp()
+{
+	LOG("Freeing LogoScene");
+
 	return true;
 }
 
-bool LogoScene::CleanUp() {
-	textureLogo = nullptr;
-	return true;
+void LogoScene::AutomaticTransition()
+{
+	accumulatedTime += 0.075f;
+
+	if (accumulatedTime >= duration)
+	{
+		app->fadeToBlack->FadeToBlackScene("Scene");
+	}
 }

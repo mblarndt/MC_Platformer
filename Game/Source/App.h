@@ -13,16 +13,16 @@
 class Window;
 class Input;
 class Render;
+class FadeToBlack;
 class Textures;
 class Audio;
 class Scene;
+class LogoScene;
+class TitleScene;
 class EntityManager;
 class Map;
-//L07 TODO 2: Add Physics module
+//L07 DONE 2: Add Physics module
 class Physics;
-class FadeToBlack;
-class LogoScene;
-
 
 class App
 {
@@ -57,9 +57,9 @@ public:
 
 	// L03: DONE 1: Create methods to control that the real Load and Save happens at the end of the frame
 	void LoadGameRequest();
-	void SaveGameRequest() ;
+	void SaveGameRequest();
 	bool LoadFromFile();
-	bool SaveToFile() ;
+	bool SaveToFile();
 
 private:
 
@@ -90,14 +90,13 @@ public:
 	Textures* tex;
 	Audio* audio;
 	Scene* scene;
+	LogoScene* logoScene;
+	TitleScene* titleScene;
 	EntityManager* entityManager;
 	Map* map;
-	//L07 TODO 2: Add Physics module
+	//L07 DONE 2: Add Physics module
 	Physics* physics;
-
-	FadeToBlack* fadeBlack;
-
-	LogoScene* logoScene;
+	FadeToBlack* fadeToBlack;
 
 private:
 
@@ -118,8 +117,8 @@ private:
 	float dt;
 
 	// L03: DONE 1: Create control variables to control that the real Load and Save happens at the end of the frame
-    bool saveGameRequested = false;
-	bool loadGameRequested = false;
+	bool saveGameRequested;
+	bool loadGameRequested;
 };
 
 extern App* app;

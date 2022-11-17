@@ -11,7 +11,7 @@
 #include <math.h>
 #include "SDL_image/include/SDL_image.h"
 
-Map::Map(bool isEnabled) : Module(isEnabled), mapLoaded(false)
+Map::Map() : Module(), mapLoaded(false)
 {
     name.Create("map");
 }
