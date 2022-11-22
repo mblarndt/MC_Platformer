@@ -1,20 +1,18 @@
-#ifndef __SCENE_H__
-#define __SCENE_H__
+#ifndef __LOGO_SCENE_H__
+#define __LOGO_SCENE_H__
 
 #include "Module.h"
-#include "Player.h"
-#include "Item.h"
 
 struct SDL_Texture;
 
-class Scene : public Module
+class LogoScene : public Module
 {
 public:
 
-	Scene();
+	LogoScene();
 
 	// Destructor
-	virtual ~Scene();
+	virtual ~LogoScene();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node& config);
@@ -34,18 +32,18 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	bool SaveState(pugi::xml_node& data);
-
-	bool LoadState(pugi::xml_node& data);
-
 public:
 
-	//L02: DONE 3: Declare a Player attribute 
-	Player* playerptr;
-
 private:
-	SDL_Texture* img;
+	SDL_Rect logoRect;
+	SDL_Texture* logo;
+	const char* texturePath;
+
+	float accumulatedTime;
+	float duration;
+
+	void AutomaticTransition();
 
 };
 
-#endif // __SCENE_H__
+#endif // __LOGO_SCENE_H__

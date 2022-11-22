@@ -21,7 +21,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -98,51 +98,53 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ContactListener.cpp" />
-    <ClCompile Include="Source\EntityManager.cpp" />
-    <ClCompile Include="Source\FadeToBlack.cpp" />
-    <ClCompile Include="Source\Item.cpp" />
-    <ClCompile Include="Source\LOGO.cpp" />
+    <ClCompile Include="Source\LogoScene.cpp" />
     <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\App.cpp" />
-    <ClCompile Include="Source\Audio.cpp" />
-    <ClCompile Include="Source\Input.cpp" />
     <ClCompile Include="Source\Map.cpp" />
+    <ClCompile Include="Source\Pathfinding.cpp" />
     <ClCompile Include="Source\Physics.cpp" />
     <ClCompile Include="Source\Player.cpp" />
-    <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Render.cpp" />
+    <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Textures.cpp" />
+    <ClCompile Include="Source\TitleScene.cpp" />
     <ClCompile Include="Source\Window.cpp" />
-    <ClInclude Include="ContactListener.h" />
     <ClInclude Include="Source\Animation.h" />
+    <ClInclude Include="Source\App.h" />
+    <ClInclude Include="Source\Audio.h" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FadeToBlack.h" />
+    <ClInclude Include="Source\Input.h" />
     <ClInclude Include="Source\Item.h" />
-    <ClInclude Include="Source\LOGO.h" />
+    <ClInclude Include="Source\LogoScene.h" />
     <ClInclude Include="Source\Map.h" />
+    <ClInclude Include="Source\Module.h" />
+    <ClInclude Include="Source\Pathfinding.h" />
     <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Queue.h" />
-    <ClInclude Include="Source\Scene.h" />
-    <ClInclude Include="Source\Audio.h" />
-    <ClInclude Include="Source\Input.h" />
-    <ClInclude Include="Source\App.h" />
-    <ClInclude Include="Source\Module.h" />
-    <ClInclude Include="Source\Render.h" />
-    <ClInclude Include="Source\Textures.h" />
-    <ClInclude Include="Source\Window.h" />
     <ClInclude Include="Source\Defs.h" />
     <ClInclude Include="Source\List.h" />
     <ClInclude Include="Source\Log.h" />
+    <ClCompile Include="Source\App.cpp" />
+    <ClCompile Include="Source\Audio.cpp" />
+    <ClCompile Include="Source\EntityManager.cpp" />
+    <ClCompile Include="Source\FadeToBlack.cpp" />
+    <ClCompile Include="Source\Input.cpp" />
+    <ClCompile Include="Source\Item.cpp" />
     <ClCompile Include="Source\Log.cpp" />
     <ClInclude Include="Source\Point.h" />
+    <ClInclude Include="Source\Render.h" />
+    <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SString.h" />
     <ClInclude Include="Source\DynArray.h" />
     <ClInclude Include="Source\External\PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="Source\External\PugiXml\src\pugixml.hpp" />
     <ClCompile Include="Source\External\PugiXml\src\pugixml.cpp" />
+    <ClInclude Include="Source\Textures.h" />
+    <ClInclude Include="Source\TitleScene.h" />
+    <ClInclude Include="Source\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
