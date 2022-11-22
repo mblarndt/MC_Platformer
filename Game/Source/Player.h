@@ -49,6 +49,8 @@ public:
 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 
+	void Shoot();
+
 	void Debug();
 	
 	//Player Physics Body

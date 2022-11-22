@@ -229,42 +229,14 @@ bool Player::Update()
 							jumpcount++;
 						}
 					}
+					else if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+						Shoot();
+					}
 					else {
 						velocitx.y = pbody->body->GetLinearVelocity().y;
 						pbody->body->SetLinearVelocity(velocitx);
 					}
 
-
-				/*----------------------------Player Movement Variation 2--------------------------*
-				if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-					if (jumpcount <= 3)
-						remainingJumpSteps = jumpsteps;
-					jumpcount++;
-				}
-
-				else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
-					velocitx = b2Vec2(speed * (-1), -GRAVITY_Y);
-				}
-
-				else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
-					velocitx = b2Vec2(-speed, -GRAVITY_Y);
-				}
-
-				else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
-					velocitx = b2Vec2(speed, -GRAVITY_Y);
-				}
-
-				//Jump Action
-				if (remainingJumpSteps > 0) {
-					vel.y = -jumpforce;//upwards - don't change x velocity
-					pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
-					remainingJumpSteps--;
-				}
-				else {
-					pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, velocitx.y));
-				}
-
-				/*----------------------------End of Variation 2---------------------------------*/
 
 				position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
 				position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
@@ -381,6 +353,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		LOG("Collision UNKNOWN");
 		break;
 	}
+
+}
+
+void Player::Shoot()
+{
 
 }
 
