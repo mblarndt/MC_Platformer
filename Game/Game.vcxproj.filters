@@ -55,8 +55,8 @@
     <ClCompile Include="Source\TitleScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Pickups.cpp">
-      <Filter>Entities\Pickups</Filter>
+    <ClCompile Include="Source\Pathfinding.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -141,8 +141,8 @@
     <ClInclude Include="Source\TitleScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Pickups.h">
-      <Filter>Entities\Pickups</Filter>
+    <ClInclude Include="Source\Pathfinding.h">
+      <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
