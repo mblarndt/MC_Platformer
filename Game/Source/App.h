@@ -21,6 +21,7 @@ class LogoScene;
 class TitleScene;
 class EntityManager;
 class Map;
+class PathFinding;
 //L07 DONE 2: Add Physics module
 class Physics;
 
@@ -97,6 +98,7 @@ public:
 	//L07 DONE 2: Add Physics module
 	Physics* physics;
 	FadeToBlack* fadeToBlack;
+	PathFinding* pathfinding;
 
 private:
 
