@@ -1,103 +1,180 @@
-#include "FadeToBlack.h"
+#include <math.h>
 
 #include "App.h"
-#include "Render.h"
-#include "LOG.h"
+#include "Module.h"
+#include "FadeToBlack.h"
 #include "Window.h"
+#include "Log.h"
+#include "Render.h"
+#include "EntityManager.h"
+#include "Map.h"
+#include "Scene.h"
+#include "LogoScene.h"
+#include "TitleScene.h"
+#include "External/SDL/include/SDL_render.h"
+#include "External/SDL/include/SDL_timer.h"
+#include "Physics.h"
 
-
-#include "SDL/include/SDL_render.h"
-
-FadeToBlack::FadeToBlack(bool isEnabled) : Module(isEnabled)
+FadeToBlack::FadeToBlack()
 {
-	name.Create("fadeBlack");
+	name.Create("fade");
+
 }
 
 FadeToBlack::~FadeToBlack()
-{
+{}
 
-}
-
-bool FadeToBlack::Awake()
+bool FadeToBlack::Awake(pugi::xml_node& conf)
 {
-	uint width;
-	uint height;
-	int size = 1;
+	uint width, height;
 	app->win->GetWindowSize(width, height);
+	screen.w = width;
+	screen.h = height;
+	screen.x = screen.y = 0;
 
-	screenRect = { 0, 0, (int)width * size, (int)height * size };
-	
 	return true;
 }
 
+// Load assets
 bool FadeToBlack::Start()
 {
 	LOG("Preparing Fade Screen");
-
-	// Enable blending mode for transparency
 	SDL_SetRenderDrawBlendMode(app->render->renderer, SDL_BLENDMODE_BLEND);
+
+	fadingPlayer = false;
+	sceneSwitch = false;
+	wantToSwitchScene = "LogoScene";
+
 	return true;
 }
 
+// Update: draw background
 bool FadeToBlack::Update(float dt)
 {
-	// Exit this function if we are not performing a fade
-	if (currentStep == Fade_Step::NONE) return true;
 
-	if (currentStep == Fade_Step::TO_BLACK)
-	{
-		++frameCount;
-		if (frameCount >= maxFadeFrames)
-		{
-			moduleToDisable->Disable();
-			moduleToEnable->Enable();
+	if (currentStep == FadeStep::NONE)
+		return true;
 
-			currentStep = Fade_Step::FROM_BLACK;
-		}
-	}
-	else
+	Uint32 now = SDL_GetTicks() - startTime;
+	float normalized = MIN(1.0f, (float)now / (float)totalTime);
+
+	switch (currentStep)
 	{
-		--frameCount;
-		if (frameCount <= 0)
+	case FadeStep::FADE_TO:
+	{
+		if (now >= totalTime)
 		{
-			currentStep = Fade_Step::NONE;
+			if (!sceneSwitch)
+			{
+			}
+			else
+			{
+				SwitchScenes(wantToSwitchScene);
+			}
+			totalTime += totalTime;
+			startTime = SDL_GetTicks();
+			currentStep = FadeStep::FADE_FROM;
 		}
+	} break;
+
+	case FadeStep::FADE_FROM:
+	{
+		normalized = 1.0f - normalized;
+
+		if (now >= totalTime)
+			currentStep = FadeStep::NONE;
+
+		fadingPlayer = false;
+		sceneSwitch = false;
+	} break;
 	}
+
+	SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(normalized * 255.0f));
+	SDL_RenderFillRect(app->render->renderer, &screen);
 
 	return true;
 }
 
-bool FadeToBlack::PostUpdate()
-{
-	// Exit this function if we are not performing a fade
-	if (currentStep == Fade_Step::NONE) return true;
-
-	float fadeRatio = (float)frameCount / (float)maxFadeFrames;
-
-	// Render the black square with alpha on the screen
-	SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(fadeRatio * 255.0f));
-	SDL_RenderFillRect(app->render->renderer, &screenRect);
-
-	return true;
-}
-
-bool FadeToBlack::Fade(Module* moduleToDisable, Module* moduleToEnable, float frames)
+// Fade to black. At mid point deactivate one module, then activate the other
+bool FadeToBlack::DoFadeToBlack(int level, float time)
 {
 	bool ret = false;
 
-	// If we are already in a fade process, ignore this call
-	if (currentStep == Fade_Step::NONE)
+	nextLevel = level;
+
+	if (currentStep == FadeStep::NONE)
 	{
-		currentStep = Fade_Step::TO_BLACK;
-		frameCount = 0;
-		maxFadeFrames = frames;
+		currentStep = FadeStep::FADE_TO;
+		startTime = SDL_GetTicks();
+		totalTime = (Uint32)(time * 0.5f * 1000.0f);
+		ret = true;
 
-		this->moduleToDisable = moduleToDisable;
-		this->moduleToEnable = moduleToEnable;
+	}
 
+	return ret;
+}
+
+
+
+
+
+bool FadeToBlack::FadeToBlackScene(char* scene, float time)
+{
+	bool ret = false;
+
+	sceneSwitch = true;
+	wantToSwitchScene = scene;
+
+	if (currentStep == FadeStep::NONE)
+	{
+		currentStep = FadeStep::FADE_TO;
+		startTime = SDL_GetTicks();
+		totalTime = (Uint32)(time * 0.5f * 1000.0f);
 		ret = true;
 	}
 
 	return ret;
+}
+
+bool FadeToBlack::SwitchMap(int level)
+{
+	return false;
+}
+
+bool FadeToBlack::SwitchScenes(char* scene)
+{
+	if (activeScene != scene)
+	{
+
+		if (scene == "LogoScene")
+		{
+			app->scene->CleanUp();
+			app->scene->active = false;
+			app->map->active = false;
+			app->physics->active = false;
+			app->logoScene->active = true;
+			app->titleScene->active = false;
+		}
+		if (scene == "TitleScene")
+		{
+			app->scene->active = false;
+			app->map->active = false;
+			app->physics->active = false;
+			app->logoScene->active = false;
+			app->titleScene->active = true;
+		}
+		if (scene == "Scene")
+		{
+			app->scene->active = true;
+			app->logoScene->active = false;
+			app->map->active = true;
+			app->physics->active = true;
+			app->titleScene->active = false;
+		}
+
+		activeScene = scene;
+	}
+
+	return true;
 }
 

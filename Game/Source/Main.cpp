@@ -32,17 +32,17 @@ int main(int argc, char* args[])
 	MainState state = CREATE;
 	int result = EXIT_FAILURE;
 
-	while(state != EXIT)
+	while (state != EXIT)
 	{
-		switch(state)
+		switch (state)
 		{
 			// Allocate the engine --------------------------------------------
-			case CREATE:
+		case CREATE:
 			LOG("CREATION PHASE ===============================");
 
 			app = new App(argc, args);
 
-			if(app != NULL)
+			if (app != NULL)
 				state = AWAKE;
 			else
 				state = FAIL;
@@ -50,9 +50,9 @@ int main(int argc, char* args[])
 			break;
 
 			// Awake all modules -----------------------------------------------
-			case AWAKE:
+		case AWAKE:
 			LOG("AWAKE PHASE ===============================");
-			if(app->Awake() == true)
+			if (app->Awake() == true)
 				state = START;
 			else
 			{
@@ -63,9 +63,9 @@ int main(int argc, char* args[])
 			break;
 
 			// Call all modules before first frame  ----------------------------
-			case START:
+		case START:
 			LOG("START PHASE ===============================");
-			if(app->Start() == true)
+			if (app->Start() == true)
 			{
 				state = LOOP;
 				LOG("UPDATE PHASE ===============================");
@@ -78,15 +78,15 @@ int main(int argc, char* args[])
 			break;
 
 			// Loop all modules until we are asked to leave ---------------------
-			case LOOP:
-			if(app->Update() == false)
+		case LOOP:
+			if (app->Update() == false)
 				state = CLEAN;
 			break;
 
 			// Cleanup allocated memory -----------------------------------------
-			case CLEAN:
+		case CLEAN:
 			LOG("CLEANUP PHASE ===============================");
-			if(app->CleanUp() == true)
+			if (app->CleanUp() == true)
 			{
 				RELEASE(app);
 				result = EXIT_SUCCESS;
@@ -98,7 +98,7 @@ int main(int argc, char* args[])
 			break;
 
 			// Exit with errors and shame ---------------------------------------
-			case FAIL:
+		case FAIL:
 			LOG("Exiting with errors :(");
 			result = EXIT_FAILURE;
 			state = EXIT;

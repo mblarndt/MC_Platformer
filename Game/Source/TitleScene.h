@@ -1,18 +1,18 @@
-#ifndef __LOGO_SCENE_H__
-#define __LOGO_SCENE_H__
+#ifndef __TITLE_SCENE_H__
+#define __TITLE_SCENE_H__
 
 #include "Module.h"
 
 struct SDL_Texture;
 
-class LogoScene : public Module
+class TitleScene : public Module
 {
 public:
 
-	LogoScene();
+	TitleScene();
 
 	// Destructor
-	virtual ~LogoScene();
+	virtual ~TitleScene();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node& config);
@@ -39,11 +39,6 @@ private:
 	SDL_Texture* logo;
 	const char* texturePath;
 
-	float accumulatedTime;
-	float duration;
-
-	void AutomaticTransition();
-
 };
 
-#endif // __LOGO_SCENE_H__
+#endif // __TITLE_SCENE_H__

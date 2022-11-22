@@ -5,11 +5,13 @@
 #include "Textures.h"
 #include "Audio.h"
 #include "Scene.h"
+#include "LogoScene.h"
+#include "TitleScene.h"
 #include "EntityManager.h"
 #include "Map.h"
 #include "Physics.h"
 #include "FadeToBlack.h"
-#include "LogoScene.h"
+#include "Pathfinding.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -22,19 +24,20 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 {
 	frames = 0;
 
-	input = new Input(true);
-	win = new Window(true);
-	render = new Render(true);
-	tex = new Textures(true);
-	audio = new Audio(true);
-	
-	// L07 TODO 2: Add Physics module
-	physics = new Physics(false);
-	scene = new Scene(false);
-	entityManager = new EntityManager(false);
-	map = new Map(false);
-	fadeBlack = new FadeToBlack(true);
-	logoScene = new LogoScene(true);
+	input = new Input();
+	win = new Window();
+	render = new Render();
+	fadeToBlack = new FadeToBlack();
+	tex = new Textures();
+	audio = new Audio();
+	//L07 DONE 2: Add Physics module
+	physics = new Physics();
+	logoScene = new LogoScene();
+	titleScene = new TitleScene();
+	scene = new Scene();
+	entityManager = new EntityManager();
+	map = new Map();
+	pathfinding = new PathFinding();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -42,16 +45,18 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(win);
 	AddModule(tex);
 	AddModule(audio);
+	//L07 DONE 2: Add Physics module
 	AddModule(physics);
-	
-	AddModule(logoScene);
+
 	AddModule(scene);
-	
+
 	AddModule(entityManager);
 	AddModule(map);
-	
-	AddModule(fadeBlack);
+	AddModule(titleScene);
+	AddModule(logoScene);
 
+	AddModule(fadeToBlack);
+	AddModule(pathfinding);
 	// Render last to swap buffer
 	AddModule(render);
 }
@@ -295,7 +300,7 @@ void App::LoadGameRequest()
 }
 
 // ---------------------------------------
-void App::SaveGameRequest() 
+void App::SaveGameRequest()
 {
 	// NOTE: We should check if SAVE_STATE_FILENAME actually exist and... should we overwriten
 	saveGameRequested = true;
@@ -335,7 +340,7 @@ bool App::LoadFromFile()
 
 // L02: DONE 7: Implement the xml save method SaveToFile() for current state
 // check https://pugixml.org/docs/quickstart.html#modify
-bool App::SaveToFile() 
+bool App::SaveToFile()
 {
 	bool ret = false;
 

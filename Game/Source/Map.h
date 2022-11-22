@@ -42,6 +42,7 @@ enum ObjectTypes
 	OBJECTTYPE_WARP,
 	OBJECTTYPE_DEATH,
 	OBJECTTYPE_FINISH,
+	OBJECTTYPE_ITEM,
 	OBJECTTYPE_ENTITY
 };
 
@@ -143,7 +144,7 @@ class Map : public Module
 {
 public:
 
-	Map(bool isEnabled);
+	Map();
 
     // Destructor
     virtual ~Map();

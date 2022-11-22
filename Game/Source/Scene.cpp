@@ -13,7 +13,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-Scene::Scene(bool isEnabled) : Module(isEnabled)
+Scene::Scene() : Module()
 {
 	name.Create("scene");
 }
@@ -46,9 +46,7 @@ bool Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Scene::Start()
 {
-	app->entityManager->Enable();
-	app->physics->Enable();
-	app->map->Enable();
+
 
 	//img = app->tex->Load("Assets/Textures/test.png");
 	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
