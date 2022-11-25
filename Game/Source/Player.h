@@ -19,7 +19,7 @@ class Player : public Entity
 {
 public:
 
-	Player();
+	Player(pugi::xml_node parameters);
 	
 	virtual ~Player();
 
@@ -50,11 +50,26 @@ public:
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 
 	void Debug();
+
+	void StateMachine();
 	
 	//Player Physics Body
 	PhysBody* pbody;
 
 	b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
+
+	struct playerState {
+		bool idle;
+		bool moveRight;
+		bool moveLeft;
+		bool isJumping;
+		bool dead;
+		bool isFalling;
+		bool isLanding;
+	};
+
+	playerState state;
+
 private:
 
 	//Texture Variables
@@ -99,8 +114,11 @@ private:
 	int jumpsteps;
 	int jumpcount;
 	int remainingJumpSteps;
-	bool isjumping;
 	int jumpStart_counter;
+
+	//States
+
+	
 	
 };
 

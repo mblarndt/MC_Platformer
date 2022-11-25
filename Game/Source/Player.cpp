@@ -9,9 +9,13 @@
 #include "Point.h"
 #include "Physics.h"
 
-Player::Player() : Entity(EntityType::PLAYER)
+Player::Player(pugi::xml_node params) : Entity(EntityType::PLAYER)
 {
 	name.Create("Player");
+	spawn.x = round(params.attribute("x").as_float());
+	spawn.y = round(params.attribute("x").as_float());
+
+	parameters = params;
 }
 
 Player::~Player() {
@@ -182,38 +186,80 @@ bool Player::Update()
 		else {
 
 			if (playerDeath == false) {
-				//Camera follow
+				
+				/*----------------------------Follow Camera--------------------------*/
 				if (position.x > (camOffset) && position.x < (4222 - (1024 - camOffset))) {
 					app->render->camera.x = -(position.x) + camOffset;
 					app->render->camera.y = menu.y;
 				}
 
-				//L02: DONE 4: modify the position of the player using arrow keys and render the texture
+
+				/*----------------------------Get State of Player--------------------------*/
 				if (v.y == 0) {
-					if (v.x < 0)	currentAnimation = &movementLeft;
+					state.isJumping = false;
+					state.isFalling = false;
 
-					if (v.x > 0)	currentAnimation = &movementRight;
+					if (v.x < 0) {
+						state.idle = false;
+						state.moveRight = false;
+						state.moveLeft = true;
+					}
 
-					if (v.x == 0)	currentAnimation = &idle;
+					if (v.x > 0) {
+						state.idle = false;
+						state.moveRight = true;
+						state.moveLeft = false;
+					}
 
+					if (v.x == 0) {
+						state.idle = true;
+						state.moveRight = false;
+						state.moveLeft = false;
+					}
+				
 					jumpcount = 2;
 				}
 				if (v.y > 0) {
-					//if (jumpStart.HasFinished()) {
+					state.idle = false;
+					state.moveRight = false;
+					state.moveLeft = false;
+					state.isJumping = false;
+					state.isFalling = true;
 					currentAnimation = &jumpDown;
 					jumpStart.Reset();
-					//}
+
+					if (v.x > 0) {
+						state.moveLeft = true;
+						state.moveRight = false;
+					}
+					if (v.x < 0) {
+						state.moveLeft = false;
+						state.moveRight = true;
+					}
 				}
 
 				if (v.y < 0) {
-					//if (jumpStart.HasFinished()) {
+					state.idle = false;
+					state.isJumping = true;
+					state.isFalling = false;
 					currentAnimation = &jumpUp;
 					jumpStart.Reset();
-					//}
-				}
-				//if (v.y == 0 && v.x != 0) currentAnimation = &idle;
 
-				/*----------------------------Player Movement Variation 2--------------------------*/
+					if (v.x > 0) {
+						state.moveLeft = true;
+						state.moveRight = false;
+					}
+					if (v.x < 0) {
+						state.moveLeft = false;
+						state.moveRight = true;
+					}
+
+				}
+
+				StateMachine();
+
+
+				/*----------------------------Player Movement--------------------------*/
 					if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
 						velocitx.x = -speed;
 					}
@@ -235,37 +281,7 @@ bool Player::Update()
 					}
 
 
-				/*----------------------------Player Movement Variation 2--------------------------*
-				if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-					if (jumpcount <= 3)
-						remainingJumpSteps = jumpsteps;
-					jumpcount++;
-				}
-
-				else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
-					velocitx = b2Vec2(speed * (-1), -GRAVITY_Y);
-				}
-
-				else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
-					velocitx = b2Vec2(-speed, -GRAVITY_Y);
-				}
-
-				else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
-					velocitx = b2Vec2(speed, -GRAVITY_Y);
-				}
-
-				//Jump Action
-				if (remainingJumpSteps > 0) {
-					vel.y = -jumpforce;//upwards - don't change x velocity
-					pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
-					remainingJumpSteps--;
-				}
-				else {
-					pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, velocitx.y));
-				}
-
-				/*----------------------------End of Variation 2---------------------------------*/
-
+				/*----------------------------Rendering Player--------------------------*/
 				position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
 				position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
 
@@ -392,4 +408,21 @@ void Player::Debug() {
 		pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 		velocitx.x = 0;
 	}
+}
+
+void Player::StateMachine()
+{
+	if(state.idle)
+		currentAnimation = &idle;
+
+	if (state.isJumping == false && state.isFalling == false)
+		if(state.moveRight)
+			currentAnimation = &movementRight;
+		if (state.moveLeft)
+			currentAnimation = &movementLeft;
+
+		
+	
+	if (state.moveLeft && state.isJumping == false && state.isFalling == false)
+		currentAnimation = &movementLeft;
 }
