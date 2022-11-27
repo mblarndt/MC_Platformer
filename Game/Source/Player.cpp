@@ -195,66 +195,7 @@ bool Player::Update()
 
 
 				/*----------------------------Get State of Player--------------------------*/
-				if (v.y == 0) {
-					state.isJumping = false;
-					state.isFalling = false;
 
-					if (v.x < 0) {
-						state.idle = false;
-						state.moveRight = false;
-						state.moveLeft = true;
-					}
-
-					if (v.x > 0) {
-						state.idle = false;
-						state.moveRight = true;
-						state.moveLeft = false;
-					}
-
-					if (v.x == 0) {
-						state.idle = true;
-						state.moveRight = false;
-						state.moveLeft = false;
-					}
-				
-					jumpcount = 2;
-				}
-				if (v.y > 0) {
-					state.idle = false;
-					state.moveRight = false;
-					state.moveLeft = false;
-					state.isJumping = false;
-					state.isFalling = true;
-					currentAnimation = &jumpDown;
-					jumpStart.Reset();
-
-					if (v.x > 0) {
-						state.moveLeft = true;
-						state.moveRight = false;
-					}
-					if (v.x < 0) {
-						state.moveLeft = false;
-						state.moveRight = true;
-					}
-				}
-
-				if (v.y < 0) {
-					state.idle = false;
-					state.isJumping = true;
-					state.isFalling = false;
-					currentAnimation = &jumpUp;
-					jumpStart.Reset();
-
-					if (v.x > 0) {
-						state.moveLeft = true;
-						state.moveRight = false;
-					}
-					if (v.x < 0) {
-						state.moveLeft = false;
-						state.moveRight = true;
-					}
-
-				}
 
 				StateMachine();
 
@@ -410,19 +351,89 @@ void Player::Debug() {
 	}
 }
 
+void Player::GetState()
+{
+	b2Vec2 v = pbody->body->GetLinearVelocity();
+	if (v.y == 0) {
+		state.isJumping = false;
+		state.isFalling = false;
+
+		if (v.x < 0) {
+			state.idle = false;
+			state.moveRight = false;
+			state.moveLeft = true;
+		}
+
+		if (v.x > 0) {
+			state.idle = false;
+			state.moveRight = true;
+			state.moveLeft = false;
+		}
+
+		if (v.x == 0) {
+			state.idle = true;
+			state.moveRight = false;
+			state.moveLeft = false;
+		}
+
+		jumpcount = 2;
+	}
+	if (v.y > 0) {
+		state.idle = false;
+		state.moveRight = false;
+		state.moveLeft = false;
+		state.isJumping = false;
+		state.isFalling = true;
+		currentAnimation = &jumpDown;
+		jumpStart.Reset();
+
+		if (v.x > 0) {
+			state.moveLeft = true;
+			state.moveRight = false;
+		}
+		if (v.x < 0) {
+			state.moveLeft = false;
+			state.moveRight = true;
+		}
+	}
+
+	if (v.y < 0) {
+		state.idle = false;
+		state.isJumping = true;
+		state.isFalling = false;
+		currentAnimation = &jumpUp;
+		jumpStart.Reset();
+
+		if (v.x > 0) {
+			state.moveLeft = true;
+			state.moveRight = false;
+		}
+		if (v.x < 0) {
+			state.moveLeft = false;
+			state.moveRight = true;
+		}
+
+	}
+}
+
 void Player::StateMachine()
 {
-	if(state.idle)
-		currentAnimation = &idle;
+	GetState();
 
 	if (state.isJumping == false && state.isFalling == false)
 		if(state.moveRight)
 			currentAnimation = &movementRight;
 		if (state.moveLeft)
 			currentAnimation = &movementLeft;
+		if (state.idle)
+			currentAnimation = &idle;
 
-		
-	
-	if (state.moveLeft && state.isJumping == false && state.isFalling == false)
-		currentAnimation = &movementLeft;
+	if (state.isJumping == true)
+		currentAnimation = &jumpUp;
+	if (state.isFalling)
+		currentAnimation = &jumpDown;
+
+	if (state.dead)
+		currentAnimation = &jumpStart;
+
 }

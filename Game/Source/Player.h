@@ -51,6 +51,8 @@ public:
 
 	void Debug();
 
+	void GetState();
+
 	void StateMachine();
 	
 	//Player Physics Body

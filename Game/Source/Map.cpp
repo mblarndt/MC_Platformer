@@ -411,15 +411,19 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->stringType == "finish") {
             newObject->type = ObjectTypes::OBJECTTYPE_FINISH;
         }
+        else if (newObject->stringType == "item") {
+            newObject->type = ObjectTypes::OBJECTTYPE_ITEM;
+        }
+        else if (newObject->stringType == "playerSpawn") {
+            newObject->type = ObjectTypes::OBJECTTYPE_PLAYERSPAWN;
+        }
         else
             newObject->type = ObjectTypes::OBJECTTYPE_ENTITY;
 
         newObject->height = object.attribute("height").as_int();
-        newObject->width = object.attribute("width").as_int();
-        
+        newObject->width = object.attribute("width").as_int();   
         newObject->x = object.attribute("x").as_int();
-        newObject->y = object.attribute("y").as_int();
-        
+        newObject->y = object.attribute("y").as_int();     
         newObject->name = object.attribute("name").as_string();
 
         cstr = "c" + cnr;
@@ -436,6 +440,13 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
             PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
             cstr->ctype = ColliderType::FINISH;
         }
+        //else if (newObject->type == ObjectTypes::OBJECTTYPE_ITEM) {
+        //    Item* cstr = (Item*)app->entityManager->CreateEntity(EntityType::ITEM, itemNode);
+        //}
+        //else if (newObject->type == ObjectTypes::OBJECTTYPE_PLAYERSPAWN) {
+        //    PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
+        //    cstr->ctype = ColliderType::FINISH;
+        //}
 
 
         group->object.Add(newObject);

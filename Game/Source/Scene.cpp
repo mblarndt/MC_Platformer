@@ -36,7 +36,7 @@ bool Scene::Awake(pugi::xml_node& config)
 	}
 
 	//L02: DONE 3: Instantiate the player using the entity manager
-	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER, config.child("player");
+	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER, config.child("player"));
 	playerptr->parameters = config.child("player");
 
 	return ret;
