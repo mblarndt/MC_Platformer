@@ -8,14 +8,11 @@
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
+#include "Item.h"
 
-Player::Player(pugi::xml_node params) : Entity(EntityType::PLAYER)
+Player::Player() : Entity(EntityType::PLAYER)
 {
 	name.Create("Player");
-	spawn.x = round(params.attribute("x").as_float());
-	spawn.y = round(params.attribute("x").as_float());
-
-	parameters = params;
 }
 
 Player::~Player() {
@@ -36,7 +33,7 @@ bool Player::Awake() {
 
 	//Respawn Position
 	spawn.x = parameters.child("startpos").attribute("x").as_int();
-	spawn.y = parameters.child("startpos").attribute("y").as_int();
+	spawn.y = spawnPos.child("startpos").attribute("y").as_int();
 
 	//Camera Offset from Player
 	camOffset = parameters.child("cam").attribute("offset").as_int();
@@ -208,7 +205,6 @@ bool Player::Update()
 					else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
 						velocitx.x = speed;
 					}
-
 					//jump
 					else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 						if (jumpcount <= 3) {
@@ -355,62 +351,41 @@ void Player::GetState()
 {
 	b2Vec2 v = pbody->body->GetLinearVelocity();
 	if (v.y == 0) {
-		state.isJumping = false;
-		state.isFalling = false;
+		grounded = true;
 
 		if (v.x < 0) {
-			state.idle = false;
-			state.moveRight = false;
-			state.moveLeft = true;
+			state = MOVE_LEFT;
 		}
 
 		if (v.x > 0) {
-			state.idle = false;
-			state.moveRight = true;
-			state.moveLeft = false;
+			state = MOVE_RIGHT;
 		}
 
 		if (v.x == 0) {
-			state.idle = true;
-			state.moveRight = false;
-			state.moveLeft = false;
+			state = IDLE;
 		}
-
-		jumpcount = 2;
 	}
 	if (v.y > 0) {
-		state.idle = false;
-		state.moveRight = false;
-		state.moveLeft = false;
-		state.isJumping = false;
-		state.isFalling = true;
-		currentAnimation = &jumpDown;
-		jumpStart.Reset();
+		
+		grounded = false;
 
 		if (v.x > 0) {
-			state.moveLeft = true;
-			state.moveRight = false;
+			state = FALL_LEFT;
 		}
 		if (v.x < 0) {
-			state.moveLeft = false;
-			state.moveRight = true;
+			state = FALL_RIGHT;
 		}
 	}
 
 	if (v.y < 0) {
-		state.idle = false;
-		state.isJumping = true;
-		state.isFalling = false;
-		currentAnimation = &jumpUp;
-		jumpStart.Reset();
+
+		grounded = false;
 
 		if (v.x > 0) {
-			state.moveLeft = true;
-			state.moveRight = false;
+			state = JUMP_LEFT;
 		}
 		if (v.x < 0) {
-			state.moveLeft = false;
-			state.moveRight = true;
+			state = JUMP_RIGHT;
 		}
 
 	}
@@ -420,20 +395,38 @@ void Player::StateMachine()
 {
 	GetState();
 
-	if (state.isJumping == false && state.isFalling == false)
-		if(state.moveRight)
-			currentAnimation = &movementRight;
-		if (state.moveLeft)
-			currentAnimation = &movementLeft;
-		if (state.idle)
+	switch (state) {
+		case IDLE: 
 			currentAnimation = &idle;
+			break;
+		case MOVE_RIGHT:
+			currentAnimation = &movementRight;
+			break;
+		case MOVE_LEFT:
+			currentAnimation = &movementLeft;
+			break;
+		case JUMP_RIGHT:
+			currentAnimation = &jumpUp;
+			break;
+		case JUMP_LEFT:
+			currentAnimation = &jumpUp;
+			break;
+		case FALL_RIGHT:
+			currentAnimation = &jumpDown;
+			break;
+		case FALL_LEFT:
+			currentAnimation = &jumpDown;
+			break;
+	}
 
-	if (state.isJumping == true)
-		currentAnimation = &jumpUp;
-	if (state.isFalling)
-		currentAnimation = &jumpDown;
+	if (preState == FALL) {
+		//currentAnimation = &jumpEnd;
+	}
+		
 
-	if (state.dead)
-		currentAnimation = &jumpStart;
+	if (grounded)
+		jumpcount = 2;
+
+	preState = state;
 
 }

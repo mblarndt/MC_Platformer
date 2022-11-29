@@ -42,6 +42,7 @@ public:
 
 	//L02: DONE 3: Declare a Player attribute 
 	Player* playerptr;
+	Item* itemptr;
 
 private:
 	SDL_Texture* img;

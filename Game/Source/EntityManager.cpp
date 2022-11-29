@@ -76,7 +76,7 @@ bool EntityManager::CleanUp()
 	return ret;
 }
 
-Entity* EntityManager::CreateEntity(EntityType type, pugi::xml_node parameters)
+Entity* EntityManager::CreateEntity(EntityType type)
 {
 	Entity* entity = nullptr; 
 
@@ -86,11 +86,11 @@ Entity* EntityManager::CreateEntity(EntityType type, pugi::xml_node parameters)
 	{
 
 	case EntityType::PLAYER:
-		entity = new Player(parameters);
+		entity = new Player();
 		break;
 
 	case EntityType::ITEM:
-		entity = new Item(parameters);
+		entity = new Item();
 		break;
 
 	default: break;

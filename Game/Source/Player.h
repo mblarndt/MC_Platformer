@@ -19,7 +19,7 @@ class Player : public Entity
 {
 public:
 
-	Player(pugi::xml_node parameters);
+	Player();
 	
 	virtual ~Player();
 
@@ -60,17 +60,26 @@ public:
 
 	b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
 
-	struct playerState {
-		bool idle;
-		bool moveRight;
-		bool moveLeft;
-		bool isJumping;
-		bool dead;
-		bool isFalling;
-		bool isLanding;
+
+	enum PlayerState {
+		IDLE,
+		MOVE_RIGHT,
+		MOVE_LEFT,
+		JUMP,
+		JUMP_LEFT,
+		JUMP_RIGHT,
+		FALL,
+		FALL_LEFT,
+		FALL_RIGHT,
+		GROUNDED,
+		DEAD
 	};
 
-	playerState state;
+	PlayerState state;
+	PlayerState preState;
+
+	bool grounded;
+	//playerState state;
 
 private:
 

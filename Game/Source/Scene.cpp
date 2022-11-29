@@ -32,11 +32,12 @@ bool Scene::Awake(pugi::xml_node& config)
 	// Check https://pugixml.org/docs/quickstart.html#access
 	for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
 	{
-		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM, itemNode);
+		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
+		item->parameters = itemNode;
 	}
 
 	//L02: DONE 3: Instantiate the player using the entity manager
-	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER, config.child("player"));
+	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 	playerptr->parameters = config.child("player");
 
 	return ret;
@@ -52,7 +53,7 @@ bool Scene::Start()
 	
 	// L03: DONE: Load map
 	app->map->Load();
-
+	
 	// L04: DONE 7: Set the window title with map/tileset info
 	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 		app->map->mapData.width,

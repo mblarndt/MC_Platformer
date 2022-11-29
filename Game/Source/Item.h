@@ -11,7 +11,7 @@ class Item : public Entity
 {
 public:
 
-	Item(pugi::xml_node parameters);
+	Item();
 	virtual ~Item();
 
 	bool Awake();

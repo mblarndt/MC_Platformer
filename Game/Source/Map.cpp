@@ -4,12 +4,15 @@
 #include "Textures.h"
 #include "Map.h"
 #include "Physics.h"
+#include "EntityManager.h"
+#include "Scene.h"
 
 #include "Defs.h"
 #include "Log.h"
 
 #include <math.h>
 #include "SDL_image/include/SDL_image.h"
+#include "Item.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -440,13 +443,15 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
             PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
             cstr->ctype = ColliderType::FINISH;
         }
-        //else if (newObject->type == ObjectTypes::OBJECTTYPE_ITEM) {
-        //    Item* cstr = (Item*)app->entityManager->CreateEntity(EntityType::ITEM, itemNode);
-        //}
-        //else if (newObject->type == ObjectTypes::OBJECTTYPE_PLAYERSPAWN) {
-        //    PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
-        //    cstr->ctype = ColliderType::FINISH;
-        //}
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_ITEM) {
+            //app->scene->itemptr = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
+            //app->scene->itemptr->parameters = object;
+
+        }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_PLAYERSPAWN) {
+            //app->scene->playerptr->spawnPos.child("playerSpawn").attribute("x") = newObject->x;
+            //app->scene->playerptr->spawnPos.child("playerSpawn").attribute("y") = newObject->y;
+        }
 
 
         group->object.Add(newObject);

@@ -3010,18 +3010,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="10" name="Items">
-  <object id="111" class="item" x="1536" y="288"/>
-  <object id="112" class="item" x="1856" y="256"/>
-  <object id="113" class="item" x="2112" y="256"/>
-  <object id="114" class="item" x="2560" y="160"/>
-  <object id="115" class="item" x="2880" y="96"/>
-  <object id="116" class="item" x="3360" y="64"/>
-  <object id="117" class="item" x="3616" y="64"/>
-  <object id="118" class="item" x="3968" y="128"/>
-  <object id="119" class="item" x="3488" y="256"/>
-  <object id="120" class="item" x="3488" y="416"/>
- </objectgroup>
+ <objectgroup id="10" name="Items"/>
  <layer id="6" name="Trees" width="200" height="15">
   <properties>
    <property name="Draw" type="bool" value="true"/>
@@ -15070,7 +15059,7 @@
     <property name="MapToLoad" value="TestMap.tmx"/>
    </properties>
   </object>
-  <object id="18" name="Player" x="1264.9" y="297.528">
+  <object id="18" name="Player" class="playerSpawn" x="1280" y="256" width="20" height="20">
    <properties>
     <property name="EntitityType" value="PLAYER"/>
    </properties>
@@ -15157,6 +15146,16 @@
   <object id="108" class="solid" x="5408" y="448" width="96" height="32"/>
   <object id="109" class="finish" x="4192" y="384" width="32" height="64"/>
   <object id="110" class="solid" x="2368" y="288" width="32" height="32"/>
+  <object id="111" class="item" x="1536" y="288" width="10" height="10"/>
+  <object id="112" class="item" x="1856" y="256" width="10" height="10"/>
+  <object id="113" class="item" x="2112" y="256" width="10" height="10"/>
+  <object id="114" class="item" x="2560" y="160" width="10" height="10"/>
+  <object id="115" class="item" x="2880" y="96" width="10" height="10"/>
+  <object id="116" class="item" x="3360" y="64" width="10" height="10"/>
+  <object id="117" class="item" x="3616" y="64" width="10" height="10"/>
+  <object id="118" class="item" x="3968" y="128" width="10" height="10"/>
+  <object id="119" class="item" x="3488" y="256" width="10" height="10"/>
+  <object id="120" class="item" x="3488" y="416" width="10" height="10"/>
  </objectgroup>
  <layer id="9" name="Text" width="200" height="15">
   <properties>

@@ -9,7 +9,7 @@
 #include "Point.h"
 #include "Physics.h"
 
-Item::Item(pugi::xml_node parameters) : Entity(EntityType::ITEM)
+Item::Item() : Entity(EntityType::ITEM)
 {
 	name.Create("item");
 }
@@ -20,10 +20,10 @@ bool Item::Awake() {
 
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
-	texturePath = parameters.attribute("texturepath").as_string();
+	width = parameters.attribute("width").as_int();
+	height = parameters.attribute("height").as_int();
 
-	width = 32;
-	height = 32;
+	texturePath = "Assets/Textures/slimeball.png";
 	radius = 10;
 
 	return true;
