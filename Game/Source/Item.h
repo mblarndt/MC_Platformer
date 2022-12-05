@@ -11,7 +11,7 @@ class Item : public Entity
 {
 public:
 
-	Item();
+	Item(pugi::xml_node paras);
 	virtual ~Item();
 
 	bool Awake();
@@ -25,6 +25,7 @@ public:
 public:
 
 	bool isPicked = false;
+	PhysBody* pbody;
 
 private:
 
@@ -32,7 +33,7 @@ private:
 	const char* texturePath;
 
 	//TODO 4: Add a physics to an item
-	PhysBody* pbody;
+	
 
 	int width;
 	int height;

@@ -40,12 +40,12 @@
 		  
 		  <movement speed="4.5" jumpforce="2.5" jumpsteps="8"/>
 	  </player>
-
-	<item x="1300" y="322" texturepath="Assets/Textures/slimeball.png"/>
-	<item x="1400" y="322" texturepath="Assets/Textures/slimeball.png"/>
-    <item x="1450" y="322" texturepath="Assets/Textures/slimeball.png"/>
-    <item x="1500" y="322" texturepath="Assets/Textures/slimeball.png"/>
-    <item x="1550" y="322" texturepath="Assets/Textures/slimeball.png"/>
+	
+	<item x="1300" y="322" radius="7.5" texturepath="Assets/Textures/slimeball.png"/>
+	<item x="1400" y="322" radius="7.5" texturepath="Assets/Textures/slimeball.png"/>
+    <item x="1450" y="300" radius="7.5" texturepath="Assets/Textures/slimeball.png"/>
+    <item x="1500" y="300" radius="7.5" texturepath="Assets/Textures/slimeball.png"/>
+    <item x="1550" y="300" radius="7.5" texturepath="Assets/Textures/slimeball.png"/>
   </scene>
 
   <map>

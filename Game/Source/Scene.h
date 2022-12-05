@@ -38,6 +38,8 @@ public:
 
 	bool LoadState(pugi::xml_node& data);
 
+	void CreateItem(pugi::xml_node itemNode);
+
 public:
 
 	//L02: DONE 3: Declare a Player attribute 

@@ -27,18 +27,16 @@ bool Scene::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene");
 	bool ret = true;
-
+	
 	// iterate all objects in the scene
 	// Check https://pugixml.org/docs/quickstart.html#access
 	for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
 	{
-		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
-		item->parameters = itemNode;
+		CreateItem(itemNode);
 	}
 
 	//L02: DONE 3: Instantiate the player using the entity manager
-	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
-	playerptr->parameters = config.child("player");
+	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER, config.child("player"));
 
 	return ret;
 }
@@ -46,13 +44,9 @@ bool Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Scene::Start()
 {
-
-
-	//img = app->tex->Load("Assets/Textures/test.png");
-	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
-	
 	// L03: DONE: Load map
 	app->map->Load();
+
 	
 	// L04: DONE 7: Set the window title with map/tileset info
 	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
@@ -144,3 +138,14 @@ bool Scene::LoadState(pugi::xml_node& data)
 
 	return true;
 }
+
+void Scene::CreateItem(pugi::xml_node itemNode)
+{
+	LOG("Start Item Creation");
+	Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM, itemNode);
+	LOG("Item Created");
+}
+
+
+
+

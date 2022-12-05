@@ -189,6 +189,7 @@ bool Map::Load()
 
     pugi::xml_document mapFileXML;
     pugi::xml_parse_result result = mapFileXML.load_file(mapFileName.GetString());
+    //pugi::xml_parse_result nameResult = mapFileXML.load_file(mapFileName.GetString());
 
     if(result == NULL)
     {
@@ -442,24 +443,29 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->type == ObjectTypes::OBJECTTYPE_FINISH) {
             PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
             cstr->ctype = ColliderType::FINISH;
+            LOG("Finish loaded");
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_ITEM) {
             //app->scene->itemptr = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
-            //app->scene->itemptr->parameters = object;
+            //app->scene->itemptr->parameters
+            //app->entityManager->CreateEntity(EntityType::ITEM);
+            //pugi::xml_node parameters;
+            //parameters.attribute
+            //app->scene->CreateItem(object);
+            LOG("Finish Items");
 
-        }
-        else if (newObject->type == ObjectTypes::OBJECTTYPE_PLAYERSPAWN) {
-            //app->scene->playerptr->spawnPos.child("playerSpawn").attribute("x") = newObject->x;
-            //app->scene->playerptr->spawnPos.child("playerSpawn").attribute("y") = newObject->y;
         }
 
 
         group->object.Add(newObject);
+        
 
         cnr++;
     }
-
+    
     return ret;
+    LOG("DEBUG");
+    LOG("Finished loading Objects");
 }
 
 // L06: DONE 6: Load a group of properties from a node and fill a list with it

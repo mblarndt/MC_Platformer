@@ -43,7 +43,7 @@ bool EntityManager::Start() {
 
 	bool ret = true; 
 
-	//Iterates over the entities and calls Start
+	//Iterates over the entities and calls Startj
 	ListItem<Entity*>* item;
 	Entity* pEntity = NULL;
 
@@ -76,7 +76,7 @@ bool EntityManager::CleanUp()
 	return ret;
 }
 
-Entity* EntityManager::CreateEntity(EntityType type)
+Entity* EntityManager::CreateEntity(EntityType type, pugi::xml_node paras)
 {
 	Entity* entity = nullptr; 
 
@@ -86,11 +86,11 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	{
 
 	case EntityType::PLAYER:
-		entity = new Player();
+		entity = new Player(paras);
 		break;
 
 	case EntityType::ITEM:
-		entity = new Item();
+		entity = new Item(paras);
 		break;
 
 	default: break;

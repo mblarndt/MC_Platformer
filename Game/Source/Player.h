@@ -19,7 +19,7 @@ class Player : public Entity
 {
 public:
 
-	Player();
+	Player(pugi::xml_node paras);
 	
 	virtual ~Player();
 
@@ -54,6 +54,12 @@ public:
 	void GetState();
 
 	void StateMachine();
+
+	void Shoot();
+
+	void HandleMovement();
+
+	void RenderEntity();
 	
 	//Player Physics Body
 	PhysBody* pbody;
@@ -128,7 +134,7 @@ private:
 	int jumpStart_counter;
 
 	//States
-
+	int shootDir;
 	
 	
 };

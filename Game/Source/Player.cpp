@@ -10,9 +10,10 @@
 #include "Physics.h"
 #include "Item.h"
 
-Player::Player() : Entity(EntityType::PLAYER)
+Player::Player(pugi::xml_node paras) : Entity(EntityType::PLAYER)
 {
 	name.Create("Player");
+	parameters = paras;
 }
 
 Player::~Player() {
@@ -198,33 +199,11 @@ bool Player::Update()
 
 
 				/*----------------------------Player Movement--------------------------*/
-					if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
-						velocitx.x = -speed;
-					}
 
-					else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
-						velocitx.x = speed;
-					}
-					//jump
-					else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-						if (jumpcount <= 3) {
-							pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
-							jumpcount++;
-						}
-					}
-					else {
-						velocitx.y = pbody->body->GetLinearVelocity().y;
-						pbody->body->SetLinearVelocity(velocitx);
-					}
-
+				HandleMovement();
 
 				/*----------------------------Rendering Player--------------------------*/
-				position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
-				position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
-
-				currentAnimation->Update();
-				SDL_Rect rect = currentAnimation->GetCurrentFrame();
-				app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect);
+				RenderEntity();
 			}
 
 			//When Player collides with Lava he spawns at start again
@@ -401,9 +380,11 @@ void Player::StateMachine()
 			break;
 		case MOVE_RIGHT:
 			currentAnimation = &movementRight;
+			shootDir = 1;
 			break;
 		case MOVE_LEFT:
 			currentAnimation = &movementLeft;
+			shootDir = -1;
 			break;
 		case JUMP_RIGHT:
 			currentAnimation = &jumpUp;
@@ -429,4 +410,48 @@ void Player::StateMachine()
 
 	preState = state;
 
+}
+
+void Player::Shoot()
+{
+	pugi::xml_node object;
+	object.attribute("x") = position.x;
+	object.attribute("y") = position.y;
+	object.attribute("radius") = 15;
+	app->scene->CreateItem(object);
+}
+
+void Player::HandleMovement()
+{
+	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
+		velocitx.x = -speed;
+	}
+
+	else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
+		velocitx.x = speed;
+	}
+	//jump
+	else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+		if (jumpcount <= 3) {
+			pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
+			jumpcount++;
+		}
+	}
+	else if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+		Shoot();
+	}
+	else {
+		velocitx.y = pbody->body->GetLinearVelocity().y;
+		pbody->body->SetLinearVelocity(velocitx);
+	}
+}
+
+void Player::RenderEntity()
+{
+	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
+	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
+
+	currentAnimation->Update();
+	SDL_Rect rect = currentAnimation->GetCurrentFrame();
+	app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect);
 }
