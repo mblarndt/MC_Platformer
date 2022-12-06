@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="200" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="121">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="200" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="129">
  <tileset firstgid="1" name="Minecraft Tileset" tilewidth="32" tileheight="32" tilecount="120" columns="10">
   <image source="Minecraft Tileset.png" width="320" height="384"/>
  </tileset>
@@ -9130,6 +9130,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -9329,6 +9330,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -9528,9 +9530,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -9726,9 +9730,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -9924,17 +9930,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -10130,11 +10130,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -10330,9 +10330,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -10528,13 +10530,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -10730,11 +10730,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -10934,7 +10934,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -11134,7 +11134,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="10"/>
    <tile/>
    <tile/>
    <tile/>
@@ -15077,6 +15077,10 @@
   <object id="113" class="item" x="2112" y="256" width="10" height="10"/>
   <object id="114" class="item" x="2560" y="160" width="10" height="10"/>
   <object id="115" class="item" x="2880" y="96" width="10" height="10"/>
+  <object id="121" class="solid" x="2944" y="352" width="3456" height="128"/>
+  <object id="123" class="solid" x="3328" y="224" width="32" height="64"/>
+  <object id="124" class="solid" x="3200" y="0" width="32" height="288"/>
+  <object id="128" class="solid" x="3328" y="64" width="32" height="288"/>
  </objectgroup>
  <layer id="9" name="Text" width="200" height="15">
   <properties>

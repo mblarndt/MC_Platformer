@@ -126,18 +126,30 @@ bool Player::Start() {
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width/2), position.y + (height/2), width, height, bodyType::DYNAMIC);
 
-	b2PolygonShape shape1;
-	b2PolygonShape shape2;
-	shape1.SetAsBox(0.01, 0.01, b2Vec2(0.3, 0), 0);
-	shape2.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
-	b2FixtureDef fixtureDef1;
-	b2FixtureDef fixtureDef2;
-	fixtureDef1.shape = &shape1;
-	fixtureDef2.shape = &shape2;
-	fixtureDef1.density = 0;
-	fixtureDef2.density = 0.1f;
-	pbody->body->CreateFixture(&fixtureDef1);
-	pbody->body->CreateFixture(&fixtureDef2);
+	b2PolygonShape shapeR;
+	b2PolygonShape shapeL;
+	b2PolygonShape shapeT;
+	b2PolygonShape shapeB;
+	shapeR.SetAsBox(0.01, 0.01, b2Vec2(0.3, 0), 0);
+	shapeL.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
+	shapeT.SetAsBox(0.01, 0.01, b2Vec2( 0, -0.3), 0);
+	shapeB.SetAsBox(0.01, 0.01, b2Vec2(0, 0.3), 0);
+	b2FixtureDef fixtureDefR;
+	b2FixtureDef fixtureDefL;
+	b2FixtureDef fixtureDefT;
+	b2FixtureDef fixtureDefB;
+	fixtureDefR.shape = &shapeR;
+	fixtureDefL.shape = &shapeL;
+	fixtureDefT.shape = &shapeT;
+	fixtureDefB.shape = &shapeB;
+	fixtureDefR.density = 0;
+	fixtureDefL.density = 0.1f;
+	fixtureDefT.density = 0.2f;
+	fixtureDefB.density = 0.3f;
+	pbody->body->CreateFixture(&fixtureDefR);
+	pbody->body->CreateFixture(&fixtureDefL);
+	pbody->body->CreateFixture(&fixtureDefT);
+	pbody->body->CreateFixture(&fixtureDefB);
   
 	// L07 DONE 7: Assign collider type
 	pbody->ctype = ColliderType::PLAYER;
@@ -283,10 +295,15 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		velocitx.x = -speed;
 		LOG("Fixture Right");
 	}
-
 	if (fix2->GetDensity() == 0.1f) {
 		velocitx.x = speed;
 		LOG("Fixture Left");
+	}
+	if (fix2->GetDensity() == 0.2f) {
+		LOG("Fixture Top");
+	}
+	if (fix2->GetDensity() == 0.3f) {
+		LOG("Fixture Bottom");
 	}
 
 	switch (physB->ctype)
