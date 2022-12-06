@@ -126,19 +126,18 @@ bool Player::Start() {
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width/2), position.y + (height/2), width, height, bodyType::DYNAMIC);
 
-	//Add Fixtures to detect collision direction
-	//b2FixtureDef myFixR;
-	//b2FixtureDef myFixL;
-	//b2PolygonShape polyL;
-	//b2PolygonShape polyR;
-	//myFixR.density = 0;
-	//myFixL.density = 0;
-	//polyL.SetAsBox(0.01, 0.01, b2Vec2(0.3,0),0);
-	//polyR.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
-	//myFixR.shape = &polyL;
-	//myFixL.shape = &polyR;
-	//pbody->body->CreateFixture(&myFixR);
-	//pbody->body->CreateFixture(&myFixL);
+	b2PolygonShape shape1;
+	b2PolygonShape shape2;
+	shape1.SetAsBox(0.01, 0.01, b2Vec2(0.3, 0), 0);
+	shape2.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
+	b2FixtureDef fixtureDef1;
+	b2FixtureDef fixtureDef2;
+	fixtureDef1.shape = &shape1;
+	fixtureDef2.shape = &shape2;
+	fixtureDef1.density = 0;
+	fixtureDef2.density = 0.1f;
+	pbody->body->CreateFixture(&fixtureDef1);
+	pbody->body->CreateFixture(&fixtureDef2);
   
 	// L07 DONE 7: Assign collider type
 	pbody->ctype = ColliderType::PLAYER;
@@ -193,15 +192,9 @@ bool Player::Update()
 
 
 				/*----------------------------Get State of Player--------------------------*/
-
-
 				StateMachine();
-
-
 				/*----------------------------Player Movement--------------------------*/
-
 				HandleMovement();
-
 				/*----------------------------Rendering Player--------------------------*/
 				RenderEntity();
 			}
@@ -282,9 +275,19 @@ bool Player::SaveState(pugi::xml_node& data)
 }
 
 // L07 DONE 6: Define OnCollision function for the player. Check the virtual function on Entity class
-void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
+void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
-	// L07 DONE 7: Detect the type of collision
+	b2Fixture* fix1 = contact->GetFixtureA();
+	b2Fixture* fix2 = contact->GetFixtureB();
+	if (fix2->GetDensity() == 0) {
+		velocitx.x = -speed;
+		LOG("Fixture Right");
+	}
+
+	if (fix2->GetDensity() == 0.1f) {
+		velocitx.x = speed;
+		LOG("Fixture Left");
+	}
 
 	switch (physB->ctype)
 	{
@@ -315,6 +318,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	}
 
 }
+
 
 void Player::Debug() {
 	if (app->input->GetKey(SDL_SCANCODE_F1) || app->input->GetKey(SDL_SCANCODE_F3)) {

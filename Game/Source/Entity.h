@@ -5,6 +5,7 @@
 #include "SString.h"
 #include "Input.h"
 #include "Render.h"
+#include "Box2D/Box2D/Box2D.h"
 
 class PhysBody;
 
@@ -69,7 +70,7 @@ public:
 		}
 	}
 
-	virtual void OnCollision(PhysBody* physA, PhysBody* physB) {
+	virtual void OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
 	};
 

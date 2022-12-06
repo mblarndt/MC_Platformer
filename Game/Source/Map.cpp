@@ -433,8 +433,8 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         cstr = "c" + cnr;
 
         if (newObject->type == ObjectTypes::OBJECTTYPE_SOLID) {
-            PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
-            cstr->ctype = ColliderType::FLOOR;
+            PhysBody* floor = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
+            floor->ctype = ColliderType::FLOOR;
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_DEATH) {
             PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
