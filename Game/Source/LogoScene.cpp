@@ -32,23 +32,21 @@ bool LogoScene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 
-	//logoRect.x = config.child("logorect").attribute("x").as_int();
-	//logoRect.y = config.child("logorect").attribute("y").as_int();
-	//logoRect.h = config.child("logorect").attribute("h").as_int();
-	//logoRect.w = config.child("logorect").attribute("w").as_int();
+	logoRect.x = config.attribute("x").as_int();
+	logoRect.y = config.attribute("y").as_int();
+	logoRect.h = config.attribute("h").as_int();
+	logoRect.w = config.attribute("w").as_int();
+	duration = config.attribute("duration").as_float();
+	texturePath = config.attribute("texturepath").as_string();
 
-	//duration = config.child("duration").attribute("value").as_float();
+	//logoRect.x = 0;
+	//logoRect.y = 0;
+	//logoRect.h = 480;
+	//logoRect.w = 1024;
 
-	//texturePath = config.child("path").attribute("value").as_string();
+	//duration = 5.0f;
 
-	logoRect.x = 0;
-	logoRect.y = 0;
-	logoRect.h = 480;
-	logoRect.w = 1024;
-
-	duration = 5.0f;
-
-	texturePath = "Assets/Textures/logo.png";
+	//texturePath = "Assets/Textures/logo.png";
 
 
 

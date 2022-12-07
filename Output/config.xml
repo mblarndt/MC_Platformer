@@ -48,6 +48,8 @@
     <item x="1550" y="300" radius="7.5" texturepath="Assets/Textures/slimeball.png"/>
   </scene>
 
+  <logoScene x="0" y="0" w="1024" h="480" texturepath="Assets/Textures/logo.png" duration="5.0f"/>
+
   <map>
     <mapfolder path="Assets/Maps/"/>
     <mapfile path="Assets/Maps/Level1.tmx"/>
