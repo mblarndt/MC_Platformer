@@ -32,24 +32,13 @@ bool LogoScene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 
+	//Load Logo Info from config file
 	logoRect.x = config.attribute("x").as_int();
 	logoRect.y = config.attribute("y").as_int();
 	logoRect.h = config.attribute("h").as_int();
 	logoRect.w = config.attribute("w").as_int();
 	duration = config.attribute("duration").as_float();
 	texturePath = config.attribute("texturepath").as_string();
-
-	//logoRect.x = 0;
-	//logoRect.y = 0;
-	//logoRect.h = 480;
-	//logoRect.w = 1024;
-
-	//duration = 5.0f;
-
-	//texturePath = "Assets/Textures/logo.png";
-
-
-
 
 	return ret;
 }
@@ -90,16 +79,10 @@ bool LogoScene::Update(float dt)
 	app->render->DrawTexture(logo, 0, 0, &logoRect);
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-	{
-
-
-
 		app->fadeToBlack->FadeToBlackScene("TitleScene");
-	}
+
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-	{
 		app->fadeToBlack->FadeToBlackScene("Scene");
-	}
 
 	return true;
 }
@@ -130,7 +113,5 @@ void LogoScene::AutomaticTransition()
 	accumulatedTime += 0.075f;
 
 	if (accumulatedTime >= duration)
-	{
 		app->fadeToBlack->FadeToBlackScene("Scene");
-	}
 }

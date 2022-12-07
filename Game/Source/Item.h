@@ -22,6 +22,8 @@ public:
 
 	bool CleanUp();
 
+	void OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact);
+
 public:
 
 	bool isPicked = false;

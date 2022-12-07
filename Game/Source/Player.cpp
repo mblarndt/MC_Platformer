@@ -94,13 +94,10 @@ bool Player::Start() {
 	movementLeft.loop = true;
 	movementLeft.speed = 0.1f;
 
-
 	idle.PushBack({ 0, 0, 60, 40 });
 	idle.PushBack({ 60, 40, 60, 40 });
 	idle.loop = true;
 	idle.speed = 0.1f;
-
-
 
 	jumpStart.PushBack({298, 48, 60, 40});
 	jumpStart.PushBack({358, 48, 60, 40});

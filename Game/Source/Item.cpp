@@ -8,6 +8,7 @@
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
+#include "EntityManager.h"
 
 Item::Item(pugi::xml_node paras) : Entity(EntityType::ITEM)
 {
@@ -57,4 +58,22 @@ bool Item::Update()
 bool Item::CleanUp()
 {
 	return true;
+}
+
+void Item::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
+
+	switch (physA->ctype)
+	{
+	case ColliderType::PLAYER:
+		LOG("Item Collision ITEM");
+		break;
+	case ColliderType::DEATH:
+		LOG("Item Collision DEATH");
+		app->entityManager->DestroyEntity(this);
+		break;
+	case ColliderType::UNKNOWN:
+		LOG("Item Collision UNKNOWN");
+		break;
+	}
+
 }
