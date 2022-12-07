@@ -62,7 +62,7 @@ bool Item::CleanUp()
 
 void Item::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
-	switch (physA->ctype)
+	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
 		LOG("Item Collision ITEM");

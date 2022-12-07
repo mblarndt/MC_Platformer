@@ -141,9 +141,7 @@ bool Scene::LoadState(pugi::xml_node& data)
 
 void Scene::CreateItem(pugi::xml_node itemNode)
 {
-	LOG("Start Item Creation");
 	Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM, itemNode);
-	LOG("Item Created");
 }
 
 

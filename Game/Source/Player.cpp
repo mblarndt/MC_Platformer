@@ -9,6 +9,7 @@
 #include "Point.h"
 #include "Physics.h"
 #include "Item.h"
+#include "Map.h"
 
 Player::Player(pugi::xml_node paras) : Entity(EntityType::PLAYER)
 {
@@ -290,17 +291,13 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	b2Fixture* fix2 = contact->GetFixtureB();
 	if (fix2->GetDensity() == 0) {
 		velocitx.x = -speed;
-		LOG("Fixture Right");
 	}
 	if (fix2->GetDensity() == 0.1f) {
 		velocitx.x = speed;
-		LOG("Fixture Left");
 	}
 	if (fix2->GetDensity() == 0.2f) {
-		LOG("Fixture Top");
 	}
 	if (fix2->GetDensity() == 0.3f) {
-		LOG("Fixture Bottom");
 		//jumpcount = 0;
 	}
 
@@ -333,7 +330,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	}
 
 }
-
 
 void Player::Debug() {
 	if (app->input->GetKey(SDL_SCANCODE_F1) || app->input->GetKey(SDL_SCANCODE_F3)) {
@@ -428,7 +424,6 @@ void Player::Shoot()
 	pugi::xml_node object;
 	object.attribute("x") = position.x;
 	object.attribute("y") = position.y;
-	object.attribute("radius") = 15;
 	app->scene->CreateItem(object);
 }
 
