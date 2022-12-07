@@ -133,7 +133,7 @@ bool Player::Start() {
 	shapeR.SetAsBox(0.01, 0.01, b2Vec2(0.3, 0), 0);
 	shapeL.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
 	shapeT.SetAsBox(0.01, 0.01, b2Vec2( 0, -0.3), 0);
-	shapeB.SetAsBox(0.01, 0.01, b2Vec2(0, 0.3), 0);
+	shapeB.SetAsBox(0.01, 0.01, b2Vec2(0, 0.29), 0);
 	b2FixtureDef fixtureDefR;
 	b2FixtureDef fixtureDefL;
 	b2FixtureDef fixtureDefT;
@@ -304,6 +304,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	}
 	if (fix2->GetDensity() == 0.3f) {
 		LOG("Fixture Bottom");
+		//jumpcount = 0;
 	}
 
 	switch (physB->ctype)
@@ -352,42 +353,34 @@ void Player::GetState()
 	b2Vec2 v = pbody->body->GetLinearVelocity();
 	if (v.y == 0) {
 		grounded = true;
-
-		if (v.x < 0) {
+		if (v.x < 0)
 			state = MOVE_LEFT;
-		}
 
-		if (v.x > 0) {
+		if (v.x > 0)
 			state = MOVE_RIGHT;
-		}
 
-		if (v.x == 0) {
+		if (v.x == 0)
 			state = IDLE;
-		}
 	}
 	if (v.y > 0) {
 		
 		grounded = false;
-
-		if (v.x > 0) {
+		if (v.x > 0)
 			state = FALL_LEFT;
-		}
-		if (v.x < 0) {
+
+		if (v.x < 0)
 			state = FALL_RIGHT;
-		}
 	}
 
 	if (v.y < 0) {
 
 		grounded = false;
 
-		if (v.x > 0) {
+		if (v.x > 0)
 			state = JUMP_LEFT;
-		}
-		if (v.x < 0) {
-			state = JUMP_RIGHT;
-		}
 
+		if (v.x < 0)
+			state = JUMP_RIGHT;
 	}
 }
 
@@ -470,7 +463,7 @@ void Player::HandleMovement()
 void Player::RenderEntity()
 {
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
+	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2)+1;
 
 	currentAnimation->Update();
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();

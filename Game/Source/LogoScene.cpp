@@ -63,6 +63,7 @@ bool LogoScene::Start()
 	app->scene->active = false;
 	app->map->active = false;
 	app->physics->active = false;
+	app->input->active = false;
 	app->fadeToBlack->activeScene = "LogoScene";
 
 	accumulatedTime = 0.0f;
