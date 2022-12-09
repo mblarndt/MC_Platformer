@@ -58,6 +58,9 @@
     <ClCompile Include="Source\TitleScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Bullet.cpp">
+      <Filter>Entities\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -143,6 +146,9 @@
     </ClInclude>
     <ClInclude Include="Source\TitleScene.h">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Bullet.h">
+      <Filter>Entities\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

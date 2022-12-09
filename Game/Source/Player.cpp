@@ -10,6 +10,7 @@
 #include "Physics.h"
 #include "Item.h"
 #include "Map.h"
+#include "Bullet.h"
 
 Player::Player(pugi::xml_node paras) : Entity(EntityType::PLAYER)
 {
@@ -403,7 +404,11 @@ void Player::Shoot()
 	pugi::xml_node object;
 	object.attribute("x") = position.x;
 	object.attribute("y") = position.y;
+	object.attribute("direction") = shootDir;
+	//app->scene->CreateBullet(object);
 	app->scene->CreateItem(object);
+
+	
 
 	//projectileBody = app->physics->CreateCircle(position.x + (50), position.y, 7.5, DYNAMIC);
 	//projectileBody->body->ApplyLinearImpulse(b2Vec2(shootDir * 2.3, 0), b2Vec2(position.x, position.y), true);

@@ -40,6 +40,8 @@ public:
 
 	void CreateItem(pugi::xml_node itemNode);
 
+	void CreateBullet(pugi::xml_node itemNode);
+
 public:
 
 	//L02: DONE 3: Declare a Player attribute 

@@ -9,6 +9,8 @@
 #include "Map.h"
 #include "Physics.h"
 #include "Player.h"
+#include "Item.h"
+#include "Bullet.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -32,7 +34,7 @@ bool Scene::Awake(pugi::xml_node& config)
 	// Check https://pugixml.org/docs/quickstart.html#access
 	for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
 	{
-		CreateItem(itemNode);
+		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM, itemNode);
 	}
 
 	//L02: DONE 3: Instantiate the player using the entity manager
@@ -142,6 +144,13 @@ bool Scene::LoadState(pugi::xml_node& data)
 void Scene::CreateItem(pugi::xml_node itemNode)
 {
 	Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM, itemNode);
+	item->ItemInitialisation();
+}
+
+void Scene::CreateBullet(pugi::xml_node itemNode)
+{
+	Bullet* bullet = (Bullet*)app->entityManager->CreateEntity(EntityType::BULLET, itemNode);
+	bullet->BulletInitialisation(itemNode);
 }
 
 
