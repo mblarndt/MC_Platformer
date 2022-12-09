@@ -9,6 +9,8 @@
 #include "Map.h"
 #include "Physics.h"
 #include "Player.h"
+#include "Pathfinding.h"
+#include "PQueue.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -46,8 +48,6 @@ bool Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Scene::Start()
 {
-
-
 	//img = app->tex->Load("Assets/Textures/test.png");
 	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
 	
@@ -63,6 +63,11 @@ bool Scene::Start()
 		app->map->mapData.tilesets.Count());
 
 	app->win->SetTitle(title.GetString());
+
+	// Texture to highligh mouse position 
+	mouseTileTex = app->tex->Load("Assets/Maps/path.png");
+	// Texture to show path origin 
+	originTex = app->tex->Load("Assets/Maps/x.png");
 
 	return true;
 }
@@ -98,6 +103,40 @@ bool Scene::Update(float dt)
 
 	// Draw map
 	app->map->Draw();
+
+	//// Pathfinding debug
+	
+	//int mouseX, mouseY;
+	//app->input->GetMousePosition(mouseX, mouseY);
+	//iPoint mouseTile = app->map->WorldToMap(mouseX - app->render->camera.x - app->map->mapData.tileWidth / 2,
+	//	mouseY - app->render->camera.y - app->map->mapData.tileHeight / 2);
+	//
+	//if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	//{
+	//	if (originSelected == true)
+	//	{
+	//		app->pathfinding->CreatePath(origin, mouseTile);
+	//		originSelected = false;
+	//	}
+	//	else
+	//	{
+	//		origin = mouseTile;
+	//		originSelected = true;
+	//		app->pathfinding->ClearLastPath();
+	//	}
+	//}
+	//
+	//// L12: Get the latest calculated path and draw
+	//const DynArray<iPoint>* path = app->pathfinding->GetLastPath();
+	//for (uint i = 0; i < path->Count(); ++i)
+	//{
+	//	iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+	//	app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
+	//}
+	//
+	//// L12: Debug pathfinding
+	//iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
+	//app->render->DrawTexture(originTex, originScreen.x, originScreen.y);
 
 	return true;
 }
