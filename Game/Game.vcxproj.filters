@@ -58,7 +58,7 @@
     <ClCompile Include="Source\Item.cpp">
       <Filter>Entitys\Item</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
+    <ClCompile Include="Source\Enemy.cpp">
       <Filter>Entitys\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
@@ -147,11 +147,11 @@
     <ClInclude Include="Source\Item.h">
       <Filter>Entitys\Item</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Entitys\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Source\PQueue.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy.h">
+      <Filter>Entitys\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
