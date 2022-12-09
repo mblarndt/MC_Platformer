@@ -104,8 +104,7 @@ bool Scene::Update(float dt)
 	// Draw map
 	app->map->Draw();
 
-	//// Pathfinding debug
-	
+	// Pathfinding debug
 	//int mouseX, mouseY;
 	//app->input->GetMousePosition(mouseX, mouseY);
 	//iPoint mouseTile = app->map->WorldToMap(mouseX - app->render->camera.x - app->map->mapData.tileWidth / 2,
