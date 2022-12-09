@@ -59,6 +59,10 @@ public:
 
 	void HandleMovement();
 
+	void HandleDeath(bool dead);
+
+	void HandleFinish(bool finish);
+
 	void RenderEntity();
 	
 	//Player Physics Body

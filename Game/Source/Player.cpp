@@ -210,45 +210,10 @@ bool Player::Update()
 			}
 
 			//When Player collides with Lava he spawns at start again
-			if (playerDeath == true) {
-				currentAnimation = &jumpStart;
-				if (frameCounter < 30) {
-					SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
-					app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
-					frameCounter++;
-				}
-				else {
-					SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
-					app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
-					SDL_Rect rect = { 0, 0, 1024, 480 };
-					if (position.x < 2944)	app->render->DrawTexture(texDeath, position.x - camOffset, 0, &rect);
-					else app->render->DrawTexture(texDeath, 3196, 0, &rect);
-					//frameCounter++;
-					if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-						position.x = spawn.x;
-						position.y = spawn.y;
-						pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
-						velocitx.x = 0;
-						playerDeath = false;
-					}
-				}
-			}
+			HandleDeath(playerDeath);
 
 			//If Player finished Level
-			if (levelFinish) {
-				SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
-				app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
-				SDL_Rect rect = { 0, 0, 1024, 480 };
-				app->render->DrawTexture(texFinish, position.x - 965, 0, &rect);
-
-				if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-					position.x = spawn.x;
-					position.y = spawn.y;
-					pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
-					velocitx.x = 0;
-					levelFinish = false;
-				}
-			}
+			HandleFinish(levelFinish);
 			
 			Debug();
 		}
@@ -449,6 +414,52 @@ void Player::HandleMovement()
 	else {
 		velocitx.y = pbody->body->GetLinearVelocity().y;
 		pbody->body->SetLinearVelocity(velocitx);
+	}
+}
+
+void Player::HandleDeath(bool dead)
+{
+	if (dead) {
+		currentAnimation = &jumpStart;
+		if (frameCounter < 30) {
+			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
+			app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
+			frameCounter++;
+		}
+		else {
+			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
+			app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
+			SDL_Rect rect = { 0, 0, 1024, 480 };
+			if (position.x < 2944)	app->render->DrawTexture(texDeath, position.x - camOffset, 0, &rect);
+			else app->render->DrawTexture(texDeath, 3196, 0, &rect);
+			//frameCounter++;
+			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+				position.x = spawn.x;
+				position.y = spawn.y;
+				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+				velocitx.x = 0;
+				playerDeath = false;
+			}
+		}
+	}
+
+}
+
+void Player::HandleFinish(bool finish)
+{
+	if (finish) {
+		SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
+		app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
+		SDL_Rect rect = { 0, 0, 1024, 480 };
+		app->render->DrawTexture(texFinish, position.x - 965, 0, &rect);
+
+		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+			position.x = spawn.x;
+			position.y = spawn.y;
+			pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+			velocitx.x = 0;
+			levelFinish = false;
+		}
 	}
 }
 
