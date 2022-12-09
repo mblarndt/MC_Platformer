@@ -62,6 +62,9 @@ bool Player::Awake() {
 	speed = parameters.child("movement").attribute("speed").as_int();
 	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
 	jumpsteps = parameters.child("movement").attribute("jumpsteps").as_int();
+
+	//health = parameters.child("stats").attribute("health").as_int();
+	health = 5;
 	
 
 	return true;
@@ -171,10 +174,15 @@ bool Player::Update()
 	b2Vec2 v = pbody->body->GetLinearVelocity();
 	b2Vec2 vel = pbody->body->GetLinearVelocity();
 
+	if (health == 0)
+		playerDeath = true;
+
 	//Activate Game
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-		app->audio->PlayMusic(backmusicPath);
-		startGame = true;
+	if (startGame == false) {
+		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+			app->audio->PlayMusic(backmusicPath);
+			startGame = true;
+		}
 	}
 
 	if (startGame == true) {
@@ -208,15 +216,17 @@ bool Player::Update()
 				/*----------------------------Rendering Player--------------------------*/
 				RenderEntity();
 			}
-
-			//When Player collides with Lava he spawns at start again
-			HandleDeath(playerDeath);
-
-			//If Player finished Level
-			HandleFinish(levelFinish);
-			
-			Debug();
 		}
+			//When Player collides with Lava he spawns at start again
+		
+
+		HandleDeath(playerDeath);
+
+		//If Player finished Level
+		HandleFinish(levelFinish);
+			
+		Debug();
+		
 	}
 
 	return true;
@@ -256,9 +266,13 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	b2Fixture* fix2 = contact->GetFixtureB();
 	if (fix2->GetDensity() == 0) {
 		velocitx.x = -speed;
+		health = health - 1;
+		//LOG("Health: %s", health);
 	}
 	if (fix2->GetDensity() == 0.1f) {
 		velocitx.x = speed;
+		health = health - 1;
+		//LOG("Health: %s", health);
 	}
 	if (fix2->GetDensity() == 0.2f) {
 	}
@@ -386,10 +400,15 @@ void Player::StateMachine()
 
 void Player::Shoot()
 {
-	pugi::xml_node object;
-	object.attribute("x") = position.x;
-	object.attribute("y") = position.y;
-	app->scene->CreateItem(object);
+	//pugi::xml_node object;
+	//object.attribute("x") = position.x;
+	//object.attribute("y") = position.y;
+	//app->scene->CreateItem(object);
+
+	projectileBody = app->physics->CreateCircle(position.x + (40), position.y, 7.5, DYNAMIC);
+	projectileBody->body->ApplyLinearImpulse(b2Vec2(2, -GRAVITY_Y), b2Vec2(position.x, position.y), true);
+
+
 }
 
 void Player::HandleMovement()
@@ -434,6 +453,7 @@ void Player::HandleDeath(bool dead)
 			else app->render->DrawTexture(texDeath, 3196, 0, &rect);
 			//frameCounter++;
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+				health = 5;
 				position.x = spawn.x;
 				position.y = spawn.y;
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);

@@ -67,6 +67,7 @@ public:
 	
 	//Player Physics Body
 	PhysBody* pbody;
+	PhysBody* projectileBody;
 
 	b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
 
@@ -139,6 +140,9 @@ private:
 
 	//States
 	int shootDir;
+
+	//Player 
+	int health;
 	
 	
 };
