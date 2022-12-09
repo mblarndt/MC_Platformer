@@ -63,9 +63,7 @@ bool Player::Awake() {
 	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
 	jumpsteps = parameters.child("movement").attribute("jumpsteps").as_int();
 
-	//health = parameters.child("stats").attribute("health").as_int();
-	health = 5;
-	
+	health = parameters.child("stats").attribute("health").as_int();
 
 	return true;
 }
@@ -439,6 +437,7 @@ void Player::HandleMovement()
 void Player::HandleDeath(bool dead)
 {
 	if (dead) {
+		health = 7;
 		currentAnimation = &jumpStart;
 		if (frameCounter < 30) {
 			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
@@ -446,6 +445,7 @@ void Player::HandleDeath(bool dead)
 			frameCounter++;
 		}
 		else {
+			
 			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 			app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
 			SDL_Rect rect = { 0, 0, 1024, 480 };
@@ -453,7 +453,7 @@ void Player::HandleDeath(bool dead)
 			else app->render->DrawTexture(texDeath, 3196, 0, &rect);
 			//frameCounter++;
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-				health = 5;
+				
 				position.x = spawn.x;
 				position.y = spawn.y;
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
