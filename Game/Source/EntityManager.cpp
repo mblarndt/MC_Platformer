@@ -104,12 +104,7 @@ Entity* EntityManager::CreateEntity(EntityType type, pugi::xml_node paras)
 
 void EntityManager::DestroyEntity(Entity* entity)
 {
-	ListItem<Entity*>* item;
-
-	for (item = entities.start; item != NULL; item = item->next)
-	{
-		if (item->data == entity) entities.Del(item);
-	}
+	entity->toDelete = true;
 }
 
 void EntityManager::AddEntity(Entity* entity)
@@ -129,6 +124,11 @@ bool EntityManager::Update(float dt)
 
 		if (pEntity->active == false) continue;
 		ret = item->data->Update();
+
+		if (pEntity->toDelete == true) {
+			entities.Del(item);
+			item->data->CleanUp();
+		}
 	}
 
 	return ret;

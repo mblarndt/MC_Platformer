@@ -163,6 +163,8 @@ bool Player::Start() {
 
 	currentAnimation = &idle;
 
+	toDelete = false;
+
 	return true;
 }
 
@@ -398,13 +400,13 @@ void Player::StateMachine()
 
 void Player::Shoot()
 {
-	//pugi::xml_node object;
-	//object.attribute("x") = position.x;
-	//object.attribute("y") = position.y;
-	//app->scene->CreateItem(object);
+	pugi::xml_node object;
+	object.attribute("x") = position.x;
+	object.attribute("y") = position.y;
+	app->scene->CreateItem(object);
 
-	projectileBody = app->physics->CreateCircle(position.x + (40), position.y, 7.5, DYNAMIC);
-	projectileBody->body->ApplyLinearImpulse(b2Vec2(2, -GRAVITY_Y), b2Vec2(position.x, position.y), true);
+	//projectileBody = app->physics->CreateCircle(position.x + (50), position.y, 7.5, DYNAMIC);
+	//projectileBody->body->ApplyLinearImpulse(b2Vec2(shootDir * 2.3, 0), b2Vec2(position.x, position.y), true);
 
 
 }

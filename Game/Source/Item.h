@@ -24,6 +24,8 @@ public:
 
 	void OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact);
 
+	void ItemInitialisation();
+
 public:
 
 	bool isPicked = false;

@@ -28,6 +28,7 @@ bool Item::Awake() {
 	position.y = parameters.attribute("y").as_int();
 	radius = 7.5;
 	texturePath = "Assets/Textures/slimeball.png";
+	
 
 	return true;
 }
@@ -41,6 +42,8 @@ bool Item::Start() {
 	pbody = app->physics->CreateCircle(position.x+(15), position.y+(15), radius, DYNAMIC);
 
 	pbody->ctype = ColliderType::ITEM;
+
+	pbody->listener = this;
 
 	return true;
 }
@@ -57,11 +60,12 @@ bool Item::Update()
 
 bool Item::CleanUp()
 {
+	app->physics->world->DestroyBody(pbody->body);
 	return true;
 }
 
 void Item::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
-
+	LOG("Item Collision");
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
@@ -70,6 +74,7 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	case ColliderType::DEATH:
 		LOG("Item Collision DEATH");
 		app->entityManager->DestroyEntity(this);
+		
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Item Collision UNKNOWN");
@@ -77,3 +82,22 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	}
 
 }
+
+void Item::ItemInitialisation()
+{
+	name.Create("item");
+	position.x = 1300;
+	position.y = 360;
+	radius = 7.5;
+	texturePath = "Assets/Textures/slimeball.png";
+
+	texture = app->tex->Load(texturePath);
+
+	// L07 TODO 4: Add a physics to an item - initialize the physics body
+	pbody = app->physics->CreateCircle(position.x + (15), position.y + (15), radius, DYNAMIC);
+
+	pbody->ctype = ColliderType::ITEM;
+
+	pbody->listener = this;
+}
+

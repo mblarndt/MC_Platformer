@@ -86,6 +86,7 @@ public:
 	// want our Entity class, maybe it's not renderable...
 	iPoint position;
 	bool renderable = true;
+	bool toDelete;
 };
 
 #endif // __ENTITY_H__
