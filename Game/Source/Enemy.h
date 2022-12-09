@@ -15,6 +15,13 @@
 
 struct SDL_Texture;
 
+enum class EnemyType
+{
+	FLOOR,
+	AIR, 
+	UNKNOWN
+};
+
 class Enemy : public Entity
 {
 public:
