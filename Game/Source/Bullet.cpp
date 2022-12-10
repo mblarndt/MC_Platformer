@@ -14,38 +14,25 @@ Bullet::Bullet(pugi::xml_node paras) : Entity(EntityType::BULLET)
 {
 	name.Create("bullet");
 	parameters = paras;
-	
+
 }
 
 Bullet::~Bullet() {}
 
 bool Bullet::Awake() {
 
-	
-	//radius = parameters.attribute("radius").as_float();
-	//texturePath = parameters.attribute("texturepath").as_string();
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 	radius = 7.5;
 	texturePath = "Assets/Textures/slimeball.png";
-	
+
 
 	return true;
 }
 
 bool Bullet::Start() {
 
-	//initilize textures
-	texture = app->tex->Load(texturePath);
-	
-	// L07 TODO 4: Add a physics to an bullet - initialize the physics body
-	pbody = app->physics->CreateCircle(position.x+(15), position.y+(15), radius, DYNAMIC);
 
-	pbody->ctype = ColliderType::BULLET;
-
-	pbody->listener = this;
-
-	pbody->body->ApplyLinearImpulse(b2Vec2(shootDir * 2.3, 0), b2Vec2(position.x + 40, position.y), true);
 
 	return true;
 }
@@ -71,12 +58,15 @@ void Bullet::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-		LOG("Bullet Collision BULLET");
+		LOG("Bullet Collision PLAYER");
+		//app->entityManager->DestroyEntity(this);
 		break;
 	case ColliderType::DEATH:
 		LOG("Bullet Collision DEATH");
-		app->entityManager->DestroyEntity(this);
-		
+		//app->entityManager->DestroyEntity(this);
+		break;
+	case ColliderType::FLOOR:
+		LOG("Bullet Collision FLOOR");
 		break;
 	case ColliderType::UNKNOWN:
 		LOG("Bullet Collision UNKNOWN");
@@ -85,12 +75,25 @@ void Bullet::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
 }
 
-void Bullet::BulletInitialisation(pugi::xml_node itemNode)
+void Bullet::BulletInitialisation(pugi::xml_node itemNode, int x, int y, int direction)
 {
-	position.x = itemNode.attribute("x").as_int();
-	position.y = itemNode.attribute("y").as_int();
-	shootDir = itemNode.attribute("direction").as_int();
+	position.x = x + (direction * 35);
+	position.y = y;
 	radius = 7.5;
 	texturePath = "Assets/Textures/slimeball.png";
+
+	//initilize textures
+	texture = app->tex->Load(texturePath);
+
+	// L07 TODO 4: Add a physics to an bullet - initialize the physics body
+	pbody = app->physics->CreateCircle(position.x + (15), position.y + (15), radius, DYNAMIC);
+
+	LOG("Create Bullet Body");
+
+	pbody->ctype = ColliderType::BULLET;
+
+	pbody->listener = this;
+
+	pbody->body->ApplyLinearImpulse(b2Vec2(direction * 2.3, 0), pbody->body->GetPosition(), true);
 }
 

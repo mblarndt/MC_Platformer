@@ -141,10 +141,10 @@ void Scene::CreateItem(pugi::xml_node itemNode)
 	item->ItemInitialisation(itemNode);
 }
 
-void Scene::CreateBullet(pugi::xml_node itemNode)
+void Scene::CreateBullet(pugi::xml_node itemNode, int x, int y, int direction)
 {
 	Bullet* bullet = (Bullet*)app->entityManager->CreateEntity(EntityType::BULLET, itemNode);
-	bullet->BulletInitialisation(itemNode);
+	bullet->BulletInitialisation(itemNode, x, y, direction);
 }
 
 

@@ -11,6 +11,7 @@
 #include "Item.h"
 #include "Map.h"
 #include "Bullet.h"
+#include "EntityManager.h"
 
 Player::Player(pugi::xml_node paras) : Entity(EntityType::PLAYER)
 {
@@ -78,6 +79,7 @@ bool Player::Start() {
 	
 	//Initialize Audio Fx
 	hitFxId = app->audio->LoadFx(hitFxPath);
+	pickCoinFxId = app->audio->LoadFx(pickCoinFxPath);
 
 	//Initialize States and Values 
 	startGame = false;
@@ -165,6 +167,8 @@ bool Player::Start() {
 	currentAnimation = &idle;
 
 	toDelete = false;
+
+	itemCount = 0;
 
 	return true;
 }
@@ -280,32 +284,32 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	if (fix2->GetDensity() == 0.3f) {
 		//jumpcount = 0;
 	}
-
 	switch (physB->ctype)
 	{
 	case ColliderType::ITEM:
-		LOG("Collision ITEM");
+		//LOG("Collision ITEM");
 		app->audio->PlayFx(pickCoinFxId);
+		itemCount++;
 		break;
 	case ColliderType::PLATFORM:
-		LOG("Collision PLATFORM");
+		//LOG("Collision PLATFORM");
 		break;
 	case ColliderType::FLOOR:
-		LOG("Collision FLOOR");
+		//LOG("Collision FLOOR");
 		jumpcount = 0;
 		break;
 	case ColliderType::DEATH:
-		LOG("Collision DEATH");
+		//LOG("Collision DEATH");
 		frameCounter = 0;
 		app->audio->PlayFx(hitFxId);
 		playerDeath = true;
 		break;
 	case ColliderType::FINISH:
-		LOG("Collision FINISH");
+		//LOG("Collision FINISH");
 		levelFinish = true;
 		break;
 	case ColliderType::UNKNOWN:
-		LOG("Collision UNKNOWN");
+		//LOG("Collision UNKNOWN");
 		break;
 	}
 
@@ -402,10 +406,10 @@ void Player::StateMachine()
 void Player::Shoot()
 {
 	pugi::xml_node object;
-	object.attribute("x") = position.x;
-	object.attribute("y") = position.y;
+	object.attribute("x") = METERS_TO_PIXELS(pbody->body->GetTransform().p.x);
+	object.attribute("y") = METERS_TO_PIXELS(pbody->body->GetTransform().p.y);
 	object.attribute("direction") = shootDir;
-	app->scene->CreateItem(object);
+	app->scene->CreateBullet(object, position.x, position.y, shootDir);
 }
 
 void Player::HandleMovement()

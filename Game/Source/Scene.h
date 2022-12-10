@@ -40,7 +40,7 @@ public:
 
 	void CreateItem(pugi::xml_node itemNode);
 
-	void CreateBullet(pugi::xml_node itemNode);
+	void CreateBullet(pugi::xml_node itemNode, int x, int y, int direction);
 
 public:
 

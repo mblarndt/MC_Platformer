@@ -21,9 +21,6 @@ Item::~Item() {}
 
 bool Item::Awake() {
 
-	
-	//radius = parameters.attribute("radius").as_float();
-	//texturePath = parameters.attribute("texturepath").as_string();
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 	radius = 7.5;
@@ -35,15 +32,7 @@ bool Item::Awake() {
 
 bool Item::Start() {
 
-	//initilize textures
-	texture = app->tex->Load(texturePath);
-	
-	// L07 TODO 4: Add a physics to an item - initialize the physics body
-	pbody = app->physics->CreateCircle(position.x+(15), position.y+(15), radius, STATIC);
 
-	pbody->ctype = ColliderType::ITEM;
-
-	pbody->listener = this;
 
 	return true;
 }
@@ -69,16 +58,15 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-		LOG("Item Collision ITEM");
+		//LOG("Item Collision ITEM");
 		app->entityManager->DestroyEntity(this);
 		break;
 	case ColliderType::DEATH:
-		LOG("Item Collision DEATH");
+		//LOG("Item Collision DEATH");
 		app->entityManager->DestroyEntity(this);
-		
 		break;
 	case ColliderType::UNKNOWN:
-		LOG("Item Collision UNKNOWN");
+		//LOG("Item Collision UNKNOWN");
 		break;
 	}
 
@@ -90,5 +78,15 @@ void Item::ItemInitialisation(pugi::xml_node itemNode)
 	position.y = itemNode.attribute("y").as_int();
 	radius = 7.5;
 	texturePath = "Assets/Textures/slimeball.png";
+
+	//initilize textures
+	texture = app->tex->Load(texturePath);
+
+	// L07 TODO 4: Add a physics to an item - initialize the physics body
+	pbody = app->physics->CreateCircle(position.x + (15), position.y + (15), radius, STATIC);
+
+	pbody->ctype = ColliderType::ITEM;
+
+	pbody->listener = this;
 }
 

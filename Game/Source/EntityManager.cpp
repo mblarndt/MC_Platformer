@@ -1,6 +1,7 @@
 #include "EntityManager.h"
 #include "Player.h"
 #include "Item.h"
+#include "Bullet.h"
 #include "App.h"
 #include "Textures.h"
 #include "Scene.h"
@@ -92,6 +93,9 @@ Entity* EntityManager::CreateEntity(EntityType type, pugi::xml_node paras)
 
 	case EntityType::ITEM:
 		entity = new Item(paras);
+		break;
+	case EntityType::BULLET:
+		entity = new Bullet(paras);
 		break;
 
 	default: break;

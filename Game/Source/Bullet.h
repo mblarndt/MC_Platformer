@@ -24,7 +24,7 @@ public:
 
 	void OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact);
 
-	void BulletInitialisation(pugi::xml_node itemNode);
+	void BulletInitialisation(pugi::xml_node itemNode, int x, int y, int direction);
 
 public:
 
@@ -36,14 +36,12 @@ private:
 	SDL_Texture* texture;
 	const char* texturePath;
 
-	//TODO 4: Add a physics to an bullet
+	//TODO 4: Add a physics to an item
 	
 
 	int width;
 	int height;
 	int radius;
-
-	int shootDir;
 };
 
 #endif // __BULLET_H__

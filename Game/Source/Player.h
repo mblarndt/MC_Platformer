@@ -91,6 +91,7 @@ public:
 
 	bool grounded;
 	//playerState state;
+	int itemCount;
 
 private:
 
