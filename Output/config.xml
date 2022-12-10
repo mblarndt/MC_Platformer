@@ -37,15 +37,9 @@
 			  <pickcoin path="Assets/Audio/Fx/pickcoin.ogg"/>
 			  <music path="Assets/Audio/Music/Sweden - C418.ogg"/>
 		  </audio>
-		  <stats health="5" />
+		  <stats health="5" bullets="3"/>
 		  <movement speed="4.5" jumpforce="2.5" jumpsteps="8"/>
 	  </player>
-	
-	<item x="1300" y="322" radius="7.5" texturepath="Assets/Textures/slimeball.png"/>
-	<item x="1400" y="322" radius="7.5" texturepath="Assets/Textures/slimeball.png"/>
-    <item x="1450" y="300" radius="7.5" texturepath="Assets/Textures/slimeball.png"/>
-    <item x="1500" y="300" radius="7.5" texturepath="Assets/Textures/slimeball.png"/>
-    <item x="1550" y="300" radius="7.5" texturepath="Assets/Textures/slimeball.png"/>
   </scene>
 
   <logoScene x="0" y="0" w="1024" h="480" texturepath="Assets/Textures/logo.png" duration="5.0f"/>

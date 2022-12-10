@@ -91,7 +91,7 @@ public:
 
 	bool grounded;
 	//playerState state;
-	int itemCount;
+	int bullets;
 
 private:
 
@@ -144,6 +144,17 @@ private:
 
 	//Player 
 	int health;
+
+	//Sensor Fixtures
+	b2PolygonShape shapeR;
+	b2PolygonShape shapeL;
+	b2PolygonShape shapeT;
+	b2PolygonShape shapeB;
+
+	b2FixtureDef fixtureDefR;
+	b2FixtureDef fixtureDefL;
+	b2FixtureDef fixtureDefT;
+	b2FixtureDef fixtureDefB;
 	
 	
 };

@@ -83,7 +83,7 @@ void Item::ItemInitialisation(pugi::xml_node itemNode)
 	texture = app->tex->Load(texturePath);
 
 	// L07 TODO 4: Add a physics to an item - initialize the physics body
-	pbody = app->physics->CreateCircle(position.x + (15), position.y + (15), radius, STATIC);
+	pbody = app->physics->CreateCircleSensor(position.x + (15), position.y + (15), radius, STATIC);
 
 	pbody->ctype = ColliderType::ITEM;
 

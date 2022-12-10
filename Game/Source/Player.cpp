@@ -66,6 +66,7 @@ bool Player::Awake() {
 	jumpsteps = parameters.child("movement").attribute("jumpsteps").as_int();
 
 	health = parameters.child("stats").attribute("health").as_int();
+	bullets = parameters.child("stats").attribute("bullets").as_int();
 
 	return true;
 }
@@ -128,18 +129,11 @@ bool Player::Start() {
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width/2), position.y + (height/2), width, height, bodyType::DYNAMIC);
 
-	b2PolygonShape shapeR;
-	b2PolygonShape shapeL;
-	b2PolygonShape shapeT;
-	b2PolygonShape shapeB;
+
 	shapeR.SetAsBox(0.01, 0.01, b2Vec2(0.3, 0), 0);
 	shapeL.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
 	shapeT.SetAsBox(0.01, 0.01, b2Vec2( 0, -0.3), 0);
 	shapeB.SetAsBox(0.01, 0.01, b2Vec2(0, 0.29), 0);
-	b2FixtureDef fixtureDefR;
-	b2FixtureDef fixtureDefL;
-	b2FixtureDef fixtureDefT;
-	b2FixtureDef fixtureDefB;
 	fixtureDefR.shape = &shapeR;
 	fixtureDefL.shape = &shapeL;
 	fixtureDefT.shape = &shapeT;
@@ -152,6 +146,7 @@ bool Player::Start() {
 	pbody->body->CreateFixture(&fixtureDefL);
 	pbody->body->CreateFixture(&fixtureDefT);
 	pbody->body->CreateFixture(&fixtureDefB);
+
   
 	// L07 DONE 7: Assign collider type
 	pbody->ctype = ColliderType::PLAYER;
@@ -167,8 +162,6 @@ bool Player::Start() {
 	currentAnimation = &idle;
 
 	toDelete = false;
-
-	itemCount = 0;
 
 	return true;
 }
@@ -269,6 +262,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
 	b2Fixture* fix1 = contact->GetFixtureA();
 	b2Fixture* fix2 = contact->GetFixtureB();
+
 	if (fix2->GetDensity() == 0) {
 		velocitx.x = -speed;
 		health = health - 1;
@@ -277,19 +271,18 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	if (fix2->GetDensity() == 0.1f) {
 		velocitx.x = speed;
 		health = health - 1;
-		//LOG("Health: %s", health);
 	}
 	if (fix2->GetDensity() == 0.2f) {
 	}
 	if (fix2->GetDensity() == 0.3f) {
-		//jumpcount = 0;
 	}
+
 	switch (physB->ctype)
 	{
 	case ColliderType::ITEM:
 		//LOG("Collision ITEM");
 		app->audio->PlayFx(pickCoinFxId);
-		itemCount++;
+		bullets = bullets+1;
 		break;
 	case ColliderType::PLATFORM:
 		//LOG("Collision PLATFORM");
@@ -405,11 +398,15 @@ void Player::StateMachine()
 
 void Player::Shoot()
 {
-	pugi::xml_node object;
-	object.attribute("x") = METERS_TO_PIXELS(pbody->body->GetTransform().p.x);
-	object.attribute("y") = METERS_TO_PIXELS(pbody->body->GetTransform().p.y);
-	object.attribute("direction") = shootDir;
-	app->scene->CreateBullet(object, position.x, position.y, shootDir);
+	if (bullets > 0) {
+		bullets = bullets - 1;
+		pugi::xml_node object;
+		object.attribute("x") = METERS_TO_PIXELS(pbody->body->GetTransform().p.x);
+		object.attribute("y") = METERS_TO_PIXELS(pbody->body->GetTransform().p.y);
+		object.attribute("direction") = shootDir;
+		app->scene->CreateBullet(object, position.x, position.y, shootDir);
+	}
+	
 }
 
 void Player::HandleMovement()

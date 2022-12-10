@@ -9,6 +9,9 @@
 #include "Point.h"
 #include "Physics.h"
 #include "EntityManager.h"
+#include <chrono>
+#include <thread>
+#include <ctime>
 
 Bullet::Bullet(pugi::xml_node paras) : Entity(EntityType::BULLET)
 {
@@ -39,6 +42,7 @@ bool Bullet::Start() {
 
 bool Bullet::Update()
 {
+
 	// L07 TODO 4: Add a physics to an bullet - update the position of the object from the physics.
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x)-radius;
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y)-radius;
@@ -63,7 +67,7 @@ void Bullet::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		break;
 	case ColliderType::DEATH:
 		LOG("Bullet Collision DEATH");
-		//app->entityManager->DestroyEntity(this);
+		app->entityManager->DestroyEntity(this);
 		break;
 	case ColliderType::FLOOR:
 		LOG("Bullet Collision FLOOR");
@@ -86,7 +90,7 @@ void Bullet::BulletInitialisation(pugi::xml_node itemNode, int x, int y, int dir
 	texture = app->tex->Load(texturePath);
 
 	// L07 TODO 4: Add a physics to an bullet - initialize the physics body
-	pbody = app->physics->CreateCircle(position.x + (15), position.y + (15), radius, DYNAMIC);
+	pbody = app->physics->CreateCircle(position.x + (2*radius), position.y + (2 * radius), radius, DYNAMIC);
 
 	LOG("Create Bullet Body");
 
@@ -96,4 +100,3 @@ void Bullet::BulletInitialisation(pugi::xml_node itemNode, int x, int y, int dir
 
 	pbody->body->ApplyLinearImpulse(b2Vec2(direction * 2.3, 0), pbody->body->GetPosition(), true);
 }
-
