@@ -39,7 +39,7 @@ bool Item::Start() {
 	texture = app->tex->Load(texturePath);
 	
 	// L07 TODO 4: Add a physics to an item - initialize the physics body
-	pbody = app->physics->CreateCircle(position.x+(15), position.y+(15), radius, DYNAMIC);
+	pbody = app->physics->CreateCircle(position.x+(15), position.y+(15), radius, STATIC);
 
 	pbody->ctype = ColliderType::ITEM;
 
@@ -70,6 +70,7 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	{
 	case ColliderType::PLAYER:
 		LOG("Item Collision ITEM");
+		app->entityManager->DestroyEntity(this);
 		break;
 	case ColliderType::DEATH:
 		LOG("Item Collision DEATH");
@@ -83,21 +84,14 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
 }
 
-void Item::ItemInitialisation()
+void Item::ItemInitialisation(pugi::xml_node itemNode)
 {
 	name.Create("item");
-	position.x = 1300;
-	position.y = 360;
+	/*position.x = 1300;
+	position.y = 360;*/
+	position.x = itemNode.attribute("x").as_int();
+	position.y = itemNode.attribute("y").as_int();
 	radius = 7.5;
 	texturePath = "Assets/Textures/slimeball.png";
-
-	texture = app->tex->Load(texturePath);
-
-	// L07 TODO 4: Add a physics to an item - initialize the physics body
-	pbody = app->physics->CreateCircle(position.x + (15), position.y + (15), radius, DYNAMIC);
-
-	pbody->ctype = ColliderType::ITEM;
-
-	pbody->listener = this;
 }
 

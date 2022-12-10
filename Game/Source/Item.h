@@ -24,7 +24,7 @@ public:
 
 	void OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact);
 
-	void ItemInitialisation();
+	void ItemInitialisation(pugi::xml_node itemNode);
 
 public:
 

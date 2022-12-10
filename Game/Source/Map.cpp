@@ -451,7 +451,7 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
             //app->entityManager->CreateEntity(EntityType::ITEM);
             //pugi::xml_node parameters;
             //parameters.attribute
-            //app->scene->CreateItem(object);
+            app->scene->CreateItem(object);
             LOG("Finish Items");
 
         }

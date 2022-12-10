@@ -30,12 +30,6 @@ bool Scene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 	
-	// iterate all objects in the scene
-	// Check https://pugixml.org/docs/quickstart.html#access
-	for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
-	{
-		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM, itemNode);
-	}
 
 	//L02: DONE 3: Instantiate the player using the entity manager
 	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER, config.child("player"));
@@ -144,7 +138,7 @@ bool Scene::LoadState(pugi::xml_node& data)
 void Scene::CreateItem(pugi::xml_node itemNode)
 {
 	Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM, itemNode);
-	item->ItemInitialisation();
+	item->ItemInitialisation(itemNode);
 }
 
 void Scene::CreateBullet(pugi::xml_node itemNode)
