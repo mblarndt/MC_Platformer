@@ -446,14 +446,7 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
             LOG("Finish loaded");
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_ITEM) {
-            //app->scene->itemptr = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
-            //app->scene->itemptr->parameters
-            //app->entityManager->CreateEntity(EntityType::ITEM);
-            //pugi::xml_node parameters;
-            //parameters.attribute
             app->scene->CreateItem(object);
-            LOG("Finish Items");
-
         }
 
 

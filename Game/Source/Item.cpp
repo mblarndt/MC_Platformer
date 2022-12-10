@@ -86,9 +86,6 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
 void Item::ItemInitialisation(pugi::xml_node itemNode)
 {
-	name.Create("item");
-	/*position.x = 1300;
-	position.y = 360;*/
 	position.x = itemNode.attribute("x").as_int();
 	position.y = itemNode.attribute("y").as_int();
 	radius = 7.5;

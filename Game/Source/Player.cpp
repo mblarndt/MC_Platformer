@@ -405,15 +405,7 @@ void Player::Shoot()
 	object.attribute("x") = position.x;
 	object.attribute("y") = position.y;
 	object.attribute("direction") = shootDir;
-	//app->scene->CreateBullet(object);
 	app->scene->CreateItem(object);
-
-	
-
-	//projectileBody = app->physics->CreateCircle(position.x + (50), position.y, 7.5, DYNAMIC);
-	//projectileBody->body->ApplyLinearImpulse(b2Vec2(shootDir * 2.3, 0), b2Vec2(position.x, position.y), true);
-
-
 }
 
 void Player::HandleMovement()

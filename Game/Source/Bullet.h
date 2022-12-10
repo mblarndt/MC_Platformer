@@ -24,7 +24,7 @@ public:
 
 	void OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact);
 
-	void BulletInitialisation(pugi::xml_node paras);
+	void BulletInitialisation(pugi::xml_node itemNode);
 
 public:
 
@@ -42,6 +42,8 @@ private:
 	int width;
 	int height;
 	int radius;
+
+	int shootDir;
 };
 
 #endif // __BULLET_H__

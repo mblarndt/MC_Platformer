@@ -45,6 +45,8 @@ bool Bullet::Start() {
 
 	pbody->listener = this;
 
+	pbody->body->ApplyLinearImpulse(b2Vec2(shootDir * 2.3, 0), b2Vec2(position.x + 40, position.y), true);
+
 	return true;
 }
 
@@ -83,22 +85,12 @@ void Bullet::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
 }
 
-void Bullet::BulletInitialisation(pugi::xml_node paras)
+void Bullet::BulletInitialisation(pugi::xml_node itemNode)
 {
-	name.Create("bullet");
-
-	position.x = 1300;
-	position.y = 360;
+	position.x = itemNode.attribute("x").as_int();
+	position.y = itemNode.attribute("y").as_int();
+	shootDir = itemNode.attribute("direction").as_int();
 	radius = 7.5;
 	texturePath = "Assets/Textures/slimeball.png";
-
-	texture = app->tex->Load(texturePath);
-
-	// L07 TODO 4: Add a physics to an bullet - initialize the physics body
-	pbody = app->physics->CreateCircle(position.x + (15), position.y + (15), radius, DYNAMIC);
-
-	pbody->ctype = ColliderType::BULLET;
-
-	pbody->listener = this;
 }
 
