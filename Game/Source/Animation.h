@@ -15,6 +15,8 @@ public:
 	int startCol;
 	int endCol;
 	int row;
+	int width;
+	int height;
 
 private:
 	float currentFrame = 0.0f;
@@ -60,6 +62,8 @@ public:
 
 		return frames[actualFrame];
 	}
+
+
 };
 
 #endif

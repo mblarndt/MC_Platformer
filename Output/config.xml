@@ -31,7 +31,7 @@
 			  <death path="Assets/Textures/dead3.png" width="1024" height="480"/>
 			  <finish path="Assets/Textures/finish.png" width="1024" height="480"/>
 		  </textures>
-		  <animations>
+		  <animations width ="60" height="40">
 			  <idle row="0" startcol="0" endcol="1"/>
 			  <moveright row="2" startcol="0" endcol="1"/>
 			  <moveleft row="2" startcol="2" endcol="3"/>

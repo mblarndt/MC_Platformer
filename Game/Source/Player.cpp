@@ -94,6 +94,8 @@ bool Player::Awake() {
 	jumpEnd.startCol = parameters.child("animations").child("jumpend").attribute("startcol").as_int();
 	jumpEnd.endCol = parameters.child("animations").child("jumpend").attribute("endcol").as_int();
 
+	spriteHeight = row = parameters.child("animations").attribute("height").as_int();
+	spriteWidth = column = parameters.child("animations").attribute("width").as_int();
 
 	return true;
 }
@@ -112,9 +114,6 @@ bool Player::Start() {
 	//Initialize States and Values 
 	startGame = false;
 	remainingPixels = 0;
-
-	spriteWidth = column = 60;
-	spriteHeight = row = 40;
 
 	//Animations
 	idle = createAnimation(idle, true, 0.1f);
