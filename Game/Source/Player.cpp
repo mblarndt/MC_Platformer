@@ -182,20 +182,12 @@ bool Player::Update()
 	if (startGame == true) {
 
 		//Camera Transition from StartScreen to Player
-		if (camMoved == false) {
-			currentAnimation = &idle;
-			if (remainingPixels < (spawn.x - (camOffset))) {
-				remainingPixels += 10;
-				app->render->camera.x = -(remainingPixels);
-			}
-			else {camMoved = true;}
-		}
+		
 
 		//Main Loop After Transition
-		else {
-
+		if (CamTransition(0, spawn.x)) {
 			if (playerDeath == false) {
-				
+
 				/*----------------------------Follow Camera--------------------------*/
 				PlayerCamera();
 				/*----------------------------Get State of Player--------------------------*/
@@ -206,9 +198,9 @@ bool Player::Update()
 				RenderEntity();
 			}
 		}
-			//When Player collides with Lava he spawns at start again
-		
 
+
+		//When Player collides with Lava he spawns at start again	
 		HandleDeath(playerDeath);
 
 		//If Player finished Level
@@ -496,4 +488,18 @@ void Player::InitSpawn(pugi::xml_node itemNode)
 {
 	position.x = spawn.x = itemNode.attribute("x").as_int();
 	position.y = spawn.y = itemNode.attribute("y").as_int();
+}
+
+bool Player::CamTransition(int start, int stop)
+{
+	bool ret = false;
+
+	if (remainingPixels < (stop - (camOffset))) {
+		remainingPixels += 10;
+		app->render->camera.x = -(remainingPixels);
+	}
+	else 
+		ret = true;
+
+	return ret;
 }

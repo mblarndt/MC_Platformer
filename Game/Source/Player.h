@@ -68,6 +68,8 @@ public:
 	void PlayerCamera();
 
 	void InitSpawn(pugi::xml_node itemNode);
+
+	bool CamTransition(int start, int stop);
 	
 	//Player Physics Body
 	PhysBody* pbody;
