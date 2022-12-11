@@ -98,7 +98,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\EnemyAir.cpp" />
+    <ClCompile Include="Source\EnemyFloor.cpp" />
     <ClCompile Include="Source\LogoScene.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Map.cpp" />
@@ -113,7 +114,8 @@
     <ClInclude Include="Source\Animation.h" />
     <ClInclude Include="Source\App.h" />
     <ClInclude Include="Source\Audio.h" />
-    <ClInclude Include="Source\Enemy.h" />
+    <ClInclude Include="Source\EnemyAir.h" />
+    <ClInclude Include="Source\EnemyFloor.h" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FadeToBlack.h" />

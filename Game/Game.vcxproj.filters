@@ -58,8 +58,11 @@
     <ClCompile Include="Source\Item.cpp">
       <Filter>Entitys\Item</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Enemy.cpp">
-      <Filter>Entitys\Enemy</Filter>
+    <ClCompile Include="Source\EnemyFloor.cpp">
+      <Filter>Entitys\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EnemyAir.cpp">
+      <Filter>Entitys\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -150,8 +153,11 @@
     <ClInclude Include="Source\PQueue.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Enemy.h">
-      <Filter>Entitys\Enemy</Filter>
+    <ClInclude Include="Source\EnemyFloor.h">
+      <Filter>Entitys\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyAir.h">
+      <Filter>Entitys\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -182,11 +188,11 @@
     <Filter Include="Entitys\Player">
       <UniqueIdentifier>{136adb73-3630-4391-93f6-c3bbd05069f7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Entitys\Enemy">
-      <UniqueIdentifier>{3338284d-ef1f-418f-b11b-fdf1e834cd42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Entitys\Item">
       <UniqueIdentifier>{c516a1ba-03c0-4371-8682-5876cd6cfccd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entitys\Enemies">
+      <UniqueIdentifier>{3338284d-ef1f-418f-b11b-fdf1e834cd42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

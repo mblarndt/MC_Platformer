@@ -1,4 +1,4 @@
-#include "Enemy.h"
+#include "EnemyFloor.h"
 #include "App.h"
 #include "Textures.h"
 #include "Audio.h"
@@ -9,84 +9,89 @@
 #include "Point.h"
 #include "Physics.h"
 
-Enemy::Enemy() : Entity(EntityType::ENEMY)
+EnemyFloor::EnemyFloor() : Entity(EntityType::ENEMYFLOOR)
 {
-	name.Create("Enemy");
+	name.Create("EnemyFloor");
 }
 
-Enemy::~Enemy() {
+EnemyFloor::~EnemyFloor() {
 
 }
 
-bool Enemy::Awake() {
+bool EnemyFloor::Awake() {
 
 	//Get and initialize Enemy parameters from XML
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
 
+	width = 40;
+	height = 48;
 
 	return true;
 }
 
-bool Enemy::Start() {
+bool EnemyFloor::Start() {
 
 	// Initilize textures
+	texture = app->tex->Load(texturePath);
 
 
 	// Initialize Audio Fx
 
 
 	// Initialize States and Values 
-
+	
 
 	// Animations
 
 
 	// Add physics to the enemy - initialize physics body
-
+	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, DYNAMIC);
 
 	// Assign collider type
-
+	pbody->ctype = ColliderType::ENEMY;
 
 	// Activate Collision Detection
+	pbody->listener = this;
 
+	pbody->body->SetFixedRotation(true);
 
 	return true;
 }
 
-bool Enemy::Update()
+bool EnemyFloor::Update()
 {
 	
 	return true;
 }
 
 // IMPORTANT FOR MEMORY MANAGEMENT
-bool Enemy::CleanUp()
+bool EnemyFloor::CleanUp()
 {
 
 	return true;
 }
 
-bool Enemy::LoadState(pugi::xml_node& data)
+bool EnemyFloor::LoadState(pugi::xml_node& data)
 {
 
 
 	return true;
 }
 
-bool Enemy::SaveState(pugi::xml_node& data)
+bool EnemyFloor::SaveState(pugi::xml_node& data)
 {
 
 	return true;
 }
 
-void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
+void EnemyFloor::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 	// L07 DONE 7: Detect the type of collision
 
 }
 
-void Enemy::Debug() {
+void EnemyFloor::Debug() {
 
 }

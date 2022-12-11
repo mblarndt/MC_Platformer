@@ -5,14 +5,16 @@
 	<textures />
 	<audio />
 	<physics />
-	<logoScreen />
 	<scene>
-		<player x="3197" y="289" />
+		<player x="1216" y="322" />
 	</scene>
 	<entitymanager />
 	<map />
-	<fadeBlack />
+	<titleScene />
+	<logoScene />
+	<fade />
+	<pathfinding />
 	<renderer>
-		<camera x="-2900" y="0" />
+		<camera x="-920" y="0" />
 	</renderer>
 </save_state>

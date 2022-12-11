@@ -38,6 +38,18 @@ bool Scene::Awake(pugi::xml_node& config)
 		item->parameters = itemNode;
 	}
 
+	for (pugi::xml_node enFlNode = config.child("enemyFloor"); enFlNode; enFlNode = enFlNode.next_sibling("enemyFloor"))
+	{
+		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ENEMYFLOOR);
+		item->parameters = enFlNode;
+	}
+
+	for (pugi::xml_node enAiNode = config.child("enemyAir"); enAiNode; enAiNode = enAiNode.next_sibling("enemyAir"))
+	{
+		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ENEMYAIR);
+		item->parameters = enAiNode;
+	}
+
 	//L02: DONE 3: Instantiate the player using the entity manager
 	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 	playerptr->parameters = config.child("player");
