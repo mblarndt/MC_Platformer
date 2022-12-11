@@ -155,6 +155,12 @@ private:
 	b2FixtureDef fixtureDefL;
 	b2FixtureDef fixtureDefT;
 	b2FixtureDef fixtureDefB;
+
+	//Animations
+	int spriteWidth;
+	int spriteHeight;
+	int row;
+	int column;
 	
 	
 };

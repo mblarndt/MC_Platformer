@@ -89,41 +89,47 @@ bool Player::Start() {
 	jumpsteps = 3;
 	remainingJumpSteps = jumpsteps;
     jumpStart_counter = 4;
-	
-    movementRight.PushBack({ 0, 80, 60, 40 });
-	movementRight.PushBack({ 60, 80, 60, 40 });
-	movementRight.loop = true;
-	movementRight.speed = 0.1f;
-	
-	movementLeft.PushBack({ 120, 80, 60, 40 });
-	movementLeft.PushBack({ 180, 80, 60, 40 });
-	movementLeft.loop = true;
-	movementLeft.speed = 0.1f;
 
-	idle.PushBack({ 0, 0, 60, 40 });
-	idle.PushBack({ 60, 40, 60, 40 });
+	spriteWidth = column =60;
+	spriteHeight = row = 40;
+
+	//Animations
+	idle.PushBack({ 0 * column,  0 * row, spriteWidth, spriteHeight });
+	idle.PushBack({ 1 * column, 0 * row, spriteWidth, spriteHeight });
 	idle.loop = true;
 	idle.speed = 0.1f;
 
-	jumpStart.PushBack({298, 48, 60, 40});
-	jumpStart.PushBack({358, 48, 60, 40});
-	jumpStart.PushBack({418, 48, 60, 40});
-	jumpStart.PushBack({478, 48, 60, 40});
-	jumpStart.loop = false;
-	jumpStart.speed = 0.2f;
+    movementRight.PushBack({ 0 * column, 2 * row, spriteWidth, spriteHeight });
+	movementRight.PushBack({ 1 * column, 2 * row, spriteWidth, spriteHeight });
+	movementRight.loop = true;
+	movementRight.speed = 0.1f;
+	
+	movementLeft.PushBack({ 2 * column, 2 * row, spriteWidth, spriteHeight });
+	movementLeft.PushBack({ 3 * column, 2 * row, spriteWidth, spriteHeight });
+	movementLeft.loop = true;
+	movementLeft.speed = 0.1f;
 
-	jumpEnd.PushBack({118, 48, 60, 40});
-	jumpEnd.PushBack({178, 48, 60, 40});
-	jumpEnd.PushBack({238, 48, 60, 40});
-	jumpEnd.PushBack({298, 48, 60, 40});
+
+	jumpUp.PushBack({ 0 * spriteWidth, 1 * spriteHeight, spriteWidth, spriteHeight });
+	jumpUp.loop = true;
+
+	jumpDown.PushBack({ 1 * spriteWidth, 1 * spriteHeight, spriteWidth, spriteHeight });
+	jumpDown.loop = true;
+
+	jumpEnd.PushBack({ 2 * column, 1 * row, spriteWidth, spriteHeight });
+	jumpEnd.PushBack({ 3 * column, 1 * row, spriteWidth, spriteHeight });
+	jumpEnd.PushBack({ 4 * column, 1 * row, spriteWidth, spriteHeight });
+	jumpEnd.PushBack({ 5 * column, 1 * row, spriteWidth, spriteHeight });
 	jumpEnd.loop = false;
 	jumpStart.speed = 0.2f;
 
-	jumpUp.PushBack({0, 40, 60, 40});
-	jumpUp.loop = true;
+	jumpStart.PushBack({ 6 * column, 1 * row, spriteWidth, spriteHeight });
+	jumpStart.PushBack({ 7 * column, 1 * row, spriteWidth, spriteHeight });
+	jumpStart.PushBack({ 8 * column, 1 * row, spriteWidth, spriteHeight });
+	jumpStart.PushBack({ 9 * column, 1 * row, spriteWidth, spriteHeight });
+	jumpStart.loop = false;
+	jumpStart.speed = 0.2f;
 
-	jumpDown.PushBack({60, 40, 60, 40});
-	jumpDown.loop = true;
 	
 	
 	// L07 TODO 5: Add physics to the player - initialize physics body
