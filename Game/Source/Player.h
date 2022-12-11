@@ -64,6 +64,8 @@ public:
 	void HandleFinish(bool finish);
 
 	void RenderEntity();
+
+	void PlayerCamera();
 	
 	//Player Physics Body
 	PhysBody* pbody;

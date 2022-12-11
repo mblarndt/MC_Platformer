@@ -12,6 +12,7 @@
 #include "Map.h"
 #include "Bullet.h"
 #include "EntityManager.h"
+#include "Window.h"
 
 Player::Player(pugi::xml_node paras) : Entity(EntityType::PLAYER)
 {
@@ -207,12 +208,7 @@ bool Player::Update()
 			if (playerDeath == false) {
 				
 				/*----------------------------Follow Camera--------------------------*/
-				if (position.x > (camOffset) && position.x < (4222 - (1024 - camOffset))) {
-					app->render->camera.x = -(position.x) + camOffset;
-					app->render->camera.y = menu.y;
-				}
-
-
+				PlayerCamera();
 				/*----------------------------Get State of Player--------------------------*/
 				StateMachine();
 				/*----------------------------Player Movement--------------------------*/
@@ -497,4 +493,12 @@ void Player::RenderEntity()
 	currentAnimation->Update();
 	SDL_Rect rect = currentAnimation->GetCurrentFrame();
 	app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect);
+}
+
+void Player::PlayerCamera()
+{
+	if (position.x > (camOffset) && position.x < ((app->map->mapData.width * app->map->mapData.tileWidth) - (app->win->width - camOffset))) {
+		app->render->camera.x = -(position.x) + camOffset;
+		app->render->camera.y = menu.y;
+	}
 }
