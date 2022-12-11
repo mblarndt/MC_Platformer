@@ -117,6 +117,8 @@ bool Scene::SaveState(pugi::xml_node &data)
 
 	player.append_attribute("x") = playerptr->position.x;
 	player.append_attribute("y") = playerptr->position.y;
+	player.append_attribute("health") = playerptr->health;
+	player.append_attribute("bullets") = playerptr->bullets;
 
 	return true;
 }
@@ -125,6 +127,9 @@ bool Scene::LoadState(pugi::xml_node& data)
 {
 	playerptr->position.x = data.child("player").attribute("x").as_int();
 	playerptr->position.y = data.child("player").attribute("y").as_int();
+	playerptr->health = data.child("player").attribute("health").as_int();
+	playerptr->bullets = data.child("player").attribute("bullets").as_int();
+
 
 	playerptr->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(playerptr->position.x),
 												PIXEL_TO_METERS(playerptr->position.y)),0);

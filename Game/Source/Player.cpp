@@ -181,10 +181,9 @@ bool Player::Update()
 
 	if (startGame == true) {
 
-		//Camera Transition from StartScreen to Player
 		
 
-		//Main Loop After Transition
+		//Main Loop starts when CamTransition finished
 		if (CamTransition(0, spawn.x)) {
 			if (playerDeath == false) {
 
@@ -215,28 +214,7 @@ bool Player::Update()
 
 bool Player::CleanUp()
 {
-
-	return true;
-}
-
-bool Player::LoadState(pugi::xml_node& data)
-{
-	position.x = data.child("camera").attribute("x").as_int();
-	position.y = data.child("camera").attribute("y").as_int();
-
-	return true;
-}
-
-// L03: DONE 8: Create a method to save the state of the renderer
-// using append_child and append_attribute
-bool Player::SaveState(pugi::xml_node& data)
-{
-	pugi::xml_node player = data.append_child("position");
-
-	player.append_attribute("x") = position.x;
-	player.append_attribute("y") = position.y;
-
-
+	app->physics->world->DestroyBody(pbody->body);
 	return true;
 }
 

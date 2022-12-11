@@ -44,9 +44,6 @@ public:
 
 public:
 
-	bool LoadState(pugi::xml_node&);
-	bool SaveState(pugi::xml_node&);
-
 	void OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact);
 
 	void Debug();
@@ -98,6 +95,7 @@ public:
 	bool grounded;
 	//playerState state;
 	int bullets;
+	int health;
 
 private:
 
@@ -149,7 +147,7 @@ private:
 	int shootDir;
 
 	//Player 
-	int health;
+	
 
 	//Sensor Fixtures
 	b2PolygonShape shapeR;
