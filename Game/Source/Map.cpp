@@ -420,6 +420,9 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->stringType == "playerSpawn") {
             newObject->type = ObjectTypes::OBJECTTYPE_PLAYERSPAWN;
         }
+        else if (newObject->stringType == "checkpoint") {
+            newObject->type = ObjectTypes::OBJECTTYPE_CHECKPOINT;
+        }
         else
             newObject->type = ObjectTypes::OBJECTTYPE_ENTITY;
 
@@ -444,12 +447,17 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
             cstr->ctype = ColliderType::FINISH;
             LOG("Finish loaded");
         }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_CHECKPOINT) {
+            PhysBody* cstr = app->physics->CreateRectangleSensor(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
+            cstr->ctype = ColliderType::CHECKPOINT;
+        }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_PLAYERSPAWN) {
             app->scene->InitPlayerSpawn(object);
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_ITEM) {
             app->scene->CreateItem(object);
         }
+       
 
 
         group->object.Add(newObject);

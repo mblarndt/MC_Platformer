@@ -223,12 +223,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
 	if (fix2->GetDensity() == 0) {
 		velocitx.x = -speed;
-		health = health - 1;
+		//health = health - 1;
 		//LOG("Health: %s", health);
 	}
 	if (fix2->GetDensity() == 0.1f) {
 		velocitx.x = speed;
-		health = health - 1;
+		//health = health - 1;
 	}
 	if (fix2->GetDensity() == 0.2f) {
 	}
@@ -258,6 +258,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	case ColliderType::FINISH:
 		//LOG("Collision FINISH");
 		levelFinish = true;
+		break;
+	case ColliderType::CHECKPOINT:
+		LOG("Collision Checkpoint");
+		app->SaveGameRequest();
 		break;
 	case ColliderType::UNKNOWN:
 		//LOG("Collision UNKNOWN");
