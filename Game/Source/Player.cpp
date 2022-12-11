@@ -32,14 +32,6 @@ bool Player::Awake() {
 	menu.x = parameters.child("menu").attribute("x").as_int();
 	menu.y = parameters.child("menu").attribute("y").as_int();
 
-	//Initial Startposition
-	position.x = parameters.child("startpos").attribute("x").as_int();
-	position.y = parameters.child("startpos").attribute("y").as_int();
-
-	//Respawn Position
-	spawn.x = parameters.child("startpos").attribute("x").as_int();
-	spawn.y = spawnPos.child("startpos").attribute("y").as_int();
-
 	//Camera Offset from Player
 	camOffset = parameters.child("cam").attribute("offset").as_int();
 
@@ -175,9 +167,6 @@ bool Player::Start() {
 
 bool Player::Update()
 {
-	//Check Velocity of Physical Body
-	b2Vec2 v = pbody->body->GetLinearVelocity();
-	b2Vec2 vel = pbody->body->GetLinearVelocity();
 
 	if (health == 0)
 		playerDeath = true;
@@ -322,36 +311,36 @@ void Player::Debug() {
 
 void Player::GetState()
 {
-	b2Vec2 v = pbody->body->GetLinearVelocity();
-	if (v.y == 0) {
+	b2Vec2 vel = pbody->body->GetLinearVelocity();
+	if (vel.y == 0) {
 		grounded = true;
-		if (v.x < 0)
+		if (vel.x < 0)
 			state = MOVE_LEFT;
 
-		if (v.x > 0)
+		if (vel.x > 0)
 			state = MOVE_RIGHT;
 
-		if (v.x == 0)
+		if (vel.x == 0)
 			state = IDLE;
 	}
-	if (v.y > 0) {
+	if (vel.y > 0) {
 		
 		grounded = false;
-		if (v.x > 0)
+		if (vel.x > 0)
 			state = FALL_LEFT;
 
-		if (v.x < 0)
+		if (vel.x < 0)
 			state = FALL_RIGHT;
 	}
 
-	if (v.y < 0) {
+	if (vel.y < 0) {
 
 		grounded = false;
 
-		if (v.x > 0)
+		if (vel.x > 0)
 			state = JUMP_LEFT;
 
-		if (v.x < 0)
+		if (vel.x < 0)
 			state = JUMP_RIGHT;
 	}
 }
@@ -501,4 +490,10 @@ void Player::PlayerCamera()
 		app->render->camera.x = -(position.x) + camOffset;
 		app->render->camera.y = menu.y;
 	}
+}
+
+void Player::InitSpawn(pugi::xml_node itemNode)
+{
+	position.x = spawn.x = itemNode.attribute("x").as_int();
+	position.y = spawn.y = itemNode.attribute("y").as_int();
 }

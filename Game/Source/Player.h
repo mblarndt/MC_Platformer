@@ -66,6 +66,8 @@ public:
 	void RenderEntity();
 
 	void PlayerCamera();
+
+	void InitSpawn(pugi::xml_node itemNode);
 	
 	//Player Physics Body
 	PhysBody* pbody;

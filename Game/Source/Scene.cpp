@@ -147,6 +147,11 @@ void Scene::CreateBullet(pugi::xml_node itemNode, int x, int y, int direction)
 	bullet->BulletInitialisation(itemNode, x, y, direction);
 }
 
+void Scene::InitPlayerSpawn(pugi::xml_node itemNode)
+{
+	playerptr->InitSpawn(itemNode);
+}
+
 
 
 

@@ -15059,7 +15059,7 @@
     <property name="MapToLoad" value="TestMap.tmx"/>
    </properties>
   </object>
-  <object id="18" name="Player" class="playerSpawn" x="1280" y="256" width="20" height="20">
+  <object id="18" name="Player" class="playerSpawn" x="1280" y="332" width="20" height="20">
    <properties>
     <property name="EntitityType" value="PLAYER"/>
    </properties>

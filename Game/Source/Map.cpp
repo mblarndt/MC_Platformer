@@ -132,7 +132,6 @@ SDL_Rect TileSet::GetTileRect(int gid) const
     return rect;
 }
 
-
 // L06: DONE 2: Pick the right Tileset based on a tile id
 TileSet* Map::GetTilesetFromTileId(int gid) const
 {
@@ -444,6 +443,9 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
             PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
             cstr->ctype = ColliderType::FINISH;
             LOG("Finish loaded");
+        }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_PLAYERSPAWN) {
+            app->scene->InitPlayerSpawn(object);
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_ITEM) {
             app->scene->CreateItem(object);

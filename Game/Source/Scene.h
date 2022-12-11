@@ -42,6 +42,8 @@ public:
 
 	void CreateBullet(pugi::xml_node itemNode, int x, int y, int direction);
 
+	void InitPlayerSpawn(pugi::xml_node itemNode);
+
 public:
 
 	//L02: DONE 3: Declare a Player attribute 
