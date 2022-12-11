@@ -181,7 +181,7 @@ bool Player::Update()
 	if (startGame == true) {
 
 		//Main Loop starts when CamTransition finished
-		if (CamTransition(0, spawn.x)) {
+		if (CamTransition(0, spawn.x) && levelFinish == false) {
 			if (playerDeath == false) {
 
 				/*----------------------------Follow Camera--------------------------*/
@@ -438,8 +438,8 @@ void Player::HandleFinish(bool finish)
 	if (finish) {
 		SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 		app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
-		SDL_Rect rect = { 0, 0, 1024, 480 };
-		app->render->DrawTexture(texFinish, position.x - 965, 0, &rect);
+		SDL_Rect rect = { 0, 0, app->win->width, 480 };
+		app->render->DrawTexture(texFinish, (app->map->mapData.width * app->map->mapData.tileWidth)- app->win->width, 0, &rect);
 
 		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 			position.x = spawn.x;
@@ -466,6 +466,9 @@ void Player::PlayerCamera()
 	if (position.x > (camOffset) && position.x < ((app->map->mapData.width * app->map->mapData.tileWidth) - (app->win->width - camOffset))) {
 		app->render->camera.x = -(position.x) + camOffset;
 		app->render->camera.y = menu.y;
+	}
+	else {
+		lastcamPos = app->render->camera.x;
 	}
 }
 

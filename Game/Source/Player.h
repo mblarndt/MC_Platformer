@@ -101,6 +101,8 @@ public:
 	int bullets;
 	int health;
 
+	int lastcamPos;
+
 private:
 
 	//Texture Variables
