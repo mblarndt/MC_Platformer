@@ -59,6 +59,42 @@ bool Player::Awake() {
 	health = parameters.child("stats").attribute("health").as_int();
 	bullets = parameters.child("stats").attribute("bullets").as_int();
 
+	//Idle
+	idle.row = parameters.child("animations").child("idle").attribute("row").as_int();
+	idle.startCol = parameters.child("animations").child("idle").attribute("startcol").as_int();
+	idle.endCol = parameters.child("animations").child("idle").attribute("endcol").as_int();
+
+	//MoveRight
+	movementRight.row = parameters.child("animations").child("moveright").attribute("row").as_int();
+	movementRight.startCol = parameters.child("animations").child("moveright").attribute("startcol").as_int();
+	movementRight.endCol = parameters.child("animations").child("moveright").attribute("endcol").as_int();
+
+	//MoveLeft
+	movementLeft.row = parameters.child("animations").child("moveleft").attribute("row").as_int();
+	movementLeft.startCol = parameters.child("animations").child("moveleft").attribute("startcol").as_int();
+	movementLeft.endCol = parameters.child("animations").child("moveleft").attribute("endcol").as_int();
+
+	//Jump Up
+	jumpUp.row = parameters.child("animations").child("jumpup").attribute("row").as_int();
+	jumpUp.startCol = parameters.child("animations").child("jumpup").attribute("startcol").as_int();
+	jumpUp.endCol = parameters.child("animations").child("jumpup").attribute("endcol").as_int();
+
+	//Jump Down
+	jumpDown.row = parameters.child("animations").child("jumpdown").attribute("row").as_int();
+	jumpDown.startCol = parameters.child("animations").child("jumpdown").attribute("startcol").as_int();
+	jumpDown.endCol = parameters.child("animations").child("jumpdown").attribute("endcol").as_int();
+
+	//Jump Down
+	jumpStart.row = parameters.child("animations").child("jumpstart").attribute("row").as_int();
+	jumpStart.startCol = parameters.child("animations").child("jumpstart").attribute("startcol").as_int();
+	jumpStart.endCol = parameters.child("animations").child("jumpstart").attribute("endcol").as_int();
+
+	//Jump Down
+	jumpEnd.row = parameters.child("animations").child("jumpend").attribute("row").as_int();
+	jumpEnd.startCol = parameters.child("animations").child("jumpend").attribute("startcol").as_int();
+	jumpEnd.endCol = parameters.child("animations").child("jumpend").attribute("endcol").as_int();
+
+
 	return true;
 }
 
@@ -77,47 +113,17 @@ bool Player::Start() {
 	startGame = false;
 	remainingPixels = 0;
 
-	spriteWidth = column =60;
+	spriteWidth = column = 60;
 	spriteHeight = row = 40;
 
 	//Animations
-	idle.PushBack({ 0 * column,  0 * row, spriteWidth, spriteHeight });
-	idle.PushBack({ 1 * column, 0 * row, spriteWidth, spriteHeight });
-	idle.loop = true;
-	idle.speed = 0.1f;
-
-    movementRight.PushBack({ 0 * column, 2 * row, spriteWidth, spriteHeight });
-	movementRight.PushBack({ 1 * column, 2 * row, spriteWidth, spriteHeight });
-	movementRight.loop = true;
-	movementRight.speed = 0.1f;
-	
-	movementLeft.PushBack({ 2 * column, 2 * row, spriteWidth, spriteHeight });
-	movementLeft.PushBack({ 3 * column, 2 * row, spriteWidth, spriteHeight });
-	movementLeft.loop = true;
-	movementLeft.speed = 0.1f;
-
-
-	jumpUp.PushBack({ 0 * spriteWidth, 1 * spriteHeight, spriteWidth, spriteHeight });
-	jumpUp.loop = true;
-
-	jumpDown.PushBack({ 1 * spriteWidth, 1 * spriteHeight, spriteWidth, spriteHeight });
-	jumpDown.loop = true;
-
-	jumpEnd.PushBack({ 2 * column, 1 * row, spriteWidth, spriteHeight });
-	jumpEnd.PushBack({ 3 * column, 1 * row, spriteWidth, spriteHeight });
-	jumpEnd.PushBack({ 4 * column, 1 * row, spriteWidth, spriteHeight });
-	jumpEnd.PushBack({ 5 * column, 1 * row, spriteWidth, spriteHeight });
-	jumpEnd.loop = false;
-	jumpStart.speed = 0.2f;
-
-	jumpStart.PushBack({ 6 * column, 1 * row, spriteWidth, spriteHeight });
-	jumpStart.PushBack({ 7 * column, 1 * row, spriteWidth, spriteHeight });
-	jumpStart.PushBack({ 8 * column, 1 * row, spriteWidth, spriteHeight });
-	jumpStart.PushBack({ 9 * column, 1 * row, spriteWidth, spriteHeight });
-	jumpStart.loop = false;
-	jumpStart.speed = 0.2f;
-
-	
+	idle = createAnimation(idle, true, 0.1f);
+    movementRight = createAnimation(movementRight, true, 0.1f);
+	movementLeft = createAnimation(movementLeft, true, 0.1f);
+	jumpUp = createAnimation(jumpUp, true, 0.1f);
+	jumpDown = createAnimation(jumpDown, true, 0.1f);
+	jumpEnd = createAnimation(jumpEnd, false, 0.2f);
+	jumpStart = createAnimation(jumpStart, false, 0.2f);	
 	
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width/2), position.y + (height/2), width, height, bodyType::DYNAMIC);
@@ -478,4 +484,15 @@ bool Player::CamTransition(int start, int stop)
 		ret = true;
 
 	return ret;
+}
+
+Animation Player::createAnimation(Animation animation, bool loop, float animSpeed)
+{
+	for (int i = animation.startCol; i <= animation.endCol; i++) {
+		animation.PushBack({ i * column,  animation.row * row, spriteWidth, spriteHeight });
+	}
+	animation.loop = loop;
+	animation.speed = animSpeed;
+
+	return animation;
 }

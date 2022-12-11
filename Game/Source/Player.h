@@ -30,7 +30,8 @@ public:
 	bool Update();
 
 	bool CleanUp();
-	
+
+
 	Animation idle;
 	Animation movementRight;
 	Animation movementLeft;
@@ -38,6 +39,7 @@ public:
 	Animation jumpEnd;
 	Animation jumpUp;
 	Animation jumpDown;
+
 
 	// Current animation check
 	Animation* currentAnimation = nullptr;
@@ -67,6 +69,8 @@ public:
 	void InitSpawn(pugi::xml_node itemNode);
 
 	bool CamTransition(int start, int stop);
+
+	Animation createAnimation(Animation animation, bool loop, float speed);
 	
 	//Player Physics Body
 	PhysBody* pbody;
@@ -161,6 +165,8 @@ private:
 	int spriteHeight;
 	int row;
 	int column;
+
+
 	
 	
 };
