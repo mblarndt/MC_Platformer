@@ -1,5 +1,5 @@
-#ifndef __PLAYER_H__
-#define __PLAYER_H__
+#ifndef __ENEMY_H__
+#define __ENEMY_H__
 
 #include "Entity.h"
 #include "Point.h"
@@ -15,13 +15,20 @@
 
 struct SDL_Texture;
 
-class Player : public Entity
+enum class EnemyType
+{
+	FLOOR,
+	AIR, 
+	UNKNOWN
+};
+
+class Enemy : public Entity
 {
 public:
 
-	Player();
-	
-	virtual ~Player();
+	Enemy();
+
+	virtual ~Enemy();
 
 	bool Awake();
 
@@ -30,14 +37,8 @@ public:
 	bool Update();
 
 	bool CleanUp();
-	
+
 	Animation idle;
-	Animation movementRight;
-	Animation movementLeft;
-	Animation jumpStart;
-	Animation jumpEnd;
-	Animation jumpUp;
-	Animation jumpDown;
 
 	// Current animation check
 	Animation* currentAnimation = nullptr;
@@ -50,7 +51,7 @@ public:
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 
 	void Debug();
-	
+
 	//Player Physics Body
 	PhysBody* pbody;
 
@@ -67,7 +68,7 @@ private:
 	const char* deathPath;
 	int deathWidth;
 	int deathHeight;
-	
+
 	SDL_Texture* texFinish;
 	const char* finishPath;
 	int finishWidth;
@@ -79,9 +80,9 @@ private:
 	const char* pickCoinFxPath;
 	const char* hitFxPath;
 	const char* backmusicPath;
-	
+
 	//Player, Camera and Game States
-	bool playerDeath;
+	bool enemyDeath;
 	bool levelFinish;
 	bool startGame;
 	bool camMoved;
@@ -89,19 +90,10 @@ private:
 	//Position Variables
 	iPoint spawn;
 	iPoint menu;
-	int camOffset;
-	int remainingPixels;
-	int frameCounter;
 
-	//Player Movement Variables
+	// Enemy Movement Variables
 	float speed;
-	float jumpforce;
-	int jumpsteps;
-	int jumpcount;
-	int remainingJumpSteps;
-	bool isjumping;
-	int jumpStart_counter;
-	
+
 };
 
-#endif // __PLAYER_H__
+#endif // __ENEMY_H__

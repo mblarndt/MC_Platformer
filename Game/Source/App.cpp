@@ -5,11 +5,13 @@
 #include "Textures.h"
 #include "Audio.h"
 #include "Scene.h"
+#include "LogoScene.h"
+#include "TitleScene.h"
 #include "EntityManager.h"
 #include "Map.h"
 #include "Physics.h"
 #include "FadeToBlack.h"
-#include "LOGO.h"
+#include "Pathfinding.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -22,22 +24,20 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 {
 	frames = 0;
 
-	input = new Input(true);
-	win = new Window(true);
-	render = new Render(true);
-	tex = new Textures(true);
-	audio = new Audio(true);
-	
-	// L07 TODO 2: Add Physics module
-	physics = new Physics(false);
-	entityManager = new EntityManager(false);
-	scene = new Scene(false);
-
-	map = new Map(false);
-	
-	logo = new Logo(true);
-	
-	fadeBlack = new FadeToBlack(true);
+	input = new Input();
+	win = new Window();
+	render = new Render();
+	fadeToBlack = new FadeToBlack();
+	tex = new Textures();
+	audio = new Audio();
+	//L07 DONE 2: Add Physics module
+	physics = new Physics();
+	logoScene = new LogoScene();
+	titleScene = new TitleScene();
+	scene = new Scene();
+	entityManager = new EntityManager();
+	map = new Map();
+	pathfinding = new PathFinding();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -45,16 +45,18 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(win);
 	AddModule(tex);
 	AddModule(audio);
+	//L07 DONE 2: Add Physics module
 	AddModule(physics);
-	
-	AddModule(logo);
+
 	AddModule(scene);
 
 	AddModule(entityManager);
 	AddModule(map);
-	
-	AddModule(fadeBlack);
-	
+	AddModule(titleScene);
+	AddModule(logoScene);
+
+	AddModule(fadeToBlack);
+	AddModule(pathfinding);
 	// Render last to swap buffer
 	AddModule(render);
 }
@@ -298,7 +300,7 @@ void App::LoadGameRequest()
 }
 
 // ---------------------------------------
-void App::SaveGameRequest() 
+void App::SaveGameRequest()
 {
 	// NOTE: We should check if SAVE_STATE_FILENAME actually exist and... should we overwriten
 	saveGameRequested = true;
@@ -324,7 +326,7 @@ bool App::LoadFromFile()
 		ListItem<Module*>* item;
 		item = modules.start;
 
-		while (item != NULL && ret)
+		while (item != NULL && ret == true)
 		{
 			ret = item->data->LoadState(gameStateFile.child("save_state").child(item->data->name.GetString()));
 			item = item->next;
@@ -338,7 +340,7 @@ bool App::LoadFromFile()
 
 // L02: DONE 7: Implement the xml save method SaveToFile() for current state
 // check https://pugixml.org/docs/quickstart.html#modify
-bool App::SaveToFile() 
+bool App::SaveToFile()
 {
 	bool ret = false;
 
@@ -359,18 +361,4 @@ bool App::SaveToFile()
 	saveGameRequested = false;
 
 	return ret;
-}
-
-pugi::xml_node App::getNodetoVar() {
-	
-	// L01: DONE 3: Load config.xml file using load_file() method from the xml_document class
-	pugi::xml_parse_result parseResult = configFile.load_file("config.xml");
-
-	// L01: DONE 3: Check result for loading errors
-	if (parseResult) {
-		return configFile.child("config");
-	}
-	else {
-		LOG("Error in App::LoadConfig(): %s", parseResult.description());
-	}
 }

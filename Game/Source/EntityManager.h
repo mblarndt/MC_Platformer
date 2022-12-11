@@ -9,7 +9,7 @@ class EntityManager : public Module
 {
 public:
 
-	EntityManager(bool isEnabled);
+	EntityManager();
 
 	// Destructor
 	virtual ~EntityManager();
@@ -33,10 +33,7 @@ public:
 
 	void AddEntity(Entity* entity);
 
-	bool SaveState(pugi::xml_node&data);
 
-	bool LoadState(pugi::xml_node&data);
-	
 public:
 
 	List<Entity*> entities;

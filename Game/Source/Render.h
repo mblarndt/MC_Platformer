@@ -11,7 +11,7 @@ class Render : public Module
 {
 public:
 
-	Render(bool isEnabled);
+	Render();
 
 	// Destructor
 	virtual ~Render();
@@ -52,7 +52,6 @@ public:
 	SDL_Rect camera;
 	SDL_Rect viewport;
 	SDL_Color background;
-
 };
 
 #endif // __RENDER_H__

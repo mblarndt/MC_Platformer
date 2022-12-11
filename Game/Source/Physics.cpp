@@ -18,8 +18,9 @@
 #pragma comment( lib, "../Game/Source/External/Box2D/libx86/ReleaseLib/Box2D.lib" )
 #endif
 
-Physics::Physics(bool isEnabled) : Module(isEnabled)
+Physics::Physics() : Module()
 {
+	name.Create("physics");
 	// Initialise all the internal class variables, at least to NULL pointer
 	world = NULL;
 	debug = false;

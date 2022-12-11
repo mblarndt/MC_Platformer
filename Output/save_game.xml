@@ -4,16 +4,15 @@
 	<window />
 	<textures />
 	<audio />
-	<:anonymous />
-	<Logo screen />
-	<scene />
-	<entitymanager>
-		<position x="1216" y="321" />
-	</entitymanager>
+	<physics />
+	<logoScreen />
+	<scene>
+		<player x="3197" y="289" />
+	</scene>
+	<entitymanager />
 	<map />
-	<:anonymous />
+	<fadeBlack />
 	<renderer>
-		<camera x="-916" y="0" />
-		<player />
+		<camera x="-2900" y="0" />
 	</renderer>
 </save_state>
