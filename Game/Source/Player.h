@@ -126,7 +126,6 @@ private:
 	bool playerDeath;
 	bool levelFinish;
 	bool startGame;
-	bool camMoved;
 
 	//Position Variables
 	iPoint spawn;
@@ -138,10 +137,7 @@ private:
 	//Player Movement Variables
 	float speed;
 	float jumpforce;
-	int jumpsteps;
 	int jumpcount;
-	int remainingJumpSteps;
-	int jumpStart_counter;
 
 	//States
 	int shootDir;

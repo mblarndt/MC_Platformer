@@ -26,7 +26,6 @@
 	  <player>
 		  <menu x="0" y="0"/>
 		  <cam offset="300"/>
-		  <!--<startpos x="1216" y="322"/> -->
 		  <textures>
 			  <player path="Assets/Textures/Slime_Spritesheet.png" width="30" height="30"/>
 			  <death path="Assets/Textures/dead3.png" width="1024" height="480"/>

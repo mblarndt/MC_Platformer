@@ -56,8 +56,6 @@ bool Player::Awake() {
 	//Player Variables
 	speed = parameters.child("movement").attribute("speed").as_int();
 	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
-	jumpsteps = parameters.child("movement").attribute("jumpsteps").as_int();
-
 	health = parameters.child("stats").attribute("health").as_int();
 	bullets = parameters.child("stats").attribute("bullets").as_int();
 
@@ -77,11 +75,7 @@ bool Player::Start() {
 
 	//Initialize States and Values 
 	startGame = false;
-	camMoved = false;
 	remainingPixels = 0;
-	jumpsteps = 3;
-	remainingJumpSteps = jumpsteps;
-    jumpStart_counter = 4;
 
 	spriteWidth = column =60;
 	spriteHeight = row = 40;
@@ -180,8 +174,6 @@ bool Player::Update()
 	}
 
 	if (startGame == true) {
-
-		
 
 		//Main Loop starts when CamTransition finished
 		if (CamTransition(0, spawn.x)) {
@@ -372,23 +364,29 @@ void Player::Shoot()
 
 void Player::HandleMovement()
 {
+	//Move Left
 	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
 		velocitx.x = -speed;
 	}
 
+	//Move Right
 	else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
 		velocitx.x = speed;
 	}
-	//jump
+	//Jump
 	else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 		if (jumpcount <= 3) {
 			pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
 			jumpcount++;
 		}
 	}
+
+	//Shoot
 	else if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
 		Shoot();
 	}
+
+
 	else {
 		velocitx.y = pbody->body->GetLinearVelocity().y;
 		pbody->body->SetLinearVelocity(velocitx);
