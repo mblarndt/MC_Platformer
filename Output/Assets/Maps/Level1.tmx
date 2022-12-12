@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="160" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="153">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="160" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="186">
  <tileset firstgid="1" name="Minecraft Tileset" tilewidth="32" tileheight="32" tilecount="120" columns="10">
   <image source="Minecraft Tileset.png" width="320" height="384"/>
  </tileset>
@@ -12042,7 +12042,7 @@
  <objectgroup id="8" name="Colliders">
   <object id="1" name="Ground" class="solid" x="1024" y="352" width="800" height="128"/>
   <object id="4" name="Ground" class="solid" x="1440" y="320" width="224" height="32"/>
-  <object id="7" class="solid" x="986" y="64" width="38" height="436"/>
+  <object id="7" class="solid" x="986" y="160" width="38" height="340"/>
   <object id="9" name="Ground" class="solid" x="1888" y="320" width="416" height="160"/>
   <object id="10" name="Ground" class="solid" x="2016" y="288" width="128" height="32"/>
   <object id="11" name="Ground" class="solid" x="2304" y="352" width="160" height="128"/>
@@ -12085,6 +12085,7 @@
   <object id="150" class="solid" x="4224" y="320" width="32" height="32"/>
   <object id="151" class="solid" x="4320" y="288" width="32" height="32"/>
   <object id="152" class="solid" x="4416" y="256" width="32" height="32"/>
+  <object id="153" class="solid" x="1152" y="224" width="32" height="32"/>
  </objectgroup>
  <layer id="12" name="Objects" width="160" height="15">
   <properties>
