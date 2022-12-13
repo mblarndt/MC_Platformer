@@ -9,6 +9,7 @@
 #include "Point.h"
 #include "Physics.h"
 #include "Map.h"
+#include "EntityManager.h"
 
 #include "Pathfinding.h"
 #include "EntityManager.h"
@@ -35,6 +36,10 @@ bool EnemyAir::Start() {
 
 bool EnemyAir::Update()
 {
+
+	if (health == 0)
+		app->entityManager->DestroyEntity(this);
+
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
 	
@@ -53,7 +58,7 @@ bool EnemyAir::Update()
 	}
 	else 
 */
-	pbody->body->ApplyLinearImpulse(b2Vec2(0, -1), pbody->body->GetPosition(), true);
+	//pbody->body->ApplyLinearImpulse(b2Vec2(0, -GRAVITY_Y), pbody->body->GetPosition(), true);
 	currentAnimation->Update();
 	SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 	app->render->DrawTexture(texture, position.x, position.y, &rect1);
@@ -83,7 +88,18 @@ bool EnemyAir::SaveState(pugi::xml_node& data)
 
 void EnemyAir::OnCollision(PhysBody* physA, PhysBody* physB) {
 
-	// L07 DONE 7: Detect the type of collision
+	switch (physB->ctype)
+	{
+	case ColliderType::PLAYER:
+		break;
+	case ColliderType::BULLET:
+		//LOG("Item Collision DEATH");
+		health = health - 1;
+		break;
+	case ColliderType::UNKNOWN:
+		//LOG("Item Collision UNKNOWN");
+		break;
+	}
 
 }
 
@@ -104,7 +120,7 @@ void EnemyAir::InitSpawn(pugi::xml_node itemNode)
 	// Initilize textures
 	texture = app->tex->Load(texturePath);
 
-
+	health = 1;
 	// Initialize Audio Fx
 
 

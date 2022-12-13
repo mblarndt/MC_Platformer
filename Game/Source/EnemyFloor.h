@@ -19,7 +19,7 @@ class EnemyFloor : public Entity
 {
 public:
 
-	EnemyFloor();
+	EnemyFloor(pugi::xml_node paras);
 
 	virtual ~EnemyFloor();
 

@@ -70,9 +70,6 @@ private:
 
 	//Player, Camera and Game States
 	bool enemyDeath;
-	bool levelFinish;
-	bool startGame;
-	bool camMoved;
 
 	//Position Variables
 	iPoint spawn;
@@ -80,6 +77,10 @@ private:
 
 	// Enemy Movement Variables
 	float speed;
+
+	int health;
+
+
 };
 
 #endif // __ENEMYAIR_H__

@@ -263,6 +263,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		LOG("Collision Checkpoint");
 		app->SaveGameRequest();
 		break;
+	case ColliderType::ENEMY:
+		health = health - 1;
+		pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
+		break;
 	case ColliderType::UNKNOWN:
 		//LOG("Collision UNKNOWN");
 		break;

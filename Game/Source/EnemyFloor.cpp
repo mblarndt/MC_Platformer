@@ -9,7 +9,7 @@
 #include "Point.h"
 #include "Physics.h"
 
-EnemyFloor::EnemyFloor() : Entity(EntityType::ENEMYFLOOR)
+EnemyFloor::EnemyFloor(pugi::xml_node paras) : Entity(EntityType::ENEMYFLOOR)
 {
 	name.Create("EnemyFloor");
 }
