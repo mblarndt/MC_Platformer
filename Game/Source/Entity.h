@@ -5,6 +5,7 @@
 #include "SString.h"
 #include "Input.h"
 #include "Render.h"
+#include "Box2D/Box2D/Box2D.h"
 
 class PhysBody;
 
@@ -12,8 +13,9 @@ enum class EntityType
 {
 	PLAYER,
 	ITEM,
-	ENEMYFLOOR,
+	BULLET,
 	ENEMYAIR,
+	ENEMYFLOOR,
 	UNKNOWN
 };
 
@@ -71,7 +73,7 @@ public:
 		}
 	}
 
-	virtual void OnCollision(PhysBody* physA, PhysBody* physB) {
+	virtual void OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
 	};
 
@@ -81,11 +83,13 @@ public:
 	EntityType type;
 	bool active = true;
 	pugi::xml_node parameters;
+	pugi::xml_node spawnPos;
 
 	// Possible properties, it depends on how generic we
 	// want our Entity class, maybe it's not renderable...
 	iPoint position;
 	bool renderable = true;
+	bool toDelete;
 };
 
 #endif // __ENTITY_H__

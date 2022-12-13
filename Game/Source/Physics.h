@@ -5,7 +5,7 @@
 #include "Box2D/Box2D/Box2D.h"
 
 #define GRAVITY_X 0.0f
-#define GRAVITY_Y -20.0f
+#define GRAVITY_Y -23.0f
 
 #define PIXELS_PER_METER 50.0f // if touched change METER_PER_PIXEL too
 #define METER_PER_PIXEL 0.02f // this is 1 / PIXELS_PER_METER !
@@ -27,10 +27,12 @@ enum class ColliderType {
 	PLAYER,
 	ENEMY,
 	ITEM,
+	BULLET,
 	PLATFORM,
 	FLOOR,
 	DEATH,
 	FINISH,
+	CHECKPOINT,
 	UNKNOWN
 	// ..
 };
@@ -74,17 +76,20 @@ public:
 	// Create basic physics objects
 	PhysBody* CreateRectangle(int x, int y, int width, int height, bodyType type);
 	PhysBody* CreateCircle(int x, int y, int radious, bodyType type);
+	PhysBody* CreateCircleSensor(int x, int y, int radious, bodyType type);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bodyType type);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
+	// Box2D World
+	b2World* world;
+
 private:
 
 	// Debug mode
 	bool debug;
 
-	// Box2D World
-	b2World* world;
+	
 };

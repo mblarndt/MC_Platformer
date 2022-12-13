@@ -8,10 +8,16 @@
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
+#include "Item.h"
+#include "Map.h"
+#include "Bullet.h"
+#include "EntityManager.h"
+#include "Window.h"
 
-Player::Player() : Entity(EntityType::PLAYER)
+Player::Player(pugi::xml_node paras) : Entity(EntityType::PLAYER)
 {
 	name.Create("Player");
+	parameters = paras;
 }
 
 Player::~Player() {
@@ -25,14 +31,6 @@ bool Player::Awake() {
 	//Menu Position
 	menu.x = parameters.child("menu").attribute("x").as_int();
 	menu.y = parameters.child("menu").attribute("y").as_int();
-
-	//Initial Startposition
-	position.x = parameters.child("startpos").attribute("x").as_int();
-	position.y = parameters.child("startpos").attribute("y").as_int();
-
-	//Respawn Position
-	spawn.x = parameters.child("startpos").attribute("x").as_int();
-	spawn.y = parameters.child("startpos").attribute("y").as_int();
 
 	//Camera Offset from Player
 	camOffset = parameters.child("cam").attribute("offset").as_int();
@@ -58,8 +56,46 @@ bool Player::Awake() {
 	//Player Variables
 	speed = parameters.child("movement").attribute("speed").as_int();
 	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
-	jumpsteps = parameters.child("movement").attribute("jumpsteps").as_int();
-	
+	health = parameters.child("stats").attribute("health").as_int();
+	bullets = parameters.child("stats").attribute("bullets").as_int();
+
+	//Idle
+	idle.row = parameters.child("animations").child("idle").attribute("row").as_int();
+	idle.startCol = parameters.child("animations").child("idle").attribute("startcol").as_int();
+	idle.endCol = parameters.child("animations").child("idle").attribute("endcol").as_int();
+
+	//MoveRight
+	movementRight.row = parameters.child("animations").child("moveright").attribute("row").as_int();
+	movementRight.startCol = parameters.child("animations").child("moveright").attribute("startcol").as_int();
+	movementRight.endCol = parameters.child("animations").child("moveright").attribute("endcol").as_int();
+
+	//MoveLeft
+	movementLeft.row = parameters.child("animations").child("moveleft").attribute("row").as_int();
+	movementLeft.startCol = parameters.child("animations").child("moveleft").attribute("startcol").as_int();
+	movementLeft.endCol = parameters.child("animations").child("moveleft").attribute("endcol").as_int();
+
+	//Jump Up
+	jumpUp.row = parameters.child("animations").child("jumpup").attribute("row").as_int();
+	jumpUp.startCol = parameters.child("animations").child("jumpup").attribute("startcol").as_int();
+	jumpUp.endCol = parameters.child("animations").child("jumpup").attribute("endcol").as_int();
+
+	//Jump Down
+	jumpDown.row = parameters.child("animations").child("jumpdown").attribute("row").as_int();
+	jumpDown.startCol = parameters.child("animations").child("jumpdown").attribute("startcol").as_int();
+	jumpDown.endCol = parameters.child("animations").child("jumpdown").attribute("endcol").as_int();
+
+	//Jump Down
+	jumpStart.row = parameters.child("animations").child("jumpstart").attribute("row").as_int();
+	jumpStart.startCol = parameters.child("animations").child("jumpstart").attribute("startcol").as_int();
+	jumpStart.endCol = parameters.child("animations").child("jumpstart").attribute("endcol").as_int();
+
+	//Jump Down
+	jumpEnd.row = parameters.child("animations").child("jumpend").attribute("row").as_int();
+	jumpEnd.startCol = parameters.child("animations").child("jumpend").attribute("startcol").as_int();
+	jumpEnd.endCol = parameters.child("animations").child("jumpend").attribute("endcol").as_int();
+
+	spriteHeight = row = parameters.child("animations").attribute("height").as_int();
+	spriteWidth = column = parameters.child("animations").attribute("width").as_int();
 
 	return true;
 }
@@ -73,55 +109,43 @@ bool Player::Start() {
 	
 	//Initialize Audio Fx
 	hitFxId = app->audio->LoadFx(hitFxPath);
+	pickCoinFxId = app->audio->LoadFx(pickCoinFxPath);
 
 	//Initialize States and Values 
 	startGame = false;
-	camMoved = false;
+	playerMoving = false;
 	remainingPixels = 0;
-	jumpsteps = 3;
-	remainingJumpSteps = jumpsteps;
-    jumpStart_counter = 4;
-	
-    movementRight.PushBack({ 0, 80, 60, 40 });
-	movementRight.PushBack({ 60, 80, 60, 40 });
-	movementRight.loop = true;
-	movementRight.speed = 0.1f;
-	
-	movementLeft.PushBack({ 120, 80, 60, 40 });
-	movementLeft.PushBack({ 180, 80, 60, 40 });
-	movementLeft.loop = true;
-	movementLeft.speed = 0.1f;
 
-
-	idle.PushBack({ 0, 0, 60, 40 });
-	idle.PushBack({ 60, 40, 60, 40 });
-	idle.loop = true;
-	idle.speed = 0.1f;
-
-
-	jumpStart.PushBack({298, 48, 60, 40});
-	jumpStart.PushBack({358, 48, 60, 40});
-	jumpStart.PushBack({418, 48, 60, 40});
-	jumpStart.PushBack({478, 48, 60, 40});
-	jumpStart.loop = false;
-	jumpStart.speed = 0.2f;
-
-	jumpEnd.PushBack({118, 48, 60, 40});
-	jumpEnd.PushBack({178, 48, 60, 40});
-	jumpEnd.PushBack({238, 48, 60, 40});
-	jumpEnd.PushBack({298, 48, 60, 40});
-	jumpEnd.loop = false;
-	jumpStart.speed = 0.2f;
-
-	jumpUp.PushBack({0, 40, 60, 40});
-	jumpUp.loop = true;
-
-	jumpDown.PushBack({60, 40, 60, 40});
-	jumpDown.loop = true;
-	
+	//Animations
+	idle = createAnimation(idle, true, 0.1f);
+    movementRight = createAnimation(movementRight, true, 0.1f);
+	movementLeft = createAnimation(movementLeft, true, 0.1f);
+	jumpUp = createAnimation(jumpUp, true, 0.1f);
+	jumpDown = createAnimation(jumpDown, true, 0.1f);
+	jumpEnd = createAnimation(jumpEnd, false, 0.2f);
+	jumpStart = createAnimation(jumpStart, false, 0.2f);	
 	
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width/2), position.y + (height/2), width, height, bodyType::DYNAMIC);
+
+
+	shapeR.SetAsBox(0.01, 0.01, b2Vec2(0.3, 0), 0);
+	shapeL.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
+	shapeT.SetAsBox(0.01, 0.01, b2Vec2( 0, -0.3), 0);
+	shapeB.SetAsBox(0.01, 0.01, b2Vec2(0, 0.29), 0);
+	fixtureDefR.shape = &shapeR;
+	fixtureDefL.shape = &shapeL;
+	fixtureDefT.shape = &shapeT;
+	fixtureDefB.shape = &shapeB;
+	fixtureDefR.density = 0;
+	fixtureDefL.density = 0.1f;
+	fixtureDefT.density = 0.2f;
+	fixtureDefB.density = 0.3f;
+	pbody->body->CreateFixture(&fixtureDefR);
+	pbody->body->CreateFixture(&fixtureDefL);
+	pbody->body->CreateFixture(&fixtureDefT);
+	pbody->body->CreateFixture(&fixtureDefB);
+
   
 	// L07 DONE 7: Assign collider type
 	pbody->ctype = ColliderType::PLAYER;
@@ -136,172 +160,53 @@ bool Player::Start() {
 
 	currentAnimation = &idle;
 
+	toDelete = false;
+
+	position = spawn;
+
 	return true;
 }
 
 bool Player::Update()
 {
-	//Check Velocity of Physical Body
-	b2Vec2 v = pbody->body->GetLinearVelocity();
-	b2Vec2 vel = pbody->body->GetLinearVelocity();
+
+	if (health == 0)
+		playerDeath = true;
 
 	//Activate Game
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-		app->audio->PlayMusic(backmusicPath);
-		startGame = true;
+	if (startGame == false) {
+		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+			app->audio->PlayMusic(backmusicPath);
+			startGame = true;
+		}
 	}
 
 	if (startGame == true) {
 
-		//Camera Transition from StartScreen to Player
-		if (camMoved == false) {
-			currentAnimation = &idle;
-			if (remainingPixels < (spawn.x - (camOffset))) {
-				remainingPixels += 10;
-				app->render->camera.x = -(remainingPixels);
-			}
-			else {camMoved = true;}
-		}
-
-		//Main Loop After Transition
-		else {
-
+		//Main Loop starts when CamTransition finished
+		if (CamTransition(0, spawn.x) && levelFinish == false) {
 			if (playerDeath == false) {
-				//Camera follow
-				if (position.x > (camOffset) && position.x < (4222 - (1024 - camOffset))) {
-					app->render->camera.x = -(position.x) + camOffset;
-					app->render->camera.y = menu.y;
-				}
 
-				//L02: DONE 4: modify the position of the player using arrow keys and render the texture
-				if (v.y == 0) {
-					if (v.x < 0)	currentAnimation = &movementLeft;
-
-					if (v.x > 0)	currentAnimation = &movementRight;
-
-					if (v.x == 0)	currentAnimation = &idle;
-
-					jumpcount = 2;
-				}
-				if (v.y > 0) {
-					//if (jumpStart.HasFinished()) {
-					currentAnimation = &jumpDown;
-					jumpStart.Reset();
-					//}
-				}
-
-				if (v.y < 0) {
-					//if (jumpStart.HasFinished()) {
-					currentAnimation = &jumpUp;
-					jumpStart.Reset();
-					//}
-				}
-				//if (v.y == 0 && v.x != 0) currentAnimation = &idle;
-
-				/*----------------------------Player Movement Variation 2--------------------------*/
-					if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
-						velocitx.x = -speed;
-					}
-
-					else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
-						velocitx.x = speed;
-					}
-
-					//jump
-					else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-						if (jumpcount <= 3) {
-							pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
-							jumpcount++;
-						}
-					}
-					else {
-						velocitx.y = pbody->body->GetLinearVelocity().y;
-						pbody->body->SetLinearVelocity(velocitx);
-					}
-
-
-				/*----------------------------Player Movement Variation 2--------------------------*
-				if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
-					if (jumpcount <= 3)
-						remainingJumpSteps = jumpsteps;
-					jumpcount++;
-				}
-
-				else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
-					velocitx = b2Vec2(speed * (-1), -GRAVITY_Y);
-				}
-
-				else if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
-					velocitx = b2Vec2(-speed, -GRAVITY_Y);
-				}
-
-				else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
-					velocitx = b2Vec2(speed, -GRAVITY_Y);
-				}
-
-				//Jump Action
-				if (remainingJumpSteps > 0) {
-					vel.y = -jumpforce;//upwards - don't change x velocity
-					pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, vel.y));
-					remainingJumpSteps--;
-				}
-				else {
-					pbody->body->SetLinearVelocity(b2Vec2(velocitx.x, velocitx.y));
-				}
-
-				/*----------------------------End of Variation 2---------------------------------*/
-
-				position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
-				position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
-
-				currentAnimation->Update();
-				SDL_Rect rect = currentAnimation->GetCurrentFrame();
-				app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect);
+				/*----------------------------Follow Camera--------------------------*/
+				PlayerCamera();
+				/*----------------------------Get State of Player--------------------------*/
+				StateMachine();
+				/*----------------------------Player Movement--------------------------*/
+				HandleMovement();
+				/*----------------------------Rendering Player--------------------------*/
+				RenderEntity();
 			}
-
-			//When Player collides with Lava he spawns at start again
-			if (playerDeath == true) {
-				currentAnimation = &jumpStart;
-				if (frameCounter < 30) {
-					SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
-					app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
-					frameCounter++;
-				}
-				else {
-					SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
-					app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
-					SDL_Rect rect = { 0, 0, 1024, 480 };
-					if (position.x < 2944)	app->render->DrawTexture(texDeath, position.x - camOffset, 0, &rect);
-					else app->render->DrawTexture(texDeath, 3196, 0, &rect);
-					//frameCounter++;
-					if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-						position.x = spawn.x;
-						position.y = spawn.y;
-						pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
-						velocitx.x = 0;
-						playerDeath = false;
-					}
-				}
-			}
-
-			//If Player finished Level
-			if (levelFinish) {
-				SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
-				app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
-				SDL_Rect rect = { 0, 0, 1024, 480 };
-				app->render->DrawTexture(texFinish, position.x - 965, 0, &rect);
-
-				if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-					position.x = spawn.x;
-					position.y = spawn.y;
-					pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
-					velocitx.x = 0;
-					levelFinish = false;
-				}
-			}
-			
-			Debug();
 		}
+
+
+		//When Player collides with Lava he spawns at start again	
+		HandleDeath(playerDeath);
+
+		//If Player finished Level
+		HandleFinish(levelFinish);
+			
+		Debug();
+		
 	}
 
 	return true;
@@ -309,61 +214,60 @@ bool Player::Update()
 
 bool Player::CleanUp()
 {
-
-	return true;
-}
-
-bool Player::LoadState(pugi::xml_node& data)
-{
-	position.x = data.child("camera").attribute("x").as_int();
-	position.y = data.child("camera").attribute("y").as_int();
-
-	return true;
-}
-
-// L03: DONE 8: Create a method to save the state of the renderer
-// using append_child and append_attribute
-bool Player::SaveState(pugi::xml_node& data)
-{
-	pugi::xml_node player = data.append_child("position");
-
-	player.append_attribute("x") = position.x;
-	player.append_attribute("y") = position.y;
-
-
+	app->physics->world->DestroyBody(pbody->body);
 	return true;
 }
 
 // L07 DONE 6: Define OnCollision function for the player. Check the virtual function on Entity class
-void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
+void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
-	// L07 DONE 7: Detect the type of collision
+	b2Fixture* fix1 = contact->GetFixtureA();
+	b2Fixture* fix2 = contact->GetFixtureB();
+
+	if (fix2->GetDensity() == 0) {
+		velocitx.x = -speed;
+		//health = health - 1;
+		//LOG("Health: %s", health);
+	}
+	if (fix2->GetDensity() == 0.1f) {
+		velocitx.x = speed;
+		//health = health - 1;
+	}
+	if (fix2->GetDensity() == 0.2f) {
+	}
+	if (fix2->GetDensity() == 0.3f) {
+	}
 
 	switch (physB->ctype)
 	{
 	case ColliderType::ITEM:
-		LOG("Collision ITEM");
+		//LOG("Collision ITEM");
 		app->audio->PlayFx(pickCoinFxId);
+		bullets = bullets+1;
 		break;
 	case ColliderType::PLATFORM:
-		LOG("Collision PLATFORM");
+		//LOG("Collision PLATFORM");
 		break;
 	case ColliderType::FLOOR:
-		LOG("Collision FLOOR");
+		//LOG("Collision FLOOR");
 		jumpcount = 0;
 		break;
 	case ColliderType::DEATH:
-		LOG("Collision DEATH");
+		//LOG("Collision DEATH");
 		frameCounter = 0;
 		app->audio->PlayFx(hitFxId);
 		playerDeath = true;
 		break;
 	case ColliderType::FINISH:
-		LOG("Collision FINISH");
+		//LOG("Collision FINISH");
 		levelFinish = true;
 		break;
+	case ColliderType::CHECKPOINT:
+		LOG("Collision Checkpoint");
+		app->SaveGameRequest();
+		break;
 	case ColliderType::UNKNOWN:
-		LOG("Collision UNKNOWN");
+		//LOG("Collision UNKNOWN");
 		break;
 	}
 
@@ -377,4 +281,228 @@ void Player::Debug() {
 		pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 		velocitx.x = 0;
 	}
+}
+
+void Player::GetState()
+{
+	b2Vec2 vel = pbody->body->GetLinearVelocity();
+	if (vel.y == 0) {
+		grounded = true;
+		if (vel.x < 0)
+			state = MOVE_LEFT;
+
+		if (vel.x > 0)
+			state = MOVE_RIGHT;
+
+		if (vel.x == 0)
+			state = IDLE;
+	}
+	if (vel.y > 0) {
+		
+		grounded = false;
+		if (vel.x > 0)
+			state = FALL_LEFT;
+
+		if (vel.x < 0)
+			state = FALL_RIGHT;
+	}
+
+	if (vel.y < 0) {
+
+		grounded = false;
+
+		if (vel.x > 0)
+			state = JUMP_LEFT;
+
+		if (vel.x < 0)
+			state = JUMP_RIGHT;
+	}
+}
+
+void Player::StateMachine()
+{
+	GetState();
+
+	switch (state) {
+		case IDLE: 
+			currentAnimation = &idle;
+			break;
+		case MOVE_RIGHT:
+			currentAnimation = &movementRight;
+			shootDir = 1;
+			break;
+		case MOVE_LEFT:
+			currentAnimation = &movementLeft;
+			shootDir = -1;
+			break;
+		case JUMP_RIGHT:
+			currentAnimation = &jumpUp;
+			break;
+		case JUMP_LEFT:
+			currentAnimation = &jumpUp;
+			break;
+		case FALL_RIGHT:
+			currentAnimation = &jumpDown;
+			break;
+		case FALL_LEFT:
+			currentAnimation = &jumpDown;
+			break;
+	}
+
+	if (preState == FALL) {
+		//currentAnimation = &jumpEnd;
+	}
+		
+
+	if (grounded)
+		jumpcount = 2;
+
+	preState = state;
+
+}
+
+void Player::Shoot()
+{
+	if (bullets > 0) {
+		bullets = bullets - 1;
+		pugi::xml_node object;
+		object.attribute("x") = METERS_TO_PIXELS(pbody->body->GetTransform().p.x);
+		object.attribute("y") = METERS_TO_PIXELS(pbody->body->GetTransform().p.y);
+		object.attribute("direction") = shootDir;
+		app->scene->CreateBullet(object, position.x, position.y, shootDir);
+	}
+	
+}
+
+void Player::HandleMovement()
+{
+	//Move Left
+	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
+		velocitx.x = -speed;
+	}
+
+	//Move Right
+	else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
+		velocitx.x = speed;
+		playerMoving = true;
+	}
+	//Jump
+	else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+		if (jumpcount <= 3) {
+			pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
+			jumpcount++;
+		}
+	}
+
+	//Shoot
+	else if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+		Shoot();
+	}
+
+
+	else {
+		velocitx.y = pbody->body->GetLinearVelocity().y;
+		pbody->body->SetLinearVelocity(velocitx);
+	}
+}
+
+void Player::HandleDeath(bool dead)
+{
+	if (dead) {
+		health = 7;
+		currentAnimation = &jumpStart;
+		if (frameCounter < 30) {
+			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
+			app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
+			frameCounter++;
+		}
+		else {
+			
+			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
+			app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
+			SDL_Rect rect = { 0, 0, 1024, 480 };
+			if (position.x < 2944)	app->render->DrawTexture(texDeath, position.x - camOffset, 0, &rect);
+			else app->render->DrawTexture(texDeath, 3196, 0, &rect);
+			//frameCounter++;
+			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+				
+				position.x = spawn.x;
+				position.y = spawn.y;
+				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+				velocitx.x = 0;
+				playerDeath = false;
+			}
+		}
+	}
+
+}
+
+void Player::HandleFinish(bool finish)
+{
+	if (finish) {
+		SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
+		app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
+		SDL_Rect rect = { 0, 0, app->win->width, 480 };
+		app->render->DrawTexture(texFinish, (app->map->mapData.width * app->map->mapData.tileWidth)- app->win->width, 0, &rect);
+
+		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+			position.x = spawn.x;
+			position.y = spawn.y;
+			pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+			velocitx.x = 0;
+			levelFinish = false;
+		}
+	}
+}
+
+void Player::RenderEntity()
+{
+	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
+	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2)+1;
+
+	currentAnimation->Update();
+	SDL_Rect rect = currentAnimation->GetCurrentFrame();
+	app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect);
+}
+
+void Player::PlayerCamera()
+{
+	if (position.x > (camOffset) && position.x < ((app->map->mapData.width * app->map->mapData.tileWidth) - (app->win->width - camOffset))) {
+		app->render->camera.x = -(position.x) + camOffset;
+		app->render->camera.y = menu.y;
+	}
+	else {
+		lastcamPos = app->render->camera.x;
+	}
+}
+
+void Player::InitSpawn(pugi::xml_node itemNode)
+{
+	position.x = spawn.x = itemNode.attribute("x").as_int();
+	position.y = spawn.y = itemNode.attribute("y").as_int();
+}
+
+bool Player::CamTransition(int start, int stop)
+{
+	bool ret = false;
+
+	if (remainingPixels < (stop - (camOffset))) {
+		remainingPixels += 10;
+		app->render->camera.x = -(remainingPixels);
+	}
+	else 
+		ret = true;
+
+	return ret;
+}
+
+Animation Player::createAnimation(Animation animation, bool loop, float animSpeed)
+{
+	for (int i = animation.startCol; i <= animation.endCol; i++) {
+		animation.PushBack({ i * column,  animation.row * row, spriteWidth, spriteHeight });
+	}
+	animation.loop = loop;
+	animation.speed = animSpeed;
+
+	return animation;
 }

@@ -6,7 +6,7 @@
 	<audio />
 	<physics />
 	<scene>
-		<player x="1216" y="322" />
+		<player x="3891" y="354" health="2" bullets="8" />
 	</scene>
 	<entitymanager />
 	<map />
@@ -15,6 +15,6 @@
 	<fade />
 	<pathfinding />
 	<renderer>
-		<camera x="-920" y="0" />
+		<camera x="-3587" y="0" />
 	</renderer>
 </save_state>

@@ -9,6 +9,7 @@
 #include "Render.h"
 #include "Player.h"
 #include "Window.h"
+#include "Player.h"
 #include "Box2D/Box2D/Box2D.h"
 
 // Tell the compiler to reference the compiled Box2D libraries
@@ -64,9 +65,8 @@ bool Physics::PreUpdate()
 			// If so, we call the OnCollision listener function (only of the sensor), passing as inputs our custom PhysBody classes
 			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
 			PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData();
-
 			if (pb1 && pb2 && pb1->listener)
-				pb1->listener->OnCollision(pb1, pb2);
+				pb1->listener->OnCollision(pb1, pb2, c);
 		}
 	}
 
@@ -126,6 +126,45 @@ PhysBody* Physics::CreateCircle(int x, int y, int radious, bodyType type)
 	b2FixtureDef fixture;
 	fixture.shape = &circle;
 	fixture.density = 1.0f;
+	b->ResetMassData();
+
+	// Add fixture to the BODY
+	b->CreateFixture(&fixture);
+
+	// Create our custom PhysBody class
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = radious * 0.5f;
+	pbody->height = radious * 0.5f;
+
+	// Return our PhysBody class
+	return pbody;
+}
+
+PhysBody* Physics::CreateCircleSensor(int x, int y, int radious, bodyType type)
+{
+	// Create BODY at position x,y
+	b2BodyDef body;
+
+	if (type == DYNAMIC) body.type = b2_dynamicBody;
+	if (type == STATIC) body.type = b2_staticBody;
+	if (type == KINEMATIC) body.type = b2_kinematicBody;
+
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	// Add BODY to the world
+	b2Body* b = world->CreateBody(&body);
+
+	// Create SHAPE
+	b2CircleShape circle;
+	circle.m_radius = PIXEL_TO_METERS(radious);
+
+	// Create FIXTURE
+	b2FixtureDef fixture;
+	fixture.shape = &circle;
+	fixture.density = 1.0f;
+	fixture.isSensor = true;
 	b->ResetMassData();
 
 	// Add fixture to the BODY
@@ -327,12 +366,13 @@ void Physics::BeginContact(b2Contact* contact)
 	// Call the OnCollision listener function to bodies A and B, passing as inputs our custom PhysBody classes
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
+	PhysBody* p = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 
 	if (physA && physA->listener != NULL)
-		physA->listener->OnCollision(physA, physB);
+		physA->listener->OnCollision(physA, physB, contact);
 
 	if (physB && physB->listener != NULL)
-		physB->listener->OnCollision(physB, physA);
+		physB->listener->OnCollision(physB, physA, contact);
 }
 
 //--------------- PhysBody

@@ -175,65 +175,82 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 int PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 {
+	int ret = -1;
+	int iterations = 0;
+
 	// L12: TODO 1: if origin or destination are not walkable, return -1
-	if (!IsWalkable(origin) || !IsWalkable(destination)) {
-		return -1;
-	}
+	if (IsWalkable(origin) && IsWalkable(destination))
+	{
+		// L12: TODO 2: Create two lists: open, close
+		PathList open;
+		PathList closed;
 
-	// L12: TODO 2: Create two lists: open, close
-	// Add the origin tile to open
-	// Iterate while we have tile in the open list
-	PathList open;
-	PathList close;
+		// Add the origin tile to open
+		open.list.Add(PathNode(0, 0, origin, nullptr));
 
-	open.list.Add(PathNode(0, 0, origin, nullptr));
+		// Iterate while we have tile in the open list
+		while (open.list.Count() > 0)
+		{
+			// L12: TODO 3: Move the lowest score cell from open list to the closed list
+			ListItem<PathNode>* lowest = open.GetNodeLowestScore();
+			ListItem<PathNode>* node = closed.list.Add(lowest->data);
+			open.list.Del(lowest);
 
-	while (open.list.Count() > 0) {
+			// L12: TODO 4: If we just added the destination, we are done!
+			if (node->data.pos == destination)
+			{
+				lastPath.Clear();
 
-		// L12: TODO 3: Move the lowest score cell from open list to the closed list
-		ListItem<PathNode>* lowest = open.GetNodeLowestScore();
-		ListItem<PathNode>* node = close.list.Add(lowest->data);
-		open.list.Del(lowest);
+				// Backtrack to create the final path
+				// Use the Pathnode::parent and Flip() the path when you are finish
+				const PathNode* pathNode = &node->data;
 
-		// L12: TODO 4: If we just added the destination, we are done!
-		// Backtrack to create the final path
-		// Use the Pathnode::parent and Flip() the path when you are finish
-		if (node->data.pos == destination) {
-			lastPath.Clear();
+				while (pathNode)
+				{
+					lastPath.PushBack(pathNode->pos);
+					pathNode = pathNode->parent;
+				}
 
-			const PathNode* pathElementNode = &node->data;
-			while (pathElementNode != nullptr) {
-				lastPath.PushBack(pathElementNode->pos);
-				pathElementNode = pathElementNode->parent;
-			}
-			lastPath.Flip();
-
-			break;
-		}
-
-		// L12: TODO 5: Fill a list of all adjancent nodes
-		PathList adjacentList;
-		node->data.FindWalkableAdjacents(adjacentList);
-
-		// L12: TODO 6: Iterate adjancent nodes:
-		ListItem<PathNode>* adjacent = adjacentList.list.start;
-		for (adjacent = adjacentList.list.start; adjacent != nullptr; adjacent = adjacent->next) {
-			// ignore nodes in the closed list
-			if (close.Find(adjacent->data.pos)) continue;
-
-			// If it is NOT found, calculate its F and add it to the open list
-			ListItem<PathNode>* adjacentInOpen = open.Find(adjacent->data.pos);
-
-			if (adjacentInOpen == nullptr) {
-				adjacent->data.CalculateF(destination);
-				open.list.Add(adjacent->data);
+				lastPath.Flip();
+				ret = lastPath.Count();
+				LOG("Created path of %d steps in %d iterations", ret, iterations);
+				break;
 			}
 
-			// If it is already in the open list, check if it is a better path (compare G)
+			// L12: TODO 5: Fill a list of all adjancent nodes
+			PathList adjacent;
+			node->data.FindWalkableAdjacents(adjacent);
+
+			// L12: TODO 6: Iterate adjancent nodes:
 			// If it is a better path, Update the parent
+			ListItem<PathNode>* item = adjacent.list.start;
+			for (; item; item = item->next)
+			{
+				// ignore nodes in the closed list
+				if (closed.Find(item->data.pos) != NULL)
+					continue;
 
+				// If it is NOT found, calculate its F and add it to the open list
+				ListItem<PathNode>* adjacentInOpen = open.Find(item->data.pos);
+				if (adjacentInOpen == NULL)
+				{
+					item->data.CalculateF(destination);
+					open.list.Add(item->data);
+				}
+				else
+				{
+					// If it is already in the open list, check if it is a better path (compare G)
+					if (adjacentInOpen->data.g > item->data.g + 1)
+					{
+						adjacentInOpen->data.parent = item->data.parent;
+						adjacentInOpen->data.CalculateF(destination);
+					}
+				}
+			}
+
+			++iterations;
 		}
 	}
-	return -1;
-}
 
+	return ret;
+}

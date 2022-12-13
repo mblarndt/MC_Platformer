@@ -27,7 +27,7 @@ public:
 	bool CleanUp();
 
 	// Additional methods
-	Entity* CreateEntity(EntityType type);
+	Entity* CreateEntity(EntityType type, pugi::xml_node paras);
 
 	void DestroyEntity(Entity* entity);
 
@@ -37,7 +37,6 @@ public:
 public:
 
 	List<Entity*> entities;
-	iPoint playerPosition;
 
 };
 

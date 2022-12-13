@@ -1,11 +1,12 @@
 #include "EntityManager.h"
 #include "Player.h"
 #include "Item.h"
-#include "EnemyFloor.h"
-#include "EnemyAir.h"
+#include "Bullet.h"
 #include "App.h"
 #include "Textures.h"
 #include "Scene.h"
+#include "EnemyAir.h"
+#include "EnemyFloor.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -45,7 +46,7 @@ bool EntityManager::Start() {
 
 	bool ret = true; 
 
-	//Iterates over the entities and calls Start
+	//Iterates over the entities and calls Startj
 	ListItem<Entity*>* item;
 	Entity* pEntity = NULL;
 
@@ -78,31 +79,32 @@ bool EntityManager::CleanUp()
 	return ret;
 }
 
-Entity* EntityManager::CreateEntity(EntityType type)
+Entity* EntityManager::CreateEntity(EntityType type, pugi::xml_node paras)
 {
 	Entity* entity = nullptr; 
+
 
 	//L02: DONE 2: Instantiate entity according to the type and add the new entoty it to the list of Entities
 
 	switch (type)
 	{
-
 	case EntityType::PLAYER:
-		entity = new Player();
+		entity = new Player(paras);
 		break;
-
 	case EntityType::ITEM:
-		entity = new Item();
+		entity = new Item(paras);
 		break;
-
-	case EntityType::ENEMYFLOOR:
-		entity = new EnemyFloor();
+	case EntityType::BULLET:
+		entity = new Bullet(paras);
 		break;
-	
 	case EntityType::ENEMYAIR:
-		entity = new EnemyAir();
-
-	default: break;
+		entity = new EnemyAir(paras);
+		break;
+	case EntityType::ENEMYFLOOR:
+		//entity = new EnemyFloor(paras);
+		break;
+	default:
+		break;
 	}
 
 	// Created entities are added to the list
@@ -113,12 +115,7 @@ Entity* EntityManager::CreateEntity(EntityType type)
 
 void EntityManager::DestroyEntity(Entity* entity)
 {
-	ListItem<Entity*>* item;
-
-	for (item = entities.start; item != NULL; item = item->next)
-	{
-		if (item->data == entity) entities.Del(item);
-	}
+	entity->toDelete = true;
 }
 
 void EntityManager::AddEntity(Entity* entity)
@@ -137,10 +134,12 @@ bool EntityManager::Update(float dt)
 		pEntity = item->data;
 
 		if (pEntity->active == false) continue;
-
-		if (pEntity->type == EntityType::PLAYER) playerPosition = pEntity->position;
-		
 		ret = item->data->Update();
+
+		if (pEntity->toDelete == true) {
+			entities.Del(item);
+			item->data->CleanUp();
+		}
 	}
 
 	return ret;
