@@ -1,5 +1,5 @@
-#ifndef __ENEMY_H__
-#define __ENEMY_H__
+#ifndef __ENEMYFLOOR_H__
+#define __ENEMYFLOOR_H__
 
 #include "Entity.h"
 #include "Point.h"
@@ -15,20 +15,13 @@
 
 struct SDL_Texture;
 
-enum class EnemyType
-{
-	FLOOR,
-	AIR, 
-	UNKNOWN
-};
-
-class Enemy : public Entity
+class EnemyFloor : public Entity
 {
 public:
 
-	Enemy();
+	EnemyFloor();
 
-	virtual ~Enemy();
+	virtual ~EnemyFloor();
 
 	bool Awake();
 
@@ -64,11 +57,6 @@ private:
 	int width;
 	int height;
 
-	SDL_Texture* texDeath;
-	const char* deathPath;
-	int deathWidth;
-	int deathHeight;
-
 	SDL_Texture* texFinish;
 	const char* finishPath;
 	int finishWidth;
@@ -76,10 +64,7 @@ private:
 
 	//FX-Sound Variables
 	int hitFxId;
-	int pickCoinFxId;
-	const char* pickCoinFxPath;
 	const char* hitFxPath;
-	const char* backmusicPath;
 
 	//Player, Camera and Game States
 	bool enemyDeath;
@@ -96,4 +81,4 @@ private:
 
 };
 
-#endif // __ENEMY_H__
+#endif // __ENEMYFLOOR_H__

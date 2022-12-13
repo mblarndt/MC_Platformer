@@ -1,7 +1,8 @@
 #include "EntityManager.h"
 #include "Player.h"
 #include "Item.h"
-#include "Enemy.h"
+#include "EnemyFloor.h"
+#include "EnemyAir.h"
 #include "App.h"
 #include "Textures.h"
 #include "Scene.h"
@@ -94,9 +95,12 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		entity = new Item();
 		break;
 
-	case EntityType::ENEMY:
-		entity = new Enemy();
+	case EntityType::ENEMYFLOOR:
+		entity = new EnemyFloor();
 		break;
+	
+	case EntityType::ENEMYAIR:
+		entity = new EnemyAir();
 
 	default: break;
 	}
@@ -133,6 +137,9 @@ bool EntityManager::Update(float dt)
 		pEntity = item->data;
 
 		if (pEntity->active == false) continue;
+
+		if (pEntity->type == EntityType::PLAYER) playerPosition = pEntity->position;
+		
 		ret = item->data->Update();
 	}
 

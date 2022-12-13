@@ -46,6 +46,9 @@
     <item x="1450" y="322" texturepath="Assets/Textures/slimeball.png"/>
     <item x="1500" y="322" texturepath="Assets/Textures/slimeball.png"/>
     <item x="1550" y="322" texturepath="Assets/Textures/slimeball.png"/>
+	
+	<enemyFloor x="" y="" texturepath="Assets/Textures/ghosties.png"/>
+	<enemyAir x="1400" y="150" texturepath="Assets/Textures/ghosties.png"/>
   </scene>
 
   <map>

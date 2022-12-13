@@ -99,7 +99,6 @@ bool Player::Start() {
 	idle.speed = 0.1f;
 
 
-
 	jumpStart.PushBack({298, 48, 60, 40});
 	jumpStart.PushBack({358, 48, 60, 40});
 	jumpStart.PushBack({418, 48, 60, 40});
@@ -123,20 +122,6 @@ bool Player::Start() {
 	
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width/2), position.y + (height/2), width, height, bodyType::DYNAMIC);
-
-	//Add Fixtures to detect collision direction
-	//b2FixtureDef myFixR;
-	//b2FixtureDef myFixL;
-	//b2PolygonShape polyL;
-	//b2PolygonShape polyR;
-	//myFixR.density = 0;
-	//myFixL.density = 0;
-	//polyL.SetAsBox(0.01, 0.01, b2Vec2(0.3,0),0);
-	//polyR.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
-	//myFixR.shape = &polyL;
-	//myFixL.shape = &polyR;
-	//pbody->body->CreateFixture(&myFixR);
-	//pbody->body->CreateFixture(&myFixL);
   
 	// L07 DONE 7: Assign collider type
 	pbody->ctype = ColliderType::PLAYER;

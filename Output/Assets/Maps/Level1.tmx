@@ -15053,19 +15053,19 @@
  <objectgroup id="8" name="Colliders">
   <object id="1" name="Ground" class="solid" x="1024" y="352" width="800" height="128"/>
   <object id="4" name="Ground" class="solid" x="1440" y="320" width="224" height="32"/>
-  <object id="7" class="solid" x="986" y="64" width="38" height="436"/>
+  <object id="7" name="Ground" class="solid" x="986" y="64" width="38" height="436"/>
   <object id="9" name="Ground" class="solid" x="1888" y="320" width="416" height="160"/>
   <object id="10" name="Ground" class="solid" x="2016" y="288" width="128" height="32"/>
   <object id="11" name="Ground" class="solid" x="2304" y="352" width="160" height="128"/>
   <object id="12" name="Ground" class="solid" x="2432" y="256" width="96" height="32"/>
   <object id="13" name="Ground" class="solid" x="2624" y="192" width="128" height="32"/>
   <object id="14" name="Ground" class="solid" x="2528" y="352" width="352" height="128"/>
-  <object id="15" name="Death" class="death" x="2464" y="427.547" width="64" height="52.4527">
+  <object id="15" name="Death" class="death" x="2464" y="428" width="64" height="52">
    <properties>
     <property name="MapToLoad" value="TestMap.tmx"/>
    </properties>
   </object>
-  <object id="16" name="Death" class="death" x="1824" y="430.113" width="64" height="49.8866">
+  <object id="16" name="Death" class="death" x="1824" y="430" width="64" height="50">
    <properties>
     <property name="MapToLoad" value="TestMap.tmx"/>
    </properties>
