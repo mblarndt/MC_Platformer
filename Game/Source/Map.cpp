@@ -520,7 +520,7 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
             app->scene->CreateItem(object);
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_ENEMYAIR) {
-            //app->scene->InitEnemySpawn(object);
+            app->scene->InitEnemySpawn(object);
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_ENEMYFLOOR) {
             //app->scene->CreateItem(object);
