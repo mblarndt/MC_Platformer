@@ -5,8 +5,6 @@
 #include "App.h"
 #include "Textures.h"
 #include "Scene.h"
-#include "EnemyAir.h"
-#include "EnemyFloor.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -97,13 +95,7 @@ Entity* EntityManager::CreateEntity(EntityType type, pugi::xml_node paras)
 		entity = new Item(paras);
 		break;
 	case EntityType::BULLET:
-		//entity = new Bullet(paras);
-		break;
-	case EntityType::ENEMYAIR:
-		entity = new EnemyAir(paras);
-		break;
-	case EntityType::ENEMYFLOOR:
-		//entity = new EnemyFloor(paras);
+		entity = new Bullet(paras);
 		break;
 
 	default: break;
