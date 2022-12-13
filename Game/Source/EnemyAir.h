@@ -16,6 +16,7 @@
 struct SDL_Texture;
 
 class EnemyAir : public Entity
+
 {
 public:
 
