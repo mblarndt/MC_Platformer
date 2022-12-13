@@ -170,6 +170,9 @@ public:
 
 	bool LoadObjectGroups(pugi::xml_node mapNode);
 
+	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
+
+
 	SString mapFileName;
 	pugi::xml_parse_result nameResult;
 
