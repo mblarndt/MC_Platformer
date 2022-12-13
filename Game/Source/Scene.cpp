@@ -12,6 +12,8 @@
 #include "Item.h"
 #include "Bullet.h"
 #include "Pathfinding.h"
+#include "EnemyAir.h"
+#include "EnemyFloor.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -164,7 +166,6 @@ bool Scene::Update(float dt)
 	for (uint i = 0; i < path->Count(); ++i)
 	{
 		iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-		LOG("Path X %i", pos.x, "Path Y %i", pos.y);
 		app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
 	}
 
@@ -237,6 +238,12 @@ void Scene::CreateBullet(pugi::xml_node itemNode, int x, int y, int direction)
 void Scene::InitPlayerSpawn(pugi::xml_node itemNode)
 {
 	playerptr->InitSpawn(itemNode);
+}
+
+void Scene::InitEnemySpawn(pugi::xml_node itemNode)
+{
+	EnemyAir* enemyair = (EnemyAir*)app->entityManager->CreateEntity(EntityType::ENEMYAIR, itemNode);
+	enemyair->InitSpawn(itemNode);
 }
 
 

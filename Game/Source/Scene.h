@@ -44,6 +44,8 @@ public:
 
 	void InitPlayerSpawn(pugi::xml_node itemNode);
 
+	void InitEnemySpawn(pugi::xml_node itemNode);
+
 public:
 
 	//L02: DONE 3: Declare a Player attribute 

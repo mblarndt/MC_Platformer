@@ -19,7 +19,7 @@ class EnemyAir : public Entity
 {
 public:
 
-	EnemyAir();
+	EnemyAir(pugi::xml_node parameters);
 
 	virtual ~EnemyAir();
 
@@ -35,6 +35,8 @@ public:
 
 	// Current animation check
 	Animation* currentAnimation = nullptr;
+
+	void InitSpawn(pugi::xml_node itemNode);
 
 public:
 
