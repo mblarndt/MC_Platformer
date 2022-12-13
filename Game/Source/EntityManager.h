@@ -37,6 +37,7 @@ public:
 public:
 
 	List<Entity*> entities;
+	iPoint playerPosition;
 
 };
 

@@ -371,7 +371,7 @@ bool Map::LoadObjectGroups(pugi::xml_node mapNode)
     {
         ObjectGroups* objectgroup = new ObjectGroups();
         ret = LoadObjects(objectNode, objectgroup);
-
+        LOG("ObjectGroup id : %d name : %s", objectNode.attribute("id").as_int(), objectNode.attribute("name").as_string());
         mapData.objectgroups.Add(objectgroup);
     }
     return ret;

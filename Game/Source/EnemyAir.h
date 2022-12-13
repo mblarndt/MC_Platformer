@@ -78,7 +78,6 @@ private:
 
 	// Enemy Movement Variables
 	float speed;
-
 };
 
 #endif // __ENEMYAIR_H__

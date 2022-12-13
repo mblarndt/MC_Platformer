@@ -8,6 +8,10 @@
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
+#include "Map.h"
+
+#include "Pathfinding.h"
+#include "EntityManager.h"
 
 EnemyAir::EnemyAir() : Entity(EntityType::ENEMYAIR)
 {
@@ -71,7 +75,21 @@ bool EnemyAir::Update()
 {
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
-	pbody->body->ApplyLinearImpulse(b2Vec2(0, GRAVITY_Y), pbody->body->GetPosition(), true);
+	
+
+	app->pathfinding->CreatePath(position, app->entityManager->playerPosition);
+
+	// Get path to make the pathfinding
+	if (app->pathfinding->GetLastPath() != nullptr) {
+		const DynArray<iPoint>* path = app->pathfinding->GetLastPath();
+
+		iPoint pos = app->map->MapToWorld(path->At(1)->x, path->At(1)->y);
+
+		b2Vec2 movVec = b2Vec2(pos.x - position.x, pos.y - position.y);
+
+		pbody->body->ApplyLinearImpulse(b2Vec2(movVec.x, movVec.y + GRAVITY_Y), pbody->body->GetPosition(), true);
+	}
+	else pbody->body->ApplyLinearImpulse(b2Vec2(0, GRAVITY_Y), pbody->body->GetPosition(), true);
 	
 	currentAnimation->Update();
 	SDL_Rect rect1 = currentAnimation->GetCurrentFrame();

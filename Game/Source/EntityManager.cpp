@@ -137,6 +137,9 @@ bool EntityManager::Update(float dt)
 		pEntity = item->data;
 
 		if (pEntity->active == false) continue;
+
+		if (pEntity->type == EntityType::PLAYER) playerPosition = pEntity->position;
+		
 		ret = item->data->Update();
 	}
 
