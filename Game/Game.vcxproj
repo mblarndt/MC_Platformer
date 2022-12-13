@@ -99,6 +99,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Bullet.cpp" />
+    <ClCompile Include="Source\EnemyAir.cpp" />
+    <ClCompile Include="Source\EnemyFloor.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\FadeToBlack.cpp" />
     <ClCompile Include="Source\Item.cpp" />
@@ -118,6 +120,8 @@
     <ClCompile Include="Source\Window.cpp" />
     <ClInclude Include="Source\Animation.h" />
     <ClInclude Include="Source\Bullet.h" />
+    <ClInclude Include="Source\EnemyAir.h" />
+    <ClInclude Include="Source\EnemyFloor.h" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FadeToBlack.h" />

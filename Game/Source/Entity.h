@@ -14,6 +14,8 @@ enum class EntityType
 	PLAYER,
 	ITEM,
 	BULLET,
+	ENEMYAIR,
+	ENEMYFLOOR,
 	UNKNOWN
 };
 

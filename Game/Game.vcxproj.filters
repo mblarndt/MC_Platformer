@@ -61,6 +61,12 @@
     <ClCompile Include="Source\Bullet.cpp">
       <Filter>Entities\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EnemyAir.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EnemyFloor.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -149,6 +155,12 @@
     </ClInclude>
     <ClInclude Include="Source\Bullet.h">
       <Filter>Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyAir.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyFloor.h">
+      <Filter>Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
