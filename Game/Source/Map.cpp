@@ -525,6 +525,12 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->type == ObjectTypes::OBJECTTYPE_ENEMYFLOOR) {
             //app->scene->CreateItem(object);
         }
+
+        switch (newObject->type) {
+        case ObjectTypes::OBJECTTYPE_SOLID:
+            PhysBody* floor = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
+            floor->ctype = ColliderType::FLOOR;
+        }
        
 
 
