@@ -3,7 +3,7 @@
  <tileset firstgid="1" name="Minecraft Tileset" tilewidth="32" tileheight="32" tilecount="120" columns="10">
   <image source="Minecraft Tileset.png" width="320" height="384"/>
  </tileset>
- <tileset firstgid="121" name="MetaData" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="2" columns="2">
+ <tileset firstgid="121" name="MapMetadata" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="2" columns="2">
   <image source="MapMetadata.png" width="67" height="34"/>
  </tileset>
  <objectgroup id="10" name="Items"/>
@@ -19321,7 +19321,7 @@
  </layer>
  <layer id="13" name="Navigation" width="160" height="15">
   <properties>
-   <property name="Draw" type="bool" value="true"/>
+   <property name="Draw" type="bool" value="false"/>
    <property name="Navigation" type="bool" value="true"/>
   </properties>
   <data>
@@ -21142,133 +21142,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile/>
-   <tile/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile/>
-   <tile/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile/>
-   <tile/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile/>
-   <tile/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile gid="122"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -21304,26 +21177,153 @@
    <tile/>
    <tile gid="122"/>
    <tile gid="122"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="122"/>
    <tile/>
    <tile/>
    <tile gid="122"/>
    <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile/>
+   <tile/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile/>
+   <tile/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile/>
+   <tile/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile gid="122"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>

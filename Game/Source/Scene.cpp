@@ -56,6 +56,17 @@ bool Scene::Start()
 	}
 
 
+	if (app->map->mapData.type == MapTypes::MAPTYPE_ISOMETRIC) {
+		uint width, height;
+		app->win->GetWindowSize(width, height);
+		app->render->camera.x = width / 2;
+
+		// Texture to highligh mouse position 
+		mouseTileTex = app->tex->Load("Assets/Maps/path.png");
+
+		// Texture to show path origin 
+		originTex = app->tex->Load("Assets/Maps/x.png");
+	}
 
 	if (app->map->mapData.type == MapTypes::MAPTYPE_ORTHOGONAL) {
 
@@ -138,6 +149,7 @@ bool Scene::Update(float dt)
 		{
 			app->pathfinding->CreatePath(origin, mouseTile);
 			originSelected = false;
+			app->render->DrawTexture(mouseTileTex, highlightedTileWorld.x, highlightedTileWorld.y);
 		}
 		else
 		{
@@ -152,6 +164,7 @@ bool Scene::Update(float dt)
 	for (uint i = 0; i < path->Count(); ++i)
 	{
 		iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+		LOG("Path X %i", pos.x, "Path Y %i", pos.y);
 		app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
 	}
 
@@ -162,12 +175,11 @@ bool Scene::Update(float dt)
 	return true;
 }
 
-// Called each loop iteration
 bool Scene::PostUpdate()
 {
 	bool ret = true;
 
-	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 
 	return ret;
