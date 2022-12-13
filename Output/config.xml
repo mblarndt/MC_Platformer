@@ -1,6 +1,6 @@
 <config>
   <app>
-    <title>Game Development Testbed</title>
+    <title>Slimy Jumper</title>
     <organization>UPC</organization>
   </app>
 
@@ -21,35 +21,37 @@
     <fx volume="128"/>
   </audio>
 
-  <!-- L02: DONE: Add an element for the entity manager and add the player parameters -->
+
   <scene>
 	  <player>
 		  <menu x="0" y="0"/>
 		  <cam offset="300"/>
-		  <startpos x="1216" y="322"/>
 		  <textures>
 			  <player path="Assets/Textures/Slime_Spritesheet.png" width="30" height="30"/>
 			  <death path="Assets/Textures/dead3.png" width="1024" height="480"/>
 			  <finish path="Assets/Textures/finish.png" width="1024" height="480"/>
 		  </textures>
+		  <animations width ="60" height="40">
+			  <idle row="0" startcol="0" endcol="1"/>
+			  <moveright row="2" startcol="0" endcol="1"/>
+			  <moveleft row="2" startcol="2" endcol="3"/>
+			  <jumpup row="1" startcol="0" endcol="0"/>
+			  <jumpdown row="1" startcol="1" endcol="1"/>
+			  <jumpstart row="1" startcol="6" endcol="9"/>
+			  <jumpend row="1" startcol="2" endcol="5"/>
+			  
+		  </animations>
 		  <audio>
 			  <hit path="Assets/Audio/Fx/hurt.ogg"/>
 			  <pickcoin path="Assets/Audio/Fx/pickcoin.ogg"/>
 			  <music path="Assets/Audio/Music/Sweden - C418.ogg"/>
 		  </audio>
-		  
-		  <movement speed="4.5" jumpforce="2.5" jumpsteps="8"/>
+		  <stats health="5" bullets="3"/>
+		  <movement speed="4.5" jumpforce="2.5"/>
 	  </player>
-
-	<item x="1300" y="322" texturepath="Assets/Textures/slimeball.png"/>
-	<item x="1400" y="322" texturepath="Assets/Textures/slimeball.png"/>
-    <item x="1450" y="322" texturepath="Assets/Textures/slimeball.png"/>
-    <item x="1500" y="322" texturepath="Assets/Textures/slimeball.png"/>
-    <item x="1550" y="322" texturepath="Assets/Textures/slimeball.png"/>
-	
-	<enemyFloor x="" y="" texturepath="Assets/Textures/ghosties.png"/>
-	<enemyAir x="1400" y="150" texturepath="Assets/Textures/ghosties.png"/>
   </scene>
+
+  <logoScene x="0" y="0" w="1024" h="480" texturepath="Assets/Textures/logo.png" duration="5.0f"/>
 
   <map>
     <mapfolder path="Assets/Maps/"/>

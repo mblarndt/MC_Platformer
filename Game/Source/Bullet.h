@@ -1,5 +1,5 @@
-#ifndef __ITEM_H__
-#define __ITEM_H__
+#ifndef __BULLET_H__
+#define __BULLET_H__
 
 #include "Entity.h"
 #include "Point.h"
@@ -7,12 +7,12 @@
 
 struct SDL_Texture;
 
-class Item : public Entity
+class Bullet : public Entity
 {
 public:
 
-	Item(pugi::xml_node paras);
-	virtual ~Item();
+	Bullet(pugi::xml_node paras);
+	virtual ~Bullet();
 
 	bool Awake();
 
@@ -24,7 +24,7 @@ public:
 
 	void OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact);
 
-	void ItemInitialisation(pugi::xml_node itemNode);
+	void BulletInitialisation(pugi::xml_node itemNode, int x, int y, int direction);
 
 public:
 
@@ -44,4 +44,4 @@ private:
 	int radius;
 };
 
-#endif // __ITEM_H__
+#endif // __BULLET_H__

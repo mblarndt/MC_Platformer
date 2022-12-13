@@ -15,12 +15,11 @@
 
 struct SDL_Texture;
 
-
 class EnemyAir : public Entity
 {
 public:
 
-	EnemyAir();
+	EnemyAir(pugi::xml_node parameters);
 
 	virtual ~EnemyAir();
 
@@ -36,6 +35,8 @@ public:
 
 	// Current animation check
 	Animation* currentAnimation = nullptr;
+
+	void InitSpawn(pugi::xml_node itemNode);
 
 public:
 
@@ -58,14 +59,14 @@ private:
 	int width;
 	int height;
 
-	//SDL_Texture* texFinish;
-	//const char* finishPath;
-	//int finishWidth;
-	//int finishHeight;
+	SDL_Texture* texFinish;
+	const char* finishPath;
+	int finishWidth;
+	int finishHeight;
 
 	//FX-Sound Variables
 	int hitFxId;
-	//const char* hitFxPath;
+	const char* hitFxPath;
 
 	//Player, Camera and Game States
 	bool enemyDeath;

@@ -13,7 +13,7 @@
 #include "Pathfinding.h"
 #include "EntityManager.h"
 
-EnemyAir::EnemyAir() : Entity(EntityType::ENEMYAIR)
+EnemyAir::EnemyAir(pugi::xml_node paras) : Entity(EntityType::ENEMYAIR)
 {
 	name.Create("EnemyAir");
 }
@@ -25,8 +25,8 @@ EnemyAir::~EnemyAir() {
 bool EnemyAir::Awake() {
 
 	//Get and initialize Enemy parameters from XML
-	position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
+	position.x = 1300;//parameters.attribute("x").as_int();
+	position.y = 400;//parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
 
 	width = 40;
@@ -77,7 +77,7 @@ bool EnemyAir::Update()
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
 	
 
-	app->pathfinding->CreatePath(position, app->entityManager->playerPosition);
+	app->pathfinding->CreatePath(position, app->scene->playerptr->position);
 
 	// Get path to make the pathfinding
 	if (app->pathfinding->GetLastPath() != nullptr) {
@@ -126,4 +126,46 @@ void EnemyAir::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 void EnemyAir::Debug() {
 
+}
+
+
+void EnemyAir::InitSpawn(pugi::xml_node itemNode)
+{
+	position.x = itemNode.attribute("x").as_int();
+	position.y = itemNode.attribute("y").as_int();
+	texturePath = parameters.attribute("texturepath").as_string();
+
+	width = 40;
+	height = 46;
+
+	// Initilize textures
+	texture = app->tex->Load(texturePath);
+
+
+	// Initialize Audio Fx
+
+
+	// Initialize States and Values 
+
+
+	// Animations
+	idle.PushBack({ 148, 2, width, height });
+	idle.PushBack({ 196, 2, width, height });
+	idle.PushBack({ 243, 2, width, height });
+	idle.loop = true;
+	//idle.pingpong = true;
+	idle.speed = 0.1f;
+
+	// Add physics to the enemy - initialize physics body
+	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, DYNAMIC);
+
+	// Assign collider type
+	pbody->ctype = ColliderType::ENEMY;
+
+	// Activate Collision Detection
+	pbody->listener = this;
+
+	pbody->body->SetFixedRotation(true);
+
+	currentAnimation = &idle;
 }

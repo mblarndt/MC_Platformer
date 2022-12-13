@@ -19,7 +19,7 @@ class Player : public Entity
 {
 public:
 
-	Player();
+	Player(pugi::xml_node paras);
 	
 	virtual ~Player();
 
@@ -30,7 +30,8 @@ public:
 	bool Update();
 
 	bool CleanUp();
-	
+
+
 	Animation idle;
 	Animation movementRight;
 	Animation movementLeft;
@@ -39,22 +40,69 @@ public:
 	Animation jumpUp;
 	Animation jumpDown;
 
+
 	// Current animation check
 	Animation* currentAnimation = nullptr;
 
 public:
 
-	bool LoadState(pugi::xml_node&);
-	bool SaveState(pugi::xml_node&);
-
-	void OnCollision(PhysBody* physA, PhysBody* physB);
+	void OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact);
 
 	void Debug();
+
+	void GetState();
+
+	void StateMachine();
+
+	void Shoot();
+
+	void HandleMovement();
+
+	void HandleDeath(bool dead);
+
+	void HandleFinish(bool finish);
+
+	void RenderEntity();
+
+	void PlayerCamera();
+
+	void InitSpawn(pugi::xml_node itemNode);
+
+	bool CamTransition(int start, int stop);
+
+	Animation createAnimation(Animation animation, bool loop, float speed);
 	
 	//Player Physics Body
 	PhysBody* pbody;
+	PhysBody* projectileBody;
 
 	b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
+
+
+	enum PlayerState {
+		IDLE,
+		MOVE_RIGHT,
+		MOVE_LEFT,
+		JUMP,
+		JUMP_LEFT,
+		JUMP_RIGHT,
+		FALL,
+		FALL_LEFT,
+		FALL_RIGHT,
+		GROUNDED,
+		DEAD
+	};
+
+	PlayerState state;
+	PlayerState preState;
+
+	bool grounded;
+	//playerState state;
+	int bullets;
+	int health;
+
+	int lastcamPos;
+
 private:
 
 	//Texture Variables
@@ -84,7 +132,6 @@ private:
 	bool playerDeath;
 	bool levelFinish;
 	bool startGame;
-	bool camMoved;
 
 	//Position Variables
 	iPoint spawn;
@@ -96,11 +143,33 @@ private:
 	//Player Movement Variables
 	float speed;
 	float jumpforce;
-	int jumpsteps;
 	int jumpcount;
-	int remainingJumpSteps;
-	bool isjumping;
-	int jumpStart_counter;
+
+	//States
+	int shootDir;
+
+	//Player 
+	
+
+	//Sensor Fixtures
+	b2PolygonShape shapeR;
+	b2PolygonShape shapeL;
+	b2PolygonShape shapeT;
+	b2PolygonShape shapeB;
+
+	b2FixtureDef fixtureDefR;
+	b2FixtureDef fixtureDefL;
+	b2FixtureDef fixtureDefT;
+	b2FixtureDef fixtureDefB;
+
+	//Animations
+	int spriteWidth;
+	int spriteHeight;
+	int row;
+	int column;
+
+
+	
 	
 };
 

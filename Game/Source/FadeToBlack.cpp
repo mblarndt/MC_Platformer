@@ -170,6 +170,7 @@ bool FadeToBlack::SwitchScenes(char* scene)
 			app->map->active = true;
 			app->physics->active = true;
 			app->titleScene->active = false;
+			app->input->active = true;
 		}
 
 		activeScene = scene;

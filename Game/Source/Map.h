@@ -43,6 +43,10 @@ enum ObjectTypes
 	OBJECTTYPE_DEATH,
 	OBJECTTYPE_FINISH,
 	OBJECTTYPE_ITEM,
+	OBJECTTYPE_PLAYERSPAWN,
+	OBJECTTYPE_CHECKPOINT,
+	OBJECTTYPE_ENEMYAIR,
+	OBJECTTYPE_ENEMYFLOOR,
 	OBJECTTYPE_ENTITY
 };
 
@@ -166,6 +170,14 @@ public:
 
 	iPoint WorldToMap(int x, int y);
 
+	bool LoadObjectGroups(pugi::xml_node mapNode);
+
+	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
+
+
+	SString mapFileName;
+	pugi::xml_parse_result nameResult;
+
 private:
 
 	bool LoadMap(pugi::xml_node mapFile);
@@ -183,9 +195,11 @@ private:
 	// L06: DONE 6: Load a group of properties 
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
-	bool LoadObjectGroups(pugi::xml_node mapNode);
+	
 
 	bool LoadObjects(pugi::xml_node& node, ObjectGroups* group);
+
+	
 
 public: 
 
@@ -194,7 +208,7 @@ public:
 
 private:
 
-    SString mapFileName;
+    //SString mapFileName;
 	SString mapFolder;
     bool mapLoaded;
 };

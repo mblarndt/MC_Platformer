@@ -4,12 +4,15 @@
 #include "Textures.h"
 #include "Map.h"
 #include "Physics.h"
+#include "EntityManager.h"
+#include "Scene.h"
 
 #include "Defs.h"
 #include "Log.h"
 
 #include <math.h>
 #include "SDL_image/include/SDL_image.h"
+#include "Item.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -28,6 +31,56 @@ bool Map::Awake(pugi::xml_node& config)
 
     mapFileName = config.child("mapfile").attribute("path").as_string();
     mapFolder = config.child("mapfolder").attribute("path").as_string();
+
+    return ret;
+}
+
+bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
+{
+    bool ret = false;
+    ListItem<MapLayer*>* item;
+    item = mapData.maplayers.start;
+
+    for (item = mapData.maplayers.start; item != NULL; item = item->next)
+    {
+        MapLayer* layer = item->data;
+
+        if (layer->properties.GetProperty("Navigation") != NULL && !layer->properties.GetProperty("Navigation")->value)
+            continue;
+
+        uchar* map = new uchar[layer->width * layer->height];
+        memset(map, 1, layer->width * layer->height);
+
+        for (int y = 0; y < mapData.height; ++y)
+        {
+            for (int x = 0; x < mapData.width; ++x)
+            {
+                int i = (y * layer->width) + x;
+
+                int tileId = layer->Get(x, y);
+                TileSet* tileset = (tileId > 0) ? GetTilesetFromTileId(tileId) : NULL;
+
+                if (tileset != NULL)
+                {
+                    //According to the mapType use the ID of the tile to set the walkability value
+                    if (mapData.type == MapTypes::MAPTYPE_ISOMETRIC && tileId == 25) map[i] = 1;
+                    else if (mapData.type == MapTypes::MAPTYPE_ORTHOGONAL && tileId == 122) map[i] = 1;
+                    else map[i] = 0;
+                }
+                else {
+                    LOG("CreateWalkabilityMap: Invalid tileset found");
+                    map[i] = 0;
+                }
+            }
+        }
+
+        *buffer = map;
+        width = mapData.width;
+        height = mapData.height;
+        ret = true;
+
+        break;
+    }
 
     return ret;
 }
@@ -79,18 +132,17 @@ iPoint Map::MapToWorld(int x, int y) const
 {
     iPoint ret;
 
-    // L08: TODO 1: Add isometric map to world coordinates
-    switch (mapData.type) {
-    case MAPTYPE_ORTHOGONAL:
+    // L08: DONE 1: Add isometric map to world coordinates
+    if (mapData.type == MAPTYPE_ORTHOGONAL)
+    {
         ret.x = x * mapData.tileWidth;
         ret.y = y * mapData.tileHeight;
-        break;
-    case MAPTYPE_ISOMETRIC:
-        ret.x = (x - y) * (mapData.tileWidth * 0.5f);
-        ret.y = (x + y) * (mapData.tileHeight * 0.5f);
-        break;
     }
-
+    else if (mapData.type == MAPTYPE_ISOMETRIC)
+    {
+        ret.x = (x - y) * (mapData.tileWidth / 2);
+        ret.y = (x + y) * (mapData.tileHeight / 2);
+    }
 
     return ret;
 }
@@ -100,15 +152,22 @@ iPoint Map::WorldToMap(int x, int y)
 {
     iPoint ret(0, 0);
 
-    switch (mapData.type) {
-    case MAPTYPE_ORTHOGONAL:
-        ret.x = mapData.tileWidth / x;
-        ret.y = mapData.tileHeight / y;
-        break;
-    case MAPTYPE_ISOMETRIC:
-        ret.x = (mapData.tileWidth / 0.5f) / (x - y);
-        ret.y = (mapData.tileHeight / 0.5f) / (x + y);
-        break;
+    if (mapData.type == MAPTYPE_ORTHOGONAL)
+    {
+        ret.x = x / mapData.tileWidth;
+        ret.y = y / mapData.tileHeight;
+    }
+    else if (mapData.type == MAPTYPE_ISOMETRIC)
+    {
+        float halfWidth = mapData.tileWidth * 0.5f;
+        float halfHeight = mapData.tileHeight * 0.5f;
+        ret.x = int((x / halfWidth + y / halfHeight) / 2);
+        ret.y = int((y / halfHeight - x / halfWidth) / 2);
+    }
+    else
+    {
+        LOG("Unknown map type");
+        ret.x = x; ret.y = y;
     }
 
     return ret;
@@ -128,7 +187,6 @@ SDL_Rect TileSet::GetTileRect(int gid) const
 
     return rect;
 }
-
 
 // L06: DONE 2: Pick the right Tileset based on a tile id
 TileSet* Map::GetTilesetFromTileId(int gid) const
@@ -186,6 +244,7 @@ bool Map::Load()
 
     pugi::xml_document mapFileXML;
     pugi::xml_parse_result result = mapFileXML.load_file(mapFileName.GetString());
+    //pugi::xml_parse_result nameResult = mapFileXML.load_file(mapFileName.GetString());
 
     if(result == NULL)
     {
@@ -411,22 +470,35 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->stringType == "finish") {
             newObject->type = ObjectTypes::OBJECTTYPE_FINISH;
         }
+        else if (newObject->stringType == "item") {
+            newObject->type = ObjectTypes::OBJECTTYPE_ITEM;
+        }
+        else if (newObject->stringType == "playerSpawn") {
+            newObject->type = ObjectTypes::OBJECTTYPE_PLAYERSPAWN;
+        }
+        else if (newObject->stringType == "enemyair") {
+            newObject->type = ObjectTypes::OBJECTTYPE_ENEMYAIR;
+        }
+        else if (newObject->stringType == "énemyfloor") {
+            newObject->type = ObjectTypes::OBJECTTYPE_ENEMYFLOOR;
+        }
+        else if (newObject->stringType == "checkpoint") {
+            newObject->type = ObjectTypes::OBJECTTYPE_CHECKPOINT;
+        }
         else
             newObject->type = ObjectTypes::OBJECTTYPE_ENTITY;
 
         newObject->height = object.attribute("height").as_int();
-        newObject->width = object.attribute("width").as_int();
-        
+        newObject->width = object.attribute("width").as_int();   
         newObject->x = object.attribute("x").as_int();
-        newObject->y = object.attribute("y").as_int();
-        
+        newObject->y = object.attribute("y").as_int();     
         newObject->name = object.attribute("name").as_string();
 
         cstr = "c" + cnr;
 
         if (newObject->type == ObjectTypes::OBJECTTYPE_SOLID) {
-            PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
-            cstr->ctype = ColliderType::FLOOR;
+            PhysBody* floor = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
+            floor->ctype = ColliderType::FLOOR;
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_DEATH) {
             PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
@@ -435,15 +507,36 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->type == ObjectTypes::OBJECTTYPE_FINISH) {
             PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
             cstr->ctype = ColliderType::FINISH;
+            LOG("Finish loaded");
         }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_CHECKPOINT) {
+            PhysBody* cstr = app->physics->CreateRectangleSensor(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
+            cstr->ctype = ColliderType::CHECKPOINT;
+        }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_PLAYERSPAWN) {
+            app->scene->InitPlayerSpawn(object);
+        }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_ITEM) {
+            app->scene->CreateItem(object);
+        }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_ENEMYAIR) {
+            //app->scene->InitEnemySpawn(object);
+        }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_ENEMYFLOOR) {
+            //app->scene->CreateItem(object);
+        }
+       
 
 
         group->object.Add(newObject);
+        
 
         cnr++;
     }
-
+    
     return ret;
+    LOG("DEBUG");
+    LOG("Finished loading Objects");
 }
 
 // L06: DONE 6: Load a group of properties from a node and fill a list with it
@@ -481,5 +574,3 @@ Properties::Property* Properties::GetProperty(const char* name)
 
     return p;
 }
-
-

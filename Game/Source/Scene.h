@@ -38,18 +38,28 @@ public:
 
 	bool LoadState(pugi::xml_node& data);
 
+	void CreateItem(pugi::xml_node itemNode);
+
+	void CreateBullet(pugi::xml_node itemNode, int x, int y, int direction);
+
+	void InitPlayerSpawn(pugi::xml_node itemNode);
+
+	void InitEnemySpawn(pugi::xml_node itemNode);
+
 public:
 
 	//L02: DONE 3: Declare a Player attribute 
 	Player* playerptr;
+	Item* itemptr;
 
 private:
 	SDL_Texture* img;
 	SDL_Texture* mouseTileTex = nullptr;
 	SDL_Texture* originTex = nullptr;
 
+	// L12: Debug pathfing
 	iPoint origin;
-	bool originSelected = true;
+	bool originSelected = false;
 
 };
 
