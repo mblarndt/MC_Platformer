@@ -16,7 +16,7 @@
 struct SDL_Texture;
 
 
-class Enemy : public Entity
+class EnemyAir : public Entity
 {
 public:
 
@@ -58,14 +58,14 @@ private:
 	int width;
 	int height;
 
-	SDL_Texture* texFinish;
-	const char* finishPath;
-	int finishWidth;
-	int finishHeight;
+	//SDL_Texture* texFinish;
+	//const char* finishPath;
+	//int finishWidth;
+	//int finishHeight;
 
 	//FX-Sound Variables
 	int hitFxId;
-	const char* hitFxPath;
+	//const char* hitFxPath;
 
 	//Player, Camera and Game States
 	bool enemyDeath;
