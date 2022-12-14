@@ -83,7 +83,6 @@ Entity* EntityManager::CreateEntity(EntityType type, pugi::xml_node paras)
 {
 	Entity* entity = nullptr; 
 
-
 	//L02: DONE 2: Instantiate entity according to the type and add the new entoty it to the list of Entities
 
 	switch (type)
@@ -92,7 +91,6 @@ Entity* EntityManager::CreateEntity(EntityType type, pugi::xml_node paras)
 	case EntityType::PLAYER:
 		entity = new Player(paras);
 		break;
-
 	case EntityType::ITEM:
 		entity = new Item(paras);
 		break;
@@ -103,7 +101,7 @@ Entity* EntityManager::CreateEntity(EntityType type, pugi::xml_node paras)
 		entity = new EnemyAir(paras);
 		break;
 	case EntityType::ENEMYFLOOR:
-		//entity = new EnemyFloor(paras);
+		entity = new EnemyFloor(paras);
 		break;
 
 	default: break;

@@ -187,6 +187,10 @@ void Scene::InitEnemySpawn(pugi::xml_node itemNode)
 {
 	EnemyAir* enemyair = (EnemyAir*)app->entityManager->CreateEntity(EntityType::ENEMYAIR, itemNode);
 	enemyair->InitSpawn(itemNode);
+
+	EnemyFloor* enemyfloor = (EnemyFloor*)app->entityManager->CreateEntity(EntityType::ENEMYFLOOR, itemNode);
+	enemyfloor->InitSpawn(itemNode);
+
 }
 
 void Scene::DebugPathfinding() {

@@ -31,18 +31,20 @@ bool EnemyAir::Awake() {
 bool EnemyAir::Start() {
 
 	health = 2;
+	pbody->body->SetGravityScale(0.0f);
 	return true;
 }
 
 bool EnemyAir::Update()
 {
-	if (health == 0) {
+	if (health <= 0) {
+		pbody->body->DestroyFixture(pbody->body->GetFixtureList());
 		app->entityManager->DestroyEntity(this);
 	}
 	FindPath();
 	Move();
 	RenderEntity();
-
+	UpdateAnim();
 	return true;
 }
 
@@ -66,7 +68,8 @@ bool EnemyAir::SaveState(pugi::xml_node& data)
 	return true;
 }
 
-void EnemyAir::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
+void EnemyAir::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact)
+{
 	LOG("EnemyAir Collision");
 	switch (physB->ctype)
 	{
@@ -80,13 +83,11 @@ void EnemyAir::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact)
 		//LOG("Item Collision UNKNOWN");
 		break;
 	}
-
 }
 
 void EnemyAir::Debug() {
 
 }
-
 
 void EnemyAir::InitSpawn(pugi::xml_node itemNode)
 {
@@ -104,9 +105,26 @@ void EnemyAir::InitSpawn(pugi::xml_node itemNode)
 	idle.PushBack({ 148, 2, width, height });
 	idle.PushBack({ 196, 2, width, height });
 	idle.PushBack({ 243, 2, width, height });
+	idle.PushBack({ 196, 2, width, height });
 	idle.loop = true;
 	//idle.pingpong = true;
-	idle.speed = 0.1f;
+	idle.speed = 0.12f;
+
+	leftanim.PushBack({ 148, 50, width, height });
+	leftanim.PushBack({ 196, 50, width, height });
+	leftanim.PushBack({ 243, 50, width, height });
+	leftanim.PushBack({ 196, 50, width, height });
+	leftanim.loop = true;
+	//leftanim.pingpong = true;
+	leftanim.speed = 0.12f;
+
+	rightanim.PushBack({ 148, 98, width, height });
+	rightanim.PushBack({ 196, 98, width, height });
+	rightanim.PushBack({ 243, 98, width, height });
+	rightanim.PushBack({ 196, 98, width, height });
+	rightanim.loop = true;
+	//leftanim.pingpong = true;
+	rightanim.speed = 0.12f;
 
 	// Add physics to the enemy - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, DYNAMIC);
@@ -166,7 +184,7 @@ void EnemyAir::FindPath()
 	iPoint playerTile = app->map->WorldToMap(app->scene->playerptr->position.x, app->scene->playerptr->position.y);
 	iPoint enemyTile = app->map->WorldToMap(position.x, position.y);
 	int distanceToPlayer = playerTile.DistanceTo(enemyTile);
-	if (distanceToPlayer > 10)
+	if (distanceToPlayer > 8)
 	{
 		behaviourState = IDLE;
 	}
@@ -190,4 +208,22 @@ void EnemyAir::RenderEntity()
 	currentAnimation->Update();
 	SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 	app->render->DrawTexture(texture, position.x, position.y, &rect1);
+}
+
+void EnemyAir::UpdateAnim()
+{
+	b2Vec2 currSpeed = pbody->body->GetLinearVelocity();
+
+	if (currSpeed.x > 1)
+	{
+		currentAnimation = &rightanim;
+	}
+	else if (currSpeed.x < -1)
+	{
+		currentAnimation = &leftanim;
+	}
+	else
+	{
+		currentAnimation = &idle;
+	}
 }

@@ -50,7 +50,7 @@
 		  <movement speed="4.5" jumpforce="2.5"/>
 	  </player>
   </scene>
-  <enemyFloor x="1300" y="360" texturepath="Assets/Textures/ghosties.png"/>
+  <enemyFloor x="2112" y="224" texturepath="Assets/Textures/ghosties.png"/>
   <enemyAir x="1400" y="150" texturepath="Assets/Textures/ghosties.png"/>
 
   <logoScene x="0" y="0" w="1024" h="480" texturepath="Assets/Textures/logo.png" duration="5.0f"/>

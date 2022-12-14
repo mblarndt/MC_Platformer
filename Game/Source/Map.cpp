@@ -479,7 +479,7 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->stringType == "enemyair") {
             newObject->type = ObjectTypes::OBJECTTYPE_ENEMYAIR;
         }
-        else if (newObject->stringType == "énemyfloor") {
+        else if (newObject->stringType == "enemyfloor") {
             newObject->type = ObjectTypes::OBJECTTYPE_ENEMYFLOOR;
         }
         else if (newObject->stringType == "checkpoint") {
@@ -523,7 +523,7 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
             app->scene->InitEnemySpawn(object);
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_ENEMYFLOOR) {
-            //app->scene->CreateItem(object);
+            app->scene->CreateItem(object);
         }
 
         switch (newObject->type) {

@@ -33,6 +33,8 @@ public:
 	bool CleanUp();
 
 	Animation idle;
+	Animation leftanim;
+	Animation rightanim;
 
 	// Current animation check
 	Animation* currentAnimation = nullptr;
@@ -69,6 +71,8 @@ public:
 	void FindPath();
 
 	void RenderEntity();
+
+	void UpdateAnim();
 
 	//Player Physics Body
 	PhysBody* pbody;
