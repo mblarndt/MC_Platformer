@@ -28,7 +28,7 @@ bool EnemyAir::Awake() {
 }
 
 bool EnemyAir::Start() {
-
+	pbody->body->SetGravityScale(0.0f);
 
 	return true;
 }
@@ -37,9 +37,7 @@ bool EnemyAir::Update()
 {
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
-	pbody->body->ApplyLinearImpulse(b2Vec2(0, GRAVITY_Y), pbody->body->GetPosition(), true);
-
-	
+	/*pbody->body->ApplyLinearImpulse(b2Vec2(0, GRAVITY_Y), pbody->body->GetPosition(), true);*/
 
 	app->pathfinding->ClearLastPath();
 	
@@ -53,12 +51,12 @@ bool EnemyAir::Update()
 		// Get path to make the pathfinding
 		if (app->pathfinding->GetLastPath() != nullptr) {
 			const DynArray<iPoint>* path = app->pathfinding->GetLastPath();
-			if (path != nullptr) {
-				iPoint pos = app->map->MapToWorld(path->At(1)->x, path->At(1)->y);
+			if (path->Count() > 0) {
+				iPoint pos = app->map->MapToWorld(path->At(0)->x, path->At(0)->y);
 
-				b2Vec2 movVec = b2Vec2(pos.x - position.x, pos.y - position.y);
-
-				pbody->body->ApplyLinearImpulse(b2Vec2(movVec.x, movVec.y + GRAVITY_Y), pbody->body->GetPosition(), true);
+				b2Vec2 movVec = b2Vec2((position.x - pos.x + app->render->camera.x), (pos.y - position.y + app->render->camera.y));
+				LOG("movVec x speed: %d  movVec y speed: %d", movVec.x, movVec.y);
+				pbody->body->SetLinearVelocity(movVec);
 			}
 		}
 	}
