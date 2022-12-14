@@ -421,7 +421,7 @@ void Player::HandleDeath(bool dead)
 			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 			app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
 			SDL_Rect rect = { 0, 0, 1024, 480 };
-			if (position.x < 2944)	app->render->DrawTexture(texDeath, position.x - camOffset, 0, &rect);
+			if (position.x < 2944)	app->render->DrawTexture(texDeath, app->render->camera.x * -1, 0, &rect);
 			else app->render->DrawTexture(texDeath, 3196, 0, &rect);
 			//frameCounter++;
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {

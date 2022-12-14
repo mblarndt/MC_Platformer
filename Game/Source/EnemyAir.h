@@ -79,6 +79,8 @@ public:
 
 	b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
 
+	int health;
+
 private:
 
 	//FX-Sound Variables
@@ -99,10 +101,6 @@ private:
 	int height;
 	SDL_Texture* mouseTileTex = nullptr;
 
-
-	// Enemy Movement Variables
-
-	int health;
 
 	int speed = 3;
 	bool right = true;

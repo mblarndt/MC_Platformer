@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Item.h"
 #include "EnemyAir.h"
+#include "EnemyFloor.h"
 struct SDL_Texture;
 
 class Scene : public Module
@@ -54,6 +55,7 @@ public:
 	Player* playerptr;
 	Item* itemptr;
 	EnemyAir* enemyairptr;
+	EnemyFloor* enemyfloorptr;
 
 private:
 	SDL_Texture* img;

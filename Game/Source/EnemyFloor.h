@@ -62,7 +62,7 @@ public:
 	bool LoadState(pugi::xml_node&);
 	bool SaveState(pugi::xml_node&);
 
-	void OnCollision(PhysBody* physA, PhysBody* physB);
+	void OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact);
 
 	void Debug();
 
@@ -78,6 +78,8 @@ public:
 	PhysBody* pbody;
 
 	b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
+
+	int health;
 
 private:
 
@@ -99,8 +101,6 @@ private:
 	int height;
 	SDL_Texture* mouseTileTex = nullptr;
 
-
-	int health;
 
 	int speed = 3;
 	bool right = true;

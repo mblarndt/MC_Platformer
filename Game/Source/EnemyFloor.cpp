@@ -68,7 +68,7 @@ bool EnemyFloor::SaveState(pugi::xml_node& data)
 	return true;
 }
 
-void EnemyFloor::OnCollision(PhysBody* physA, PhysBody* physB)
+void EnemyFloor::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact)
 {
 	LOG("EnemyFloor Collision");
 	switch (physB->ctype)
@@ -77,7 +77,7 @@ void EnemyFloor::OnCollision(PhysBody* physA, PhysBody* physB)
 		break;
 	case ColliderType::BULLET:
 		LOG("Item Collision DEATH");
-		health = health - 1;
+		health--;
 		break;
 	case ColliderType::UNKNOWN:
 		//LOG("Item Collision UNKNOWN");

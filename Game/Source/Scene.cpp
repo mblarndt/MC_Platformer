@@ -114,7 +114,7 @@ bool Scene::Update(float dt)
 
 	DebugPathfinding();
 
-
+	LOG("camera x is: %d", app->render->camera.x);
 
 	return true;
 }
@@ -146,6 +146,18 @@ bool Scene::SaveState(pugi::xml_node &data)
 	player.append_attribute("health") = playerptr->health;
 	player.append_attribute("bullets") = playerptr->bullets;
 
+	pugi::xml_node enemyair = data.append_child("enemyair");
+
+	enemyair.append_attribute("x") = enemyairptr->position.x;
+	enemyair.append_attribute("y") = enemyairptr->position.y;
+	enemyair.append_attribute("health") = enemyairptr->health;
+
+	pugi::xml_node enemyfloor = data.append_child("enemyfloor");
+
+	enemyfloor.append_attribute("x") = enemyfloorptr->position.x;
+	enemyfloor.append_attribute("y") = enemyfloorptr->position.y;
+	enemyfloor.append_attribute("health") = enemyfloorptr->health;
+
 	return true;
 }
 
@@ -156,11 +168,27 @@ bool Scene::LoadState(pugi::xml_node& data)
 	playerptr->health = data.child("player").attribute("health").as_int();
 	playerptr->bullets = data.child("player").attribute("bullets").as_int();
 
-
 	playerptr->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(playerptr->position.x),
 												PIXEL_TO_METERS(playerptr->position.y)),0);
-
 	playerptr->velocitx.x = 0;
+
+
+	enemyairptr->position.x = data.child("enemyair").attribute("x").as_int();
+	enemyairptr->position.y = data.child("enemyair").attribute("y").as_int();
+	enemyairptr->health = data.child("enemyair").attribute("health").as_int();
+
+	enemyairptr->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(enemyairptr->position.x),
+												  PIXEL_TO_METERS(enemyairptr->position.y)), 0);
+
+
+	enemyfloorptr->position.x = data.child("enemyfloor").attribute("x").as_int();
+	enemyfloorptr->position.y = data.child("enemyfloor").attribute("y").as_int();
+	enemyfloorptr->health = data.child("enemyfloor").attribute("health").as_int();
+
+	enemyfloorptr->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(enemyfloorptr->position.x),
+												    PIXEL_TO_METERS(enemyfloorptr->position.y)), 0);
+
+
 	app->entityManager->LoadState(data);
 
 	return true;
@@ -185,11 +213,11 @@ void Scene::InitPlayerSpawn(pugi::xml_node itemNode)
 
 void Scene::InitEnemySpawn(pugi::xml_node itemNode)
 {
-	EnemyAir* enemyair = (EnemyAir*)app->entityManager->CreateEntity(EntityType::ENEMYAIR, itemNode);
-	enemyair->InitSpawn(itemNode);
+	enemyairptr = (EnemyAir*)app->entityManager->CreateEntity(EntityType::ENEMYAIR, itemNode);
+	enemyairptr->InitSpawn(itemNode);
 
-	EnemyFloor* enemyfloor = (EnemyFloor*)app->entityManager->CreateEntity(EntityType::ENEMYFLOOR, itemNode);
-	enemyfloor->InitSpawn(itemNode);
+	enemyfloorptr = (EnemyFloor*)app->entityManager->CreateEntity(EntityType::ENEMYFLOOR, itemNode);
+	enemyfloorptr->InitSpawn(itemNode);
 
 }
 
