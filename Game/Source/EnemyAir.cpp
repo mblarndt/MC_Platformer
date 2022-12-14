@@ -36,32 +36,10 @@ bool EnemyAir::Start() {
 
 bool EnemyAir::Update()
 {
-
-	if (health == 0)
-		app->entityManager->DestroyEntity(this);
-
-	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
 	
-
-	app->pathfinding->CreatePath(position, app->scene->playerptr->position);
-/*
-	// Get path to make the pathfinding
-	if (app->pathfinding->GetLastPath() != nullptr) {
-		const DynArray<iPoint>* path = app->pathfinding->GetLastPath();
-
-		iPoint pos = app->map->MapToWorld(path->At(1)->x, path->At(1)->y);
-
-		b2Vec2 movVec = b2Vec2(pos.x - position.x, pos.y - position.y);
-
-		pbody->body->ApplyLinearImpulse(b2Vec2(movVec.x, movVec.y + GRAVITY_Y), pbody->body->GetPosition(), true);
-	}
-	else 
-*/
-	//pbody->body->ApplyLinearImpulse(b2Vec2(0, -GRAVITY_Y), pbody->body->GetPosition(), true);
-	currentAnimation->Update();
-	SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
-	app->render->DrawTexture(texture, position.x, position.y, &rect1);
+	FindPath();
+	Move();
+	RenderEntity();
 
 	return true;
 }
@@ -94,7 +72,7 @@ void EnemyAir::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	case ColliderType::BULLET:
 		//LOG("Item Collision DEATH");
-		health = health - 1;
+		//health = health - 1;
 		break;
 	case ColliderType::UNKNOWN:
 		//LOG("Item Collision UNKNOWN");
@@ -147,4 +125,74 @@ void EnemyAir::InitSpawn(pugi::xml_node itemNode)
 	pbody->body->SetFixedRotation(true);
 
 	currentAnimation = &idle;
+}
+
+void EnemyAir::Move()
+{
+	b2Vec2 vel = pbody->body->GetLinearVelocity();
+	b2Vec2 desiredVel = { 0,0 };
+	b2Vec2 impulse;
+
+	if (behaviourState == CHASE) {
+		if (path->Count() > 1) {
+			const iPoint* tile = path->At(0);
+			const iPoint* nextTile = path->At(1);
+
+			b2Vec2 dif = { (float)nextTile->x - tile->x , (float)nextTile->y - tile->y };
+			dif.Normalize();
+			desiredVel.x = dif.x * speed;
+
+			desiredVel.y = dif.y * speed;
+
+		}
+	}
+	else
+	{
+		desiredVel = { 0,0 };
+	}
+	if (desiredVel.x > 0)
+	{
+		right = true;
+	}
+	else if (desiredVel.x < 0)
+	{
+		right = false;
+	}
+
+
+	impulse = desiredVel - vel;
+	float mass = pbody->body->GetMass();
+	pbody->body->ApplyLinearImpulse(impulse, pbody->body->GetWorldCenter(), true);
+}
+
+
+void EnemyAir::FindPath()
+{
+	iPoint playerTile = app->map->WorldToMap(app->scene->playerptr->position.x, app->scene->playerptr->position.y);
+	iPoint enemyTile = app->map->WorldToMap(position.x, position.y);
+	int distanceToPlayer = playerTile.DistanceTo(enemyTile);
+	if (distanceToPlayer > 10)
+	{
+		behaviourState = IDLE;
+	}
+	else {
+
+		if (app->pathfinding->CreatePath(enemyTile, playerTile) != -1) {
+			behaviourState = CHASE;
+			path = app->pathfinding->GetLastPath();
+		}
+		else {
+			behaviourState = IDLE;
+		}
+	}
+}
+
+void EnemyAir::RenderEntity()
+{
+	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
+	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
+
+	currentAnimation->Update();
+	SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
+	app->render->DrawTexture(texture, position.x, position.y, &rect1);
 }

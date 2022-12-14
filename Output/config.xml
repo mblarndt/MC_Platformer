@@ -46,7 +46,7 @@
 			  <pickcoin path="Assets/Audio/Fx/pickcoin.ogg"/>
 			  <music path="Assets/Audio/Music/Sweden - C418.ogg"/>
 		  </audio>
-		  <stats health="5" bullets="3"/>
+		  <stats health="5" bullets="100"/>
 		  <movement speed="4.5" jumpforce="2.5"/>
 	  </player>
   </scene>

@@ -264,7 +264,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		app->SaveGameRequest();
 		break;
 	case ColliderType::ENEMY:
-		health = health - 1;
+		//health = health - 1;
 		pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
 		break;
 	case ColliderType::UNKNOWN:
