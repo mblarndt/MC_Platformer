@@ -102,26 +102,26 @@ void EnemyFloor::InitSpawn(pugi::xml_node itemNode)
 	texture = app->tex->Load(texturePath);
 
 	// Animations
-	idle.PushBack({ 148, 2, width, height });
-	idle.PushBack({ 196, 2, width, height });
-	idle.PushBack({ 243, 2, width, height });
-	idle.PushBack({ 196, 2, width, height });
+	idle.PushBack({ 436, 194, width, height });
+	idle.PushBack({ 484, 194, width, height });
+	idle.PushBack({ 531, 194, width, height });
+	idle.PushBack({ 484, 194, width, height });
 	idle.loop = true;
 	//idle.pingpong = true;
 	idle.speed = 0.12f;
 
-	leftanim.PushBack({ 148, 50, width, height });
-	leftanim.PushBack({ 196, 50, width, height });
-	leftanim.PushBack({ 243, 50, width, height });
-	leftanim.PushBack({ 196, 50, width, height });
+	leftanim.PushBack({ 436, 242, width, height });
+	leftanim.PushBack({ 484, 242, width, height });
+	leftanim.PushBack({ 531, 242, width, height });
+	leftanim.PushBack({ 484, 242, width, height });
 	leftanim.loop = true;
 	//leftanim.pingpong = true;
 	leftanim.speed = 0.12f;
 
-	rightanim.PushBack({ 148, 98, width, height });
-	rightanim.PushBack({ 196, 98, width, height });
-	rightanim.PushBack({ 243, 98, width, height });
-	rightanim.PushBack({ 196, 98, width, height });
+	rightanim.PushBack({ 436, 290, width, height });
+	rightanim.PushBack({ 484, 290, width, height });
+	rightanim.PushBack({ 531, 290, width, height });
+	rightanim.PushBack({ 484, 290, width, height });
 	rightanim.loop = true;
 	//leftanim.pingpong = true;
 	rightanim.speed = 0.12f;
