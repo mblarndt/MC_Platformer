@@ -114,8 +114,6 @@ bool Scene::Update(float dt)
 
 	DebugPathfinding();
 
-	LOG("camera x is: %d", app->render->camera.x);
-
 	return true;
 }
 
@@ -211,11 +209,15 @@ void Scene::InitPlayerSpawn(pugi::xml_node itemNode)
 	playerptr->InitSpawn(itemNode);
 }
 
-void Scene::InitEnemySpawn(pugi::xml_node itemNode)
+void Scene::InitEnemyAirSpawn(pugi::xml_node itemNode)
 {
 	enemyairptr = (EnemyAir*)app->entityManager->CreateEntity(EntityType::ENEMYAIR, itemNode);
 	enemyairptr->InitSpawn(itemNode);
 
+}
+
+void Scene::InitEnemyFloorSpawn(pugi::xml_node itemNode)
+{
 	enemyfloorptr = (EnemyFloor*)app->entityManager->CreateEntity(EntityType::ENEMYFLOOR, itemNode);
 	enemyfloorptr->InitSpawn(itemNode);
 

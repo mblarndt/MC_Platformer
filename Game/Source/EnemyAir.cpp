@@ -93,7 +93,7 @@ void EnemyAir::InitSpawn(pugi::xml_node itemNode)
 {
 	position.x = itemNode.attribute("x").as_int();
 	position.y = itemNode.attribute("y").as_int();
-	texturePath = "Assets/Textures/ghosties.png";//parameters.attribute("texturepath").as_string();
+	texturePath = "Assets/Textures/ghosties.png";
 
 	width = 40;
 	height = 46;

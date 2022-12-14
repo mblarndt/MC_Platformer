@@ -45,7 +45,9 @@ public:
 
 	void InitPlayerSpawn(pugi::xml_node itemNode);
 
-	void InitEnemySpawn(pugi::xml_node itemNode);
+	void InitEnemyAirSpawn(pugi::xml_node itemNode);
+	
+	void InitEnemyFloorSpawn(pugi::xml_node itemNode);
 
 	void DebugPathfinding();
 
