@@ -225,17 +225,20 @@ void Scene::InitEnemyFloorSpawn(pugi::xml_node itemNode)
 
 void Scene::DebugPathfinding() {
 
-	// L12: Get the latest calculated path and draw
-	const DynArray<iPoint>* path = app->pathfinding->GetLastPath();
-	for (uint i = 0; i < path->Count(); ++i)
-	{
-		iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-		app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
-	}
+	if (app->physics->debug) {
 
-	// L12: Debug pathfinding
-	iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
-	app->render->DrawTexture(originTex, originScreen.x, originScreen.y);
+		// L12: Get the latest calculated path and draw
+		const DynArray<iPoint>* path = app->pathfinding->GetLastPath();
+		for (uint i = 0; i < path->Count(); ++i)
+		{
+			iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+			app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
+		}
+
+		// L12: Debug pathfinding
+		iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
+		app->render->DrawTexture(originTex, originScreen.x, originScreen.y);
+	}
 }
 
 
