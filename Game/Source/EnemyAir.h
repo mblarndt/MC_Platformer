@@ -60,7 +60,7 @@ public:
 	bool LoadState(pugi::xml_node&);
 	bool SaveState(pugi::xml_node&);
 
-	void OnCollision(PhysBody* physA, PhysBody* physB);
+	void OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact);
 
 	void Debug();
 
@@ -100,7 +100,7 @@ private:
 
 	int health;
 
-	int speed = 5;
+	int speed = 3;
 	bool right = true;
 	BehaviourState behaviourState = IDLE;
 	SString moveClass;

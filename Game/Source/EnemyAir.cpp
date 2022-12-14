@@ -30,7 +30,7 @@ bool EnemyAir::Awake() {
 
 bool EnemyAir::Start() {
 
-
+	health = 2;
 	return true;
 }
 
@@ -66,14 +66,14 @@ bool EnemyAir::SaveState(pugi::xml_node& data)
 	return true;
 }
 
-void EnemyAir::OnCollision(PhysBody* physA, PhysBody* physB) {
+void EnemyAir::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	LOG("EnemyAir Collision");
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
 		break;
 	case ColliderType::BULLET:
-		//LOG("Item Collision DEATH");
+		LOG("Item Collision DEATH");
 		health = health - 1;
 		break;
 	case ColliderType::UNKNOWN:
@@ -99,8 +99,6 @@ void EnemyAir::InitSpawn(pugi::xml_node itemNode)
 
 	// Initilize textures
 	texture = app->tex->Load(texturePath);
-
-	health = 1;
 
 	// Animations
 	idle.PushBack({ 148, 2, width, height });
