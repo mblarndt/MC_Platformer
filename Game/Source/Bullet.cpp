@@ -72,6 +72,9 @@ void Bullet::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	case ColliderType::FLOOR:
 		LOG("Bullet Collision FLOOR");
 		break;
+	case ColliderType::ENEMY:
+		LOG("Bullet Collision ENEMY");
+		break;
 	case ColliderType::UNKNOWN:
 		LOG("Bullet Collision UNKNOWN");
 		break;

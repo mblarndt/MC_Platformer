@@ -36,7 +36,9 @@ bool EnemyAir::Start() {
 
 bool EnemyAir::Update()
 {
-	
+	if (health == 0) {
+		app->entityManager->DestroyEntity(this);
+	}
 	FindPath();
 	Move();
 	RenderEntity();
@@ -65,14 +67,14 @@ bool EnemyAir::SaveState(pugi::xml_node& data)
 }
 
 void EnemyAir::OnCollision(PhysBody* physA, PhysBody* physB) {
-
+	LOG("EnemyAir Collision");
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
 		break;
 	case ColliderType::BULLET:
 		//LOG("Item Collision DEATH");
-		//health = health - 1;
+		health = health - 1;
 		break;
 	case ColliderType::UNKNOWN:
 		//LOG("Item Collision UNKNOWN");
@@ -99,11 +101,6 @@ void EnemyAir::InitSpawn(pugi::xml_node itemNode)
 	texture = app->tex->Load(texturePath);
 
 	health = 1;
-	// Initialize Audio Fx
-
-
-	// Initialize States and Values 
-
 
 	// Animations
 	idle.PushBack({ 148, 2, width, height });

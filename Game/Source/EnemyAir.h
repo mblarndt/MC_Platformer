@@ -93,6 +93,8 @@ private:
 	const char* texturePath;
 	int width;
 	int height;
+	SDL_Texture* mouseTileTex = nullptr;
+
 
 	// Enemy Movement Variables
 
