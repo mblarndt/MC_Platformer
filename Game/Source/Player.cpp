@@ -265,7 +265,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		break;
 	case ColliderType::ENEMY:
 		//health = health - 1;
-		pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
+		pbody->body->ApplyLinearImpulse(b2Vec2(1, 0), pbody->body->GetPosition(), true);
 		break;
 	case ColliderType::UNKNOWN:
 		//LOG("Collision UNKNOWN");
