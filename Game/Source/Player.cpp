@@ -97,6 +97,9 @@ bool Player::Awake() {
 	spriteHeight = row = parameters.child("animations").attribute("height").as_int();
 	spriteWidth = column = parameters.child("animations").attribute("width").as_int();
 
+	idle.width = movementLeft.width = movementRight.width = jumpUp.width = jumpDown.width = jumpStart.width = jumpEnd.width = spriteWidth;
+	idle.height = movementLeft.height = movementRight.height = jumpUp.height = jumpDown.height = jumpStart.height = jumpEnd.height = spriteHeight;
+
 	return true;
 }
 
@@ -116,13 +119,13 @@ bool Player::Start() {
 	remainingPixels = 0;
 
 	//Animations
-	idle = createAnimation(idle, true, 0.1f);
-    movementRight = createAnimation(movementRight, true, 0.1f);
-	movementLeft = createAnimation(movementLeft, true, 0.1f);
-	jumpUp = createAnimation(jumpUp, true, 0.1f);
-	jumpDown = createAnimation(jumpDown, true, 0.1f);
-	jumpEnd = createAnimation(jumpEnd, false, 0.2f);
-	jumpStart = createAnimation(jumpStart, false, 0.2f);	
+	idle = app->animation->CreateAnimation(idle, true, 0.1f);
+    movementRight = app->animation->CreateAnimation(movementRight, true, 0.1f);
+	movementLeft = app->animation->CreateAnimation(movementLeft, true, 0.1f);
+	jumpUp = app->animation->CreateAnimation(jumpUp, true, 0.1f);
+	jumpDown = app->animation->CreateAnimation(jumpDown, true, 0.1f);
+	jumpEnd = app->animation->CreateAnimation(jumpEnd, false, 0.2f);
+	jumpStart = app->animation->CreateAnimation(jumpStart, false, 0.2f);	
 	
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width/2), position.y + (height/2), width, height, bodyType::DYNAMIC);
@@ -496,15 +499,4 @@ bool Player::CamTransition(int start, int stop)
 		ret = true;
 
 	return ret;
-}
-
-Animation Player::createAnimation(Animation animation, bool loop, float animSpeed)
-{
-	for (int i = animation.startCol; i <= animation.endCol; i++) {
-		animation.PushBack({ i * column,  animation.row * row, spriteWidth, spriteHeight });
-	}
-	animation.loop = loop;
-	animation.speed = animSpeed;
-
-	return animation;
 }

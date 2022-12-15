@@ -12,6 +12,7 @@
 #include "Physics.h"
 #include "FadeToBlack.h"
 #include "Pathfinding.h"
+#include "Animation.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -38,6 +39,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	entityManager = new EntityManager();
 	map = new Map();
 	pathfinding = new PathFinding();
+	animation = new Animation();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -57,6 +59,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 
 	AddModule(fadeToBlack);
 	AddModule(pathfinding);
+	AddModule(animation);
 	// Render last to swap buffer
 	AddModule(render);
 }

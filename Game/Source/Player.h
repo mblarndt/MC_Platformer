@@ -69,8 +69,6 @@ public:
 	void InitSpawn(pugi::xml_node itemNode);
 
 	bool CamTransition(int start, int stop);
-
-	Animation createAnimation(Animation animation, bool loop, float speed);
 	
 	//Player Physics Body
 	PhysBody* pbody;

@@ -95,33 +95,33 @@ void EnemyFloor::InitSpawn(pugi::xml_node itemNode)
 	position.y = itemNode.attribute("y").as_int();
 	texturePath = "Assets/Textures/ghosties.png";
 
-	width = 40;
-	height = 46;
+	width = 48;
+	height = 48;
 
 	// Initilize textures
 	texture = app->tex->Load(texturePath);
 
 	// Animations
-	idle.PushBack({ 436, 194, width, height });
-	idle.PushBack({ 484, 194, width, height });
-	idle.PushBack({ 531, 194, width, height });
-	idle.PushBack({ 484, 194, width, height });
+	idle.PushBack({292, 192, width, height });
+	//idle.PushBack({ 484, 194, width, height });
+	//idle.PushBack({ 531, 194, width, height });
+	//idle.PushBack({ 484, 194, width, height });
 	idle.loop = true;
 	//idle.pingpong = true;
 	idle.speed = 0.12f;
 
-	leftanim.PushBack({ 436, 242, width, height });
-	leftanim.PushBack({ 484, 242, width, height });
-	leftanim.PushBack({ 531, 242, width, height });
-	leftanim.PushBack({ 484, 242, width, height });
+	leftanim.PushBack({ 4 * width, 6 * height, width, height });
+	leftanim.PushBack({ 4 * width, 6 * height, width, height });
+	leftanim.PushBack({ 5 * width, 7 * height, width, height });
+	leftanim.PushBack({ 5 * width, 7 * height, width, height });
 	leftanim.loop = true;
 	//leftanim.pingpong = true;
 	leftanim.speed = 0.12f;
 
-	rightanim.PushBack({ 436, 290, width, height });
-	rightanim.PushBack({ 484, 290, width, height });
-	rightanim.PushBack({ 531, 290, width, height });
-	rightanim.PushBack({ 484, 290, width, height });
+	rightanim.PushBack({ 5 * width, 7 * height, width, height });
+	rightanim.PushBack({ 5 * width, 7 * height, width, height });
+	rightanim.PushBack({ 5 * width, 7 * height, width, height });
+	rightanim.PushBack({ 5 * width, 7 * height, width, height });
 	rightanim.loop = true;
 	//leftanim.pingpong = true;
 	rightanim.speed = 0.12f;
