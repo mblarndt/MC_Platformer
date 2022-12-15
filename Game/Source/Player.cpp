@@ -166,8 +166,7 @@ bool Player::Start() {
 
 bool Player::Update()
 {
-
-	if (health == 0)
+	if (health < 1)
 		playerDeath = true;
 
 	//Activate Game
@@ -182,7 +181,10 @@ bool Player::Update()
 
 		//Main Loop starts when CamTransition finished
 		if (CamTransition(0, spawn.x) && levelFinish == false) {
+
+
 			if (playerDeath == false) {
+				
 
 				/*----------------------------Follow Camera--------------------------*/
 				PlayerCamera();
@@ -264,8 +266,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		app->SaveGameRequest();
 		break;
 	case ColliderType::ENEMY:
-		//health = health - 1;
-		pbody->body->ApplyLinearImpulse(b2Vec2(1, 0), pbody->body->GetPosition(), true);
+		app->audio->PlayFx(hitFxId);
+		health = health - 1;
+		pbody->body->ApplyLinearImpulse(b2Vec2(2, 0), pbody->body->GetPosition(), true);
+
 		break;
 	case ColliderType::UNKNOWN:
 		//LOG("Collision UNKNOWN");
@@ -409,7 +413,6 @@ void Player::HandleMovement()
 void Player::HandleDeath(bool dead)
 {
 	if (dead) {
-		health = 7;
 		currentAnimation = &jumpStart;
 		if (frameCounter < 30) {
 			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
@@ -424,7 +427,7 @@ void Player::HandleDeath(bool dead)
 			app->render->DrawTexture(texDeath, app->render->camera.x * -1, 0, &rect);
 			//frameCounter++;
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-				
+				health = 5;
 				position.x = spawn.x;
 				position.y = spawn.y;
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
