@@ -77,7 +77,12 @@ void EnemyFloor::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contac
 		break;
 	case ColliderType::BULLET:
 		LOG("Item Collision DEATH");
+		pbody->body->ApplyLinearImpulse(b2Vec2(direction * 3, 0), pbody->body->GetPosition(), true);
 		health--;
+		break;
+	case ColliderType::DEATH:
+		LOG("Item Collision DEATH");
+		health = 0;
 		break;
 	case ColliderType::UNKNOWN:
 		//LOG("Item Collision UNKNOWN");
@@ -104,18 +109,18 @@ void EnemyFloor::InitSpawn(pugi::xml_node itemNode)
 	texture = app->tex->Load(texturePath);
 
 	// Animations
-	idle.startCol = 7;
-	idle.endCol = 11;
+	idle.startCol = 0;
+	idle.endCol = 3;
 	idle.row = 4;
-	idle = app->animation->CreateAnimation(idle, true, 0.12f);
+	idle = app->animation->CreateAnimation(idle, true, 0.05f);
 
-	leftanim.startCol = 6;
-	leftanim.endCol = 11;
+	leftanim.startCol = 0;
+	leftanim.endCol = 3;
 	leftanim.row = 5;
 	leftanim = app->animation->CreateAnimation(leftanim, true, 0.12f);
 
-	rightanim.startCol = 6;
-	rightanim.endCol = 11;
+	rightanim.startCol = 0;
+	rightanim.endCol = 3;
 	rightanim.row = 6;
 	rightanim = app->animation->CreateAnimation(rightanim, true, 0.12f);
 
@@ -207,10 +212,12 @@ void EnemyFloor::UpdateAnim()
 
 	if (currSpeed.x > 1)
 	{
+		direction = 1;
 		currentAnimation = &rightanim;
 	}
 	else if (currSpeed.x < -1)
 	{
+		direction = -1;
 		currentAnimation = &leftanim;
 	}
 	else

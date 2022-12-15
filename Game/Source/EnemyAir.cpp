@@ -78,6 +78,7 @@ void EnemyAir::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact)
 		break;
 	case ColliderType::BULLET:
 		LOG("Item Collision DEATH");
+		pbody->body->ApplyLinearImpulse(b2Vec2(direction * 3, 0), pbody->body->GetPosition(), true);
 		health = health - 1;
 		break;
 	case ColliderType::UNKNOWN:

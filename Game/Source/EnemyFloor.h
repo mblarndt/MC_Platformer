@@ -109,6 +109,8 @@ private:
 	bool isJumping = false;
 	const DynArray<iPoint>* path;
 
+	int direction;
+
 
 
 
