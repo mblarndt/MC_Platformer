@@ -6,7 +6,7 @@
 	<audio />
 	<physics />
 	<scene>
-		<player x="1573" y="290" health="5" bullets="82" />
+		<player x="1573" y="290" health="7" bullets="82" />
 		<enemyair x="1467" y="263" health="0" />
 		<enemyfloor x="1387" y="305" health="2" />
 	</scene>
