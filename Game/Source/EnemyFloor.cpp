@@ -97,34 +97,27 @@ void EnemyFloor::InitSpawn(pugi::xml_node itemNode)
 
 	width = 48;
 	height = 48;
+	idle.width = leftanim.width = rightanim.width = width;
+	idle.height = leftanim.height = rightanim.height = height;
 
 	// Initilize textures
 	texture = app->tex->Load(texturePath);
 
 	// Animations
-	idle.PushBack({292, 192, width, height });
-	//idle.PushBack({ 484, 194, width, height });
-	//idle.PushBack({ 531, 194, width, height });
-	//idle.PushBack({ 484, 194, width, height });
-	idle.loop = true;
-	//idle.pingpong = true;
-	idle.speed = 0.12f;
+	idle.startCol = 7;
+	idle.endCol = 11;
+	idle.row = 4;
+	idle = app->animation->CreateAnimation(idle, true, 0.12f);
 
-	leftanim.PushBack({ 4 * width, 6 * height, width, height });
-	leftanim.PushBack({ 4 * width, 6 * height, width, height });
-	leftanim.PushBack({ 5 * width, 7 * height, width, height });
-	leftanim.PushBack({ 5 * width, 7 * height, width, height });
-	leftanim.loop = true;
-	//leftanim.pingpong = true;
-	leftanim.speed = 0.12f;
+	leftanim.startCol = 6;
+	leftanim.endCol = 11;
+	leftanim.row = 5;
+	leftanim = app->animation->CreateAnimation(leftanim, true, 0.12f);
 
-	rightanim.PushBack({ 5 * width, 7 * height, width, height });
-	rightanim.PushBack({ 5 * width, 7 * height, width, height });
-	rightanim.PushBack({ 5 * width, 7 * height, width, height });
-	rightanim.PushBack({ 5 * width, 7 * height, width, height });
-	rightanim.loop = true;
-	//leftanim.pingpong = true;
-	rightanim.speed = 0.12f;
+	rightanim.startCol = 6;
+	rightanim.endCol = 11;
+	rightanim.row = 6;
+	rightanim = app->animation->CreateAnimation(rightanim, true, 0.12f);
 
 	// Add physics to the enemy - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, DYNAMIC);

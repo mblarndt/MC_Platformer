@@ -41,6 +41,7 @@ bool EnemyAir::Update()
 		pbody->body->DestroyFixture(pbody->body->GetFixtureList());
 		app->entityManager->DestroyEntity(this);
 	}
+
 	FindPath();
 	Move();
 	RenderEntity();
@@ -95,36 +96,29 @@ void EnemyAir::InitSpawn(pugi::xml_node itemNode)
 	position.y = itemNode.attribute("y").as_int();
 	texturePath = "Assets/Textures/ghosties.png";
 
-	width = 40;
-	height = 46;
+	width = 48;
+	height = 48;
+	idle.width = leftanim.width = rightanim.width = width;
+	idle.height = leftanim.height = rightanim.height = height;
 
 	// Initilize textures
 	texture = app->tex->Load(texturePath);
 
 	// Animations
-	idle.PushBack({ 148, 2, width, height });
-	idle.PushBack({ 196, 2, width, height });
-	idle.PushBack({ 243, 2, width, height });
-	idle.PushBack({ 196, 2, width, height });
-	idle.loop = true;
-	//idle.pingpong = true;
-	idle.speed = 0.12f;
+	idle.startCol = 0;
+	idle.endCol = 2;
+	idle.row = 0;
+	idle = app->animation->CreateAnimation(idle, true, 0.12f);
 
-	leftanim.PushBack({ 148, 50, width, height });
-	leftanim.PushBack({ 196, 50, width, height });
-	leftanim.PushBack({ 243, 50, width, height });
-	leftanim.PushBack({ 196, 50, width, height });
-	leftanim.loop = true;
-	//leftanim.pingpong = true;
-	leftanim.speed = 0.12f;
+	leftanim.startCol = 2;
+	leftanim.endCol = 5;
+	leftanim.row = 1;
+	leftanim = app->animation->CreateAnimation(leftanim, true, 0.12f);
 
-	rightanim.PushBack({ 148, 98, width, height });
-	rightanim.PushBack({ 196, 98, width, height });
-	rightanim.PushBack({ 243, 98, width, height });
-	rightanim.PushBack({ 196, 98, width, height });
-	rightanim.loop = true;
-	//leftanim.pingpong = true;
-	rightanim.speed = 0.12f;
+	rightanim.startCol = 2;
+	rightanim.endCol = 5;
+	rightanim.row = 2;
+	rightanim = app->animation->CreateAnimation(rightanim, true, 0.12f);
 
 	// Add physics to the enemy - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, DYNAMIC);
@@ -177,7 +171,6 @@ void EnemyAir::Move()
 	float mass = pbody->body->GetMass();
 	pbody->body->ApplyLinearImpulse(impulse, pbody->body->GetWorldCenter(), true);
 }
-
 
 void EnemyAir::FindPath()
 {
