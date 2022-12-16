@@ -27,6 +27,12 @@ Player::~Player() {
 bool Player::Awake() {
 
 	//Get and initialize Player parameters from XML
+	lives = parameters.child("stats").attribute("lives").as_int();
+	health = parameters.child("stats").attribute("health").as_int();
+	bullets = parameters.child("stats").attribute("bullets").as_int();
+
+	speed = parameters.child("movement").attribute("speed").as_int();
+	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
 
 	//Menu Position
 	menu.x = parameters.child("menu").attribute("x").as_int();
@@ -54,10 +60,7 @@ bool Player::Awake() {
 	backmusicPath = parameters.child("audio").child("music").attribute("path").as_string();
 
 	//Player Variables
-	speed = parameters.child("movement").attribute("speed").as_int();
-	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
-	health = parameters.child("stats").attribute("health").as_int();
-	bullets = parameters.child("stats").attribute("bullets").as_int();
+	
 
 	//Idle
 	idle.row = parameters.child("animations").child("idle").attribute("row").as_int();
@@ -97,6 +100,9 @@ bool Player::Awake() {
 	spriteHeight = row = parameters.child("animations").attribute("height").as_int();
 	spriteWidth = column = parameters.child("animations").attribute("width").as_int();
 
+	idle.width = movementLeft.width = movementRight.width = jumpUp.width = jumpDown.width = jumpStart.width = jumpEnd.width = spriteWidth;
+	idle.height = movementLeft.height = movementRight.height = jumpUp.height = jumpDown.height = jumpStart.height = jumpEnd.height = spriteHeight;
+
 	return true;
 }
 
@@ -113,17 +119,16 @@ bool Player::Start() {
 
 	//Initialize States and Values 
 	startGame = false;
-	playerMoving = false;
 	remainingPixels = 0;
 
 	//Animations
-	idle = createAnimation(idle, true, 0.1f);
-    movementRight = createAnimation(movementRight, true, 0.1f);
-	movementLeft = createAnimation(movementLeft, true, 0.1f);
-	jumpUp = createAnimation(jumpUp, true, 0.1f);
-	jumpDown = createAnimation(jumpDown, true, 0.1f);
-	jumpEnd = createAnimation(jumpEnd, false, 0.2f);
-	jumpStart = createAnimation(jumpStart, false, 0.2f);	
+	idle = app->animation->CreateAnimation(idle, true, 0.1f);
+    movementRight = app->animation->CreateAnimation(movementRight, true, 0.1f);
+	movementLeft = app->animation->CreateAnimation(movementLeft, true, 0.1f);
+	jumpUp = app->animation->CreateAnimation(jumpUp, true, 0.1f);
+	jumpDown = app->animation->CreateAnimation(jumpDown, true, 0.1f);
+	jumpEnd = app->animation->CreateAnimation(jumpEnd, false, 0.2f);
+	jumpStart = app->animation->CreateAnimation(jumpStart, false, 0.2f);	
 	
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width/2), position.y + (height/2), width, height, bodyType::DYNAMIC);
@@ -162,16 +167,15 @@ bool Player::Start() {
 
 	toDelete = false;
 
-	position = spawn;
-
 	return true;
 }
 
 bool Player::Update()
 {
-
 	if (health == 0)
 		playerDeath = true;
+	if (lives == 0)
+		gameOver = true;
 
 	//Activate Game
 	if (startGame == false) {
@@ -185,7 +189,10 @@ bool Player::Update()
 
 		//Main Loop starts when CamTransition finished
 		if (CamTransition(0, spawn.x) && levelFinish == false) {
+
+
 			if (playerDeath == false) {
+				
 
 				/*----------------------------Follow Camera--------------------------*/
 				PlayerCamera();
@@ -265,6 +272,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	case ColliderType::CHECKPOINT:
 		LOG("Collision Checkpoint");
 		app->SaveGameRequest();
+		break;
+	case ColliderType::ENEMY:
+		app->audio->PlayFx(hitFxId);
+		health = health - 1;
+		pbody->body->ApplyLinearImpulse(b2Vec2(2, 0), pbody->body->GetPosition(), true);
+
 		break;
 	case ColliderType::UNKNOWN:
 		//LOG("Collision UNKNOWN");
@@ -384,7 +397,6 @@ void Player::HandleMovement()
 	//Move Right
 	else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
 		velocitx.x = speed;
-		playerMoving = true;
 	}
 	//Jump
 	else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
@@ -409,7 +421,6 @@ void Player::HandleMovement()
 void Player::HandleDeath(bool dead)
 {
 	if (dead) {
-		health = 7;
 		currentAnimation = &jumpStart;
 		if (frameCounter < 30) {
 			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
@@ -417,15 +428,14 @@ void Player::HandleDeath(bool dead)
 			frameCounter++;
 		}
 		else {
-			
+
 			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 			app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
 			SDL_Rect rect = { 0, 0, 1024, 480 };
-			if (position.x < 2944)	app->render->DrawTexture(texDeath, position.x - camOffset, 0, &rect);
-			else app->render->DrawTexture(texDeath, 3196, 0, &rect);
+			app->render->DrawTexture(texDeath, app->render->camera.x * -1, 0, &rect);
 			//frameCounter++;
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-				
+				health = 5;
 				position.x = spawn.x;
 				position.y = spawn.y;
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
@@ -443,7 +453,7 @@ void Player::HandleFinish(bool finish)
 		SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 		app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
 		SDL_Rect rect = { 0, 0, app->win->width, 480 };
-		app->render->DrawTexture(texFinish, (app->map->mapData.width * app->map->mapData.tileWidth)- app->win->width, 0, &rect);
+		app->render->DrawTexture(texFinish, app->render->camera.x * (-1), 0, &rect);
 
 		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 			position.x = spawn.x;
@@ -494,15 +504,4 @@ bool Player::CamTransition(int start, int stop)
 		ret = true;
 
 	return ret;
-}
-
-Animation Player::createAnimation(Animation animation, bool loop, float animSpeed)
-{
-	for (int i = animation.startCol; i <= animation.endCol; i++) {
-		animation.PushBack({ i * column,  animation.row * row, spriteWidth, spriteHeight });
-	}
-	animation.loop = loop;
-	animation.speed = animSpeed;
-
-	return animation;
 }

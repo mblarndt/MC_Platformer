@@ -69,8 +69,6 @@ public:
 	void InitSpawn(pugi::xml_node itemNode);
 
 	bool CamTransition(int start, int stop);
-
-	Animation createAnimation(Animation animation, bool loop, float speed);
 	
 	//Player Physics Body
 	PhysBody* pbody;
@@ -100,10 +98,9 @@ public:
 	//playerState state;
 	int bullets;
 	int health;
+	int lives;
 
 	int lastcamPos;
-	
-	bool playerMoving;
 
 private:
 
@@ -134,6 +131,7 @@ private:
 	bool playerDeath;
 	bool levelFinish;
 	bool startGame;
+	bool gameOver;
 
 	//Position Variables
 	iPoint spawn;
