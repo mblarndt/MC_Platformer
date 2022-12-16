@@ -9,9 +9,7 @@
 #include "Point.h"
 #include "Physics.h"
 #include "EntityManager.h"
-#include <chrono>
-#include <thread>
-#include <ctime>
+#include "Timer.h"
 
 Bullet::Bullet(pugi::xml_node paras) : Entity(EntityType::BULLET)
 {
@@ -42,6 +40,9 @@ bool Bullet::Start() {
 
 bool Bullet::Update()
 {
+	if (t.ReadSec() > 1) {
+		app->entityManager->DestroyEntity(this);
+	}
 
 	// L07 TODO 4: Add a physics to an bullet - update the position of the object from the physics.
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x)-radius;
@@ -84,6 +85,8 @@ void Bullet::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
 void Bullet::BulletInitialisation(pugi::xml_node itemNode, int x, int y, int direction)
 {
+	t.Start();
+	
 	position.x = x + (direction * 35);
 	position.y = y;
 	radius = 7.5;
