@@ -27,6 +27,8 @@ public:
 
 	void BulletInitialisation(pugi::xml_node itemNode, int x, int y, int direction);
 
+	void RenderEntity();
+
 public:
 
 	bool isPicked = false;

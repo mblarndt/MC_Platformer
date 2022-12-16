@@ -98,6 +98,7 @@ public:
 	//playerState state;
 	int bullets;
 	int health;
+	int lives;
 
 	int lastcamPos;
 
@@ -130,6 +131,7 @@ private:
 	bool playerDeath;
 	bool levelFinish;
 	bool startGame;
+	bool gameOver;
 
 	//Position Variables
 	iPoint spawn;

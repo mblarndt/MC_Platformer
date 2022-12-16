@@ -40,15 +40,12 @@ bool Bullet::Start() {
 
 bool Bullet::Update()
 {
+	
+	RenderEntity();
+
 	if (t.ReadSec() > 1) {
 		app->entityManager->DestroyEntity(this);
 	}
-
-	// L07 TODO 4: Add a physics to an bullet - update the position of the object from the physics.
-	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x)-radius;
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y)-radius;
-	app->render->DrawTexture(texture, position.x, position.y);
-
 	return true;
 }
 
@@ -105,4 +102,11 @@ void Bullet::BulletInitialisation(pugi::xml_node itemNode, int x, int y, int dir
 	pbody->listener = this;
 
 	pbody->body->ApplyLinearImpulse(b2Vec2(direction * 2.3, 0), pbody->body->GetPosition(), true);
+}
+
+void Bullet::RenderEntity()
+{
+	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - radius;
+	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - radius;
+	app->render->DrawTexture(texture, position.x, position.y);
 }

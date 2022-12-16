@@ -27,6 +27,12 @@ Player::~Player() {
 bool Player::Awake() {
 
 	//Get and initialize Player parameters from XML
+	lives = parameters.child("stats").attribute("lives").as_int();
+	health = parameters.child("stats").attribute("health").as_int();
+	bullets = parameters.child("stats").attribute("bullets").as_int();
+
+	speed = parameters.child("movement").attribute("speed").as_int();
+	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
 
 	//Menu Position
 	menu.x = parameters.child("menu").attribute("x").as_int();
@@ -54,10 +60,7 @@ bool Player::Awake() {
 	backmusicPath = parameters.child("audio").child("music").attribute("path").as_string();
 
 	//Player Variables
-	speed = parameters.child("movement").attribute("speed").as_int();
-	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
-	health = parameters.child("stats").attribute("health").as_int();
-	bullets = parameters.child("stats").attribute("bullets").as_int();
+	
 
 	//Idle
 	idle.row = parameters.child("animations").child("idle").attribute("row").as_int();
@@ -169,8 +172,10 @@ bool Player::Start() {
 
 bool Player::Update()
 {
-	if (health < 1)
+	if (health == 0)
 		playerDeath = true;
+	if (lives == 0)
+		gameOver = true;
 
 	//Activate Game
 	if (startGame == false) {
