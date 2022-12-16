@@ -69,6 +69,8 @@ public:
 	void InitSpawn(pugi::xml_node itemNode);
 
 	bool CamTransition(int start, int stop);
+
+	void Bump();
 	
 	//Player Physics Body
 	PhysBody* pbody;
@@ -78,6 +80,7 @@ public:
 
 
 	enum PlayerState {
+		MOVE,
 		IDLE,
 		MOVE_RIGHT,
 		MOVE_LEFT,
@@ -91,8 +94,10 @@ public:
 		DEAD
 	};
 
+
 	PlayerState state;
 	PlayerState preState;
+	PlayerState mainState;
 
 	bool grounded;
 	//playerState state;

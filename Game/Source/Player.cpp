@@ -146,10 +146,10 @@ bool Player::Start() {
 	fixtureDefL.density = 0.1f;
 	fixtureDefT.density = 0.2f;
 	fixtureDefB.density = 0.3f;
-	pbody->body->CreateFixture(&fixtureDefR);
-	pbody->body->CreateFixture(&fixtureDefL);
-	pbody->body->CreateFixture(&fixtureDefT);
-	pbody->body->CreateFixture(&fixtureDefB);
+	//pbody->body->CreateFixture(&fixtureDefR);
+	//pbody->body->CreateFixture(&fixtureDefL);
+	//pbody->body->CreateFixture(&fixtureDefT);
+	//pbody->body->CreateFixture(&fixtureDefB);
 
   
 	// L07 DONE 7: Assign collider type
@@ -200,8 +200,12 @@ bool Player::Update()
 				StateMachine();
 				/*----------------------------Player Movement--------------------------*/
 				HandleMovement();
+				
 				/*----------------------------Rendering Player--------------------------*/
 				RenderEntity();
+
+				
+
 			}
 		}
 
@@ -232,12 +236,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	b2Fixture* fix2 = contact->GetFixtureB();
 
 	if (fix2->GetDensity() == 0) {
-		velocitx.x = -speed;
+		//velocitx.x = -speed;
 		//health = health - 1;
 		//LOG("Health: %s", health);
 	}
 	if (fix2->GetDensity() == 0.1f) {
-		velocitx.x = speed;
+		//velocitx.x = speed;
 		//health = health - 1;
 	}
 	if (fix2->GetDensity() == 0.2f) {
@@ -257,6 +261,16 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		break;
 	case ColliderType::FLOOR:
 		//LOG("Collision FLOOR");
+		if ((physA->body->GetPosition().y > physB->body->GetPosition().y)) {
+
+			if (physA->body->GetPosition().x < physB->body->GetPosition().x) {
+				velocitx.x = -speed;
+			}
+			if (physA->body->GetPosition().x > physB->body->GetPosition().x) {
+				velocitx.x = speed;
+			}
+		}
+		
 		jumpcount = 0;
 		break;
 	case ColliderType::DEATH:
@@ -275,8 +289,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		break;
 	case ColliderType::ENEMY:
 		app->audio->PlayFx(hitFxId);
-		health = health - 1;
+		//health = health - 1;
 		pbody->body->ApplyLinearImpulse(b2Vec2(2, 0), pbody->body->GetPosition(), true);
+
+		if (mainState = FALL) {
+			pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
+		}
 
 		break;
 	case ColliderType::UNKNOWN:
@@ -300,6 +318,7 @@ void Player::GetState()
 {
 	b2Vec2 vel = pbody->body->GetLinearVelocity();
 	if (vel.y == 0) {
+		mainState = MOVE;
 		grounded = true;
 		if (vel.x < 0)
 			state = MOVE_LEFT;
@@ -311,7 +330,7 @@ void Player::GetState()
 			state = IDLE;
 	}
 	if (vel.y > 0) {
-		
+		mainState = FALL;
 		grounded = false;
 		if (vel.x > 0)
 			state = FALL_LEFT;
@@ -321,7 +340,7 @@ void Player::GetState()
 	}
 
 	if (vel.y < 0) {
-
+		mainState = JUMP;
 		grounded = false;
 
 		if (vel.x > 0)
@@ -410,8 +429,7 @@ void Player::HandleMovement()
 	else if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
 		Shoot();
 	}
-
-
+	
 	else {
 		velocitx.y = pbody->body->GetLinearVelocity().y;
 		pbody->body->SetLinearVelocity(velocitx);
@@ -504,4 +522,8 @@ bool Player::CamTransition(int start, int stop)
 		ret = true;
 
 	return ret;
+}
+
+void Player::Bump() {
+	
 }
