@@ -443,6 +443,7 @@ void Player::HandleDeath(bool dead)
 		if (frameCounter < 30) {
 			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 			app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
+			deadTextureOn = true;
 			frameCounter++;
 		}
 		else {
@@ -451,6 +452,7 @@ void Player::HandleDeath(bool dead)
 			app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
 			SDL_Rect rect = { 0, 0, 1024, 480 };
 			app->render->DrawTexture(texDeath, app->render->camera.x * -1, 0, &rect);
+			deadTextureOn = true;
 			//frameCounter++;
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 				health = 5;
@@ -459,6 +461,7 @@ void Player::HandleDeath(bool dead)
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 				velocitx.x = 0;
 				playerDeath = false;
+				deadTextureOn = false;
 			}
 		}
 	}

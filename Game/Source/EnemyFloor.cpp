@@ -201,9 +201,12 @@ void EnemyFloor::RenderEntity()
 	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - (width / 2);
 	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - (height / 2);
 
-	currentAnimation->Update();
-	SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
-	app->render->DrawTexture(texture, position.x, position.y, &rect1);
+	if (!app->scene->playerptr->deadTextureOn)
+	{
+		currentAnimation->Update();
+		SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
+		app->render->DrawTexture(texture, position.x, position.y, &rect1);
+	}
 }
 
 void EnemyFloor::UpdateAnim()

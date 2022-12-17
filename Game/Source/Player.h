@@ -107,6 +107,8 @@ public:
 
 	int lastcamPos;
 
+	bool deadTextureOn;
+
 private:
 
 	//Texture Variables
