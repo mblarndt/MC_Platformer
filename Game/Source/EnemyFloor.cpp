@@ -100,6 +100,8 @@ void EnemyFloor::InitSpawn(pugi::xml_node itemNode)
 	position.y = itemNode.attribute("y").as_int();
 	texturePath = "Assets/Textures/ghosties.png";
 
+	spawn = iPoint(position.x, position.y);
+
 	width = 48;
 	height = 48;
 	idle.width = leftanim.width = rightanim.width = width;
