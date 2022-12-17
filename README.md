@@ -3,6 +3,7 @@
 ## Description
 
 Our submission for the class platformer project, based on Mojang's "Minecraft" easthetic. In this game you play as a Minecraft mob known as Slime. The player has to navigate the level through jumping in order to reach the end.
+Enemies can be killed by shoothing collectable "Slime Balls".
 
 ## Key Features
 
