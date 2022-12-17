@@ -70,7 +70,7 @@ public:
 
 	bool CamTransition(int start, int stop);
 
-	Animation createAnimation(Animation animation, bool loop, float speed);
+	void Bump();
 	
 	//Player Physics Body
 	PhysBody* pbody;
@@ -80,6 +80,7 @@ public:
 
 
 	enum PlayerState {
+		MOVE,
 		IDLE,
 		MOVE_RIGHT,
 		MOVE_LEFT,
@@ -93,15 +94,20 @@ public:
 		DEAD
 	};
 
+
 	PlayerState state;
 	PlayerState preState;
+	PlayerState mainState;
 
 	bool grounded;
 	//playerState state;
 	int bullets;
 	int health;
+	int lives;
 
 	int lastcamPos;
+
+	bool deadTextureOn;
 
 private:
 
@@ -132,6 +138,7 @@ private:
 	bool playerDeath;
 	bool levelFinish;
 	bool startGame;
+	bool gameOver;
 
 	//Position Variables
 	iPoint spawn;

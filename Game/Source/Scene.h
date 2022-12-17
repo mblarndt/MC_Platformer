@@ -4,7 +4,8 @@
 #include "Module.h"
 #include "Player.h"
 #include "Item.h"
-
+#include "EnemyAir.h"
+#include "EnemyFloor.h"
 struct SDL_Texture;
 
 class Scene : public Module
@@ -44,13 +45,19 @@ public:
 
 	void InitPlayerSpawn(pugi::xml_node itemNode);
 
-	void InitEnemySpawn(pugi::xml_node itemNode);
+	void InitEnemyAirSpawn(pugi::xml_node itemNode);
+	
+	void InitEnemyFloorSpawn(pugi::xml_node itemNode);
+
+	void DebugPathfinding();
 
 public:
 
 	//L02: DONE 3: Declare a Player attribute 
 	Player* playerptr;
 	Item* itemptr;
+	EnemyAir* enemyairptr;
+	EnemyFloor* enemyfloorptr;
 
 private:
 	SDL_Texture* img;

@@ -27,6 +27,12 @@ Player::~Player() {
 bool Player::Awake() {
 
 	//Get and initialize Player parameters from XML
+	lives = parameters.child("stats").attribute("lives").as_int();
+	health = parameters.child("stats").attribute("health").as_int();
+	bullets = parameters.child("stats").attribute("bullets").as_int();
+
+	speed = parameters.child("movement").attribute("speed").as_int();
+	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
 
 	//Menu Position
 	menu.x = parameters.child("menu").attribute("x").as_int();
@@ -54,10 +60,7 @@ bool Player::Awake() {
 	backmusicPath = parameters.child("audio").child("music").attribute("path").as_string();
 
 	//Player Variables
-	speed = parameters.child("movement").attribute("speed").as_int();
-	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
-	health = parameters.child("stats").attribute("health").as_int();
-	bullets = parameters.child("stats").attribute("bullets").as_int();
+	
 
 	//Idle
 	idle.row = parameters.child("animations").child("idle").attribute("row").as_int();
@@ -97,6 +100,9 @@ bool Player::Awake() {
 	spriteHeight = row = parameters.child("animations").attribute("height").as_int();
 	spriteWidth = column = parameters.child("animations").attribute("width").as_int();
 
+	idle.width = movementLeft.width = movementRight.width = jumpUp.width = jumpDown.width = jumpStart.width = jumpEnd.width = spriteWidth;
+	idle.height = movementLeft.height = movementRight.height = jumpUp.height = jumpDown.height = jumpStart.height = jumpEnd.height = spriteHeight;
+
 	return true;
 }
 
@@ -116,13 +122,13 @@ bool Player::Start() {
 	remainingPixels = 0;
 
 	//Animations
-	idle = createAnimation(idle, true, 0.1f);
-    movementRight = createAnimation(movementRight, true, 0.1f);
-	movementLeft = createAnimation(movementLeft, true, 0.1f);
-	jumpUp = createAnimation(jumpUp, true, 0.1f);
-	jumpDown = createAnimation(jumpDown, true, 0.1f);
-	jumpEnd = createAnimation(jumpEnd, false, 0.2f);
-	jumpStart = createAnimation(jumpStart, false, 0.2f);	
+	idle = app->animation->CreateAnimation(idle, true, 0.1f);
+    movementRight = app->animation->CreateAnimation(movementRight, true, 0.1f);
+	movementLeft = app->animation->CreateAnimation(movementLeft, true, 0.1f);
+	jumpUp = app->animation->CreateAnimation(jumpUp, true, 0.1f);
+	jumpDown = app->animation->CreateAnimation(jumpDown, true, 0.1f);
+	jumpEnd = app->animation->CreateAnimation(jumpEnd, false, 0.2f);
+	jumpStart = app->animation->CreateAnimation(jumpStart, false, 0.2f);	
 	
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width/2), position.y + (height/2), width, height, bodyType::DYNAMIC);
@@ -140,10 +146,10 @@ bool Player::Start() {
 	fixtureDefL.density = 0.1f;
 	fixtureDefT.density = 0.2f;
 	fixtureDefB.density = 0.3f;
-	pbody->body->CreateFixture(&fixtureDefR);
-	pbody->body->CreateFixture(&fixtureDefL);
-	pbody->body->CreateFixture(&fixtureDefT);
-	pbody->body->CreateFixture(&fixtureDefB);
+	//pbody->body->CreateFixture(&fixtureDefR);
+	//pbody->body->CreateFixture(&fixtureDefL);
+	//pbody->body->CreateFixture(&fixtureDefT);
+	//pbody->body->CreateFixture(&fixtureDefB);
 
   
 	// L07 DONE 7: Assign collider type
@@ -166,9 +172,10 @@ bool Player::Start() {
 
 bool Player::Update()
 {
-
 	if (health == 0)
 		playerDeath = true;
+	if (lives == 0)
+		gameOver = true;
 
 	//Activate Game
 	if (startGame == false) {
@@ -182,7 +189,10 @@ bool Player::Update()
 
 		//Main Loop starts when CamTransition finished
 		if (CamTransition(0, spawn.x) && levelFinish == false) {
+
+
 			if (playerDeath == false) {
+				
 
 				/*----------------------------Follow Camera--------------------------*/
 				PlayerCamera();
@@ -190,8 +200,12 @@ bool Player::Update()
 				StateMachine();
 				/*----------------------------Player Movement--------------------------*/
 				HandleMovement();
+				
 				/*----------------------------Rendering Player--------------------------*/
 				RenderEntity();
+
+				
+
 			}
 		}
 
@@ -222,12 +236,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	b2Fixture* fix2 = contact->GetFixtureB();
 
 	if (fix2->GetDensity() == 0) {
-		velocitx.x = -speed;
+		//velocitx.x = -speed;
 		//health = health - 1;
 		//LOG("Health: %s", health);
 	}
 	if (fix2->GetDensity() == 0.1f) {
-		velocitx.x = speed;
+		//velocitx.x = speed;
 		//health = health - 1;
 	}
 	if (fix2->GetDensity() == 0.2f) {
@@ -247,6 +261,16 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		break;
 	case ColliderType::FLOOR:
 		//LOG("Collision FLOOR");
+		if ((physA->body->GetPosition().y > physB->body->GetPosition().y)) {
+
+			if (physA->body->GetPosition().x < physB->body->GetPosition().x) {
+				velocitx.x = -speed;
+			}
+			if (physA->body->GetPosition().x > physB->body->GetPosition().x) {
+				velocitx.x = speed;
+			}
+		}
+		
 		jumpcount = 0;
 		break;
 	case ColliderType::DEATH:
@@ -262,6 +286,16 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	case ColliderType::CHECKPOINT:
 		LOG("Collision Checkpoint");
 		app->SaveGameRequest();
+		break;
+	case ColliderType::ENEMY:
+		app->audio->PlayFx(hitFxId);
+		//health = health - 1;
+		pbody->body->ApplyLinearImpulse(b2Vec2(2, 0), pbody->body->GetPosition(), true);
+
+		if (mainState = FALL) {
+			pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
+		}
+
 		break;
 	case ColliderType::UNKNOWN:
 		//LOG("Collision UNKNOWN");
@@ -284,6 +318,7 @@ void Player::GetState()
 {
 	b2Vec2 vel = pbody->body->GetLinearVelocity();
 	if (vel.y == 0) {
+		mainState = MOVE;
 		grounded = true;
 		if (vel.x < 0)
 			state = MOVE_LEFT;
@@ -295,7 +330,7 @@ void Player::GetState()
 			state = IDLE;
 	}
 	if (vel.y > 0) {
-		
+		mainState = FALL;
 		grounded = false;
 		if (vel.x > 0)
 			state = FALL_LEFT;
@@ -305,7 +340,7 @@ void Player::GetState()
 	}
 
 	if (vel.y < 0) {
-
+		mainState = JUMP;
 		grounded = false;
 
 		if (vel.x > 0)
@@ -394,8 +429,7 @@ void Player::HandleMovement()
 	else if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
 		Shoot();
 	}
-
-
+	
 	else {
 		velocitx.y = pbody->body->GetLinearVelocity().y;
 		pbody->body->SetLinearVelocity(velocitx);
@@ -405,28 +439,29 @@ void Player::HandleMovement()
 void Player::HandleDeath(bool dead)
 {
 	if (dead) {
-		health = 7;
 		currentAnimation = &jumpStart;
 		if (frameCounter < 30) {
 			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 			app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
+			deadTextureOn = true;
 			frameCounter++;
 		}
 		else {
-			
+
 			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 			app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
 			SDL_Rect rect = { 0, 0, 1024, 480 };
-			if (position.x < 2944)	app->render->DrawTexture(texDeath, position.x - camOffset, 0, &rect);
-			else app->render->DrawTexture(texDeath, 3196, 0, &rect);
+			app->render->DrawTexture(texDeath, app->render->camera.x * -1, 0, &rect);
+			deadTextureOn = true;
 			//frameCounter++;
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-				
+				health = 5;
 				position.x = spawn.x;
 				position.y = spawn.y;
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 				velocitx.x = 0;
 				playerDeath = false;
+				deadTextureOn = false;
 			}
 		}
 	}
@@ -439,7 +474,7 @@ void Player::HandleFinish(bool finish)
 		SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 		app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
 		SDL_Rect rect = { 0, 0, app->win->width, 480 };
-		app->render->DrawTexture(texFinish, (app->map->mapData.width * app->map->mapData.tileWidth)- app->win->width, 0, &rect);
+		app->render->DrawTexture(texFinish, app->render->camera.x * (-1), 0, &rect);
 
 		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 			position.x = spawn.x;
@@ -492,13 +527,6 @@ bool Player::CamTransition(int start, int stop)
 	return ret;
 }
 
-Animation Player::createAnimation(Animation animation, bool loop, float animSpeed)
-{
-	for (int i = animation.startCol; i <= animation.endCol; i++) {
-		animation.PushBack({ i * column,  animation.row * row, spriteWidth, spriteHeight });
-	}
-	animation.loop = loop;
-	animation.speed = animSpeed;
-
-	return animation;
+void Player::Bump() {
+	
 }

@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 #include "Point.h"
+#include "Timer.h"
 #include "SDL/include/SDL.h"
 
 struct SDL_Texture;
@@ -26,10 +27,13 @@ public:
 
 	void BulletInitialisation(pugi::xml_node itemNode, int x, int y, int direction);
 
+	void RenderEntity();
+
 public:
 
 	bool isPicked = false;
 	PhysBody* pbody;
+	Timer t;
 
 private:
 
@@ -42,6 +46,11 @@ private:
 	int width;
 	int height;
 	int radius;
+
+	uint32 starttime;
+
+	bool timerStarted;
+
 };
 
 #endif // __BULLET_H__

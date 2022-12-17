@@ -8,6 +8,7 @@
 #include "Animation.h"
 
 #include "SDL/include/SDL.h"
+#include "DynArray.h"
 
 #define MAX_JUMP_SPEED 7.0f
 #define MAX_VEL 4.0f
@@ -19,7 +20,7 @@ class EnemyFloor : public Entity
 {
 public:
 
-	EnemyFloor();
+	EnemyFloor(pugi::xml_node paras);
 
 	virtual ~EnemyFloor();
 
@@ -32,35 +33,55 @@ public:
 	bool CleanUp();
 
 	Animation idle;
+	Animation leftanim;
+	Animation rightanim;
 
 	// Current animation check
 	Animation* currentAnimation = nullptr;
+
+	void InitSpawn(pugi::xml_node itemNode);
+
+	enum BehaviourState {
+		IDLE,
+		CHASE,
+		MOVE_RIGHT,
+		MOVE_LEFT,
+		JUMP,
+		JUMP_LEFT,
+		JUMP_RIGHT,
+		FALL,
+		FALL_LEFT,
+		FALL_RIGHT,
+		GROUNDED,
+		DEAD
+	};
+
 
 public:
 
 	bool LoadState(pugi::xml_node&);
 	bool SaveState(pugi::xml_node&);
 
-	void OnCollision(PhysBody* physA, PhysBody* physB);
+	void OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact);
 
 	void Debug();
+
+	void Move();
+
+	void FindPath();
+
+	void RenderEntity();
+
+	void UpdateAnim();
 
 	//Player Physics Body
 	PhysBody* pbody;
 
 	b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
+
+	int health;
+
 private:
-
-	//Texture Variables
-	SDL_Texture* texture;
-	const char* texturePath;
-	int width;
-	int height;
-
-	SDL_Texture* texFinish;
-	const char* finishPath;
-	int finishWidth;
-	int finishHeight;
 
 	//FX-Sound Variables
 	int hitFxId;
@@ -68,16 +89,30 @@ private:
 
 	//Player, Camera and Game States
 	bool enemyDeath;
-	bool levelFinish;
-	bool startGame;
-	bool camMoved;
 
 	//Position Variables
 	iPoint spawn;
 	iPoint menu;
 
-	// Enemy Movement Variables
-	float speed;
+	//Texture Variables
+	SDL_Texture* texture;
+	const char* texturePath;
+	int width;
+	int height;
+	SDL_Texture* mouseTileTex = nullptr;
+
+
+	int speed = 3;
+	bool right = true;
+	BehaviourState behaviourState = IDLE;
+	SString moveClass;
+	bool isJumping = false;
+	const DynArray<iPoint>* path;
+
+	int direction;
+
+
+
 
 };
 

@@ -109,69 +109,10 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		app->LoadGameRequest();
 
-	//Camera Movement
-	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		app->render->camera.y += 3;
-
-	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		app->render->camera.y -= 3;
-
-	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		app->render->camera.x += 3;
-
-	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x -= 3;
-
 	// Draw map
 	app->map->Draw();
 
-	// L08: DONE 3: Test World to map method
-	int mouseX, mouseY;
-	app->input->GetMousePosition(mouseX, mouseY);
-
-	iPoint mouseTile = iPoint(0, 0);
-
-	if (app->map->mapData.type == MapTypes::MAPTYPE_ISOMETRIC) {
-		mouseTile = app->map->WorldToMap(mouseX - app->render->camera.x - app->map->mapData.tileWidth / 2,
-			mouseY - app->render->camera.y - app->map->mapData.tileHeight / 2);
-	}
-	if (app->map->mapData.type == MapTypes::MAPTYPE_ORTHOGONAL) {
-		mouseTile = app->map->WorldToMap(mouseX - app->render->camera.x,
-			mouseY - app->render->camera.y);
-	}
-
-	//Convert again the tile coordinates to world coordinates to render the texture of the tile
-	iPoint highlightedTileWorld = app->map->MapToWorld(mouseTile.x, mouseTile.y);
-	app->render->DrawTexture(mouseTileTex, highlightedTileWorld.x, highlightedTileWorld.y);
-
-	//Test compute path function
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		if (originSelected == true)
-		{
-			app->pathfinding->CreatePath(origin, mouseTile);
-			originSelected = false;
-			app->render->DrawTexture(mouseTileTex, highlightedTileWorld.x, highlightedTileWorld.y);
-		}
-		else
-		{
-			origin = mouseTile;
-			originSelected = true;
-			app->pathfinding->ClearLastPath();
-		}
-	}
-
-	// L12: Get the latest calculated path and draw
-	const DynArray<iPoint>* path = app->pathfinding->GetLastPath();
-	for (uint i = 0; i < path->Count(); ++i)
-	{
-		iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-		app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
-	}
-
-	// L12: Debug pathfinding
-	iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
-	app->render->DrawTexture(originTex, originScreen.x, originScreen.y);
+	DebugPathfinding();
 
 	return true;
 }
@@ -203,6 +144,18 @@ bool Scene::SaveState(pugi::xml_node &data)
 	player.append_attribute("health") = playerptr->health;
 	player.append_attribute("bullets") = playerptr->bullets;
 
+	pugi::xml_node enemyair = data.append_child("enemyair");
+
+	enemyair.append_attribute("x") = enemyairptr->position.x;
+	enemyair.append_attribute("y") = enemyairptr->position.y;
+	enemyair.append_attribute("health") = enemyairptr->health;
+
+	pugi::xml_node enemyfloor = data.append_child("enemyfloor");
+
+	enemyfloor.append_attribute("x") = enemyfloorptr->position.x;
+	enemyfloor.append_attribute("y") = enemyfloorptr->position.y;
+	enemyfloor.append_attribute("health") = enemyfloorptr->health;
+
 	return true;
 }
 
@@ -213,11 +166,27 @@ bool Scene::LoadState(pugi::xml_node& data)
 	playerptr->health = data.child("player").attribute("health").as_int();
 	playerptr->bullets = data.child("player").attribute("bullets").as_int();
 
-
 	playerptr->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(playerptr->position.x),
 												PIXEL_TO_METERS(playerptr->position.y)),0);
-
 	playerptr->velocitx.x = 0;
+
+
+	enemyairptr->position.x = data.child("enemyair").attribute("x").as_int();
+	enemyairptr->position.y = data.child("enemyair").attribute("y").as_int();
+	enemyairptr->health = data.child("enemyair").attribute("health").as_int();
+
+	enemyairptr->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(enemyairptr->position.x),
+												  PIXEL_TO_METERS(enemyairptr->position.y)), 0);
+
+
+	enemyfloorptr->position.x = data.child("enemyfloor").attribute("x").as_int();
+	enemyfloorptr->position.y = data.child("enemyfloor").attribute("y").as_int();
+	enemyfloorptr->health = data.child("enemyfloor").attribute("health").as_int();
+
+	enemyfloorptr->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(enemyfloorptr->position.x),
+												    PIXEL_TO_METERS(enemyfloorptr->position.y)), 0);
+
+
 	app->entityManager->LoadState(data);
 
 	return true;
@@ -240,12 +209,36 @@ void Scene::InitPlayerSpawn(pugi::xml_node itemNode)
 	playerptr->InitSpawn(itemNode);
 }
 
-void Scene::InitEnemySpawn(pugi::xml_node itemNode)
+void Scene::InitEnemyAirSpawn(pugi::xml_node itemNode)
 {
-	EnemyAir* enemyair = (EnemyAir*)app->entityManager->CreateEntity(EntityType::ENEMYAIR, itemNode);
-	enemyair->InitSpawn(itemNode);
+	enemyairptr = (EnemyAir*)app->entityManager->CreateEntity(EntityType::ENEMYAIR, itemNode);
+	enemyairptr->InitSpawn(itemNode);
+
 }
 
+void Scene::InitEnemyFloorSpawn(pugi::xml_node itemNode)
+{
+	enemyfloorptr = (EnemyFloor*)app->entityManager->CreateEntity(EntityType::ENEMYFLOOR, itemNode);
+	enemyfloorptr->InitSpawn(itemNode);
+}
+
+void Scene::DebugPathfinding() {
+
+	if (app->physics->debug) {
+
+		// L12: Get the latest calculated path and draw
+		const DynArray<iPoint>* path = app->pathfinding->GetLastPath();
+		for (uint i = 0; i < path->Count(); ++i)
+		{
+			iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+			app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
+		}
+
+		// L12: Debug pathfinding
+		iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
+		app->render->DrawTexture(originTex, originScreen.x, originScreen.y);
+	}
+}
 
 
 
