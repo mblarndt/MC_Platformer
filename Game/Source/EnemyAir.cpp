@@ -173,6 +173,11 @@ void EnemyAir::Move()
 	impulse = desiredVel - vel;
 	float mass = pbody->body->GetMass();
 	pbody->body->ApplyLinearImpulse(impulse, pbody->body->GetWorldCenter(), true);
+
+	if (app->scene->playerptr->deadTextureOn)
+	{
+		pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(spawn.x), PIXEL_TO_METERS(spawn.y)), 0);
+	}
 }
 
 void EnemyAir::FindPath()

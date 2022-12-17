@@ -174,6 +174,11 @@ void EnemyFloor::Move()
 
 	impulse = desiredVel - vel;
 	pbody->body->ApplyLinearImpulse(b2Vec2(impulse.x, 0), pbody->body->GetWorldCenter(), true);
+
+	if (app->scene->playerptr->deadTextureOn)
+	{
+		pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(spawn.x), PIXEL_TO_METERS(spawn.y)), 0);
+	}
 }
 
 
