@@ -220,7 +220,6 @@ void Scene::InitEnemyFloorSpawn(pugi::xml_node itemNode)
 {
 	enemyfloorptr = (EnemyFloor*)app->entityManager->CreateEntity(EntityType::ENEMYFLOOR, itemNode);
 	enemyfloorptr->InitSpawn(itemNode);
-
 }
 
 void Scene::DebugPathfinding() {
