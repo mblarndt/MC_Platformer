@@ -113,14 +113,14 @@ void EnemyAir::InitSpawn(pugi::xml_node itemNode)
 	idle.row = 0;
 	idle = app->animation->CreateAnimation(idle, true, 0.12f);
 
-	leftanim.startCol = 2;
-	leftanim.endCol = 5;
-	leftanim.row = 1;
+	leftanim.startCol = 0;
+	leftanim.endCol = 4;
+	leftanim.row = 2;
 	leftanim = app->animation->CreateAnimation(leftanim, true, 0.12f);
 
-	rightanim.startCol = 2;
-	rightanim.endCol = 5;
-	rightanim.row = 2;
+	rightanim.startCol = 0;
+	rightanim.endCol = 4;
+	rightanim.row = 1;
 	rightanim = app->animation->CreateAnimation(rightanim, true, 0.12f);
 
 	// Add physics to the enemy - initialize physics body

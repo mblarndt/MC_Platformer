@@ -101,7 +101,7 @@ private:
 	int height;
 
 
-	int speed = 3;
+	int speed = 2.5;
 	bool right = true;
 	BehaviourState behaviourState = IDLE;
 	SString moveClass;

@@ -289,7 +289,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		break;
 	case ColliderType::ENEMY:
 		app->audio->PlayFx(hitFxId);
-		//health = health - 1;
+		health = health - 1;
 		pbody->body->ApplyLinearImpulse(b2Vec2(2, 0), pbody->body->GetPosition(), true);
 
 		if (mainState = FALL) {
