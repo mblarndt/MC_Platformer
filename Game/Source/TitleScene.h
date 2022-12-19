@@ -32,12 +32,20 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	void AutomaticTransition();
+
 public:
 
 private:
 	SDL_Rect logoRect;
 	SDL_Texture* logo;
 	const char* texturePath;
+
+	// L15: TODO 2: Declare a GUI Button and create it using the GuiManager
+	GuiButton* btn1;
+	GuiButton* btn2;
+
+	float duration;
 
 };
 

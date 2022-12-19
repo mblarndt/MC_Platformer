@@ -9,6 +9,8 @@
 #include "Map.h"
 #include "Physics.h"
 #include "FadeToBlack.h"
+#include "GuiButton.h"
+#include "GuiManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -37,7 +39,7 @@ bool TitleScene::Awake(pugi::xml_node& config)
 	logoRect.h = 480;
 	logoRect.w = 1024;
 
-	texturePath = "Assets/Textures/logo.png";
+	texturePath = "Assets/Textures/background1.png";
 
 	return ret;
 }
@@ -51,6 +53,11 @@ bool TitleScene::Start()
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
+
+	uint w, h;
+	app->win->GetWindowSize(w, h);
+	btn1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "Test1", { 100, (int)w / 10,     190, 66 }, this);
+	btn2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "Test2", { 100, (int)w / 10 * 2, 190, 66 }, this);
 
 	return true;
 }
@@ -72,15 +79,15 @@ bool TitleScene::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
-
-		
-		
-		app->fadeToBlack->FadeToBlackScene("Scene", 0.1);
+		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		app->fadeToBlack->DoFadeToBlack(2);
 	}
+
+	//L15: Draw GUI
+	app->guiManager->Draw();
 
 	return true;
 }
@@ -104,4 +111,5 @@ bool TitleScene::CleanUp()
 
 	return true;
 }
+
 
