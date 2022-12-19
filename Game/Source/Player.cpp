@@ -209,8 +209,6 @@ bool Player::Update()
 			}
 		}
 
-		app->render->RenderNumber(health);
-
 		//When Player collides with Lava he spawns at start again	
 		HandleDeath(playerDeath);
 

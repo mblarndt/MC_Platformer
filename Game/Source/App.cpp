@@ -13,6 +13,7 @@
 #include "FadeToBlack.h"
 #include "Pathfinding.h"
 #include "Animation.h"
+#include "GuiManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -40,6 +41,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	map = new Map();
 	pathfinding = new PathFinding();
 	animation = new Animation();
+	guiManager = new GuiManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -62,6 +64,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(animation);
 	// Render last to swap buffer
 	AddModule(render);
+	AddModule(guiManager);
 }
 
 // Destructor
