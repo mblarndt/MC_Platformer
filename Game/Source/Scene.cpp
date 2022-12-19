@@ -14,6 +14,8 @@
 #include "Pathfinding.h"
 #include "EnemyAir.h"
 #include "EnemyFloor.h"
+#include "GuiManager.h"
+#include "GuiButton.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -77,6 +79,12 @@ bool Scene::Start()
 
 		// Texture to show path origin 
 		originTex = app->tex->Load("Assets/Maps/x_square.png");
+
+		uint w, h;
+		app->win->GetWindowSize(w, h);
+		btn1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "Test1", { ((int)w / 2) - 80, (int)w / 10,     190, 66 }, this);
+		btn2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "Test2", { ((int)w / 2) - 80, (int)w / 10 * 2, 190, 66 }, this);
+
 	}
 
 	
@@ -111,6 +119,9 @@ bool Scene::Update(float dt)
 
 	// Draw map
 	app->map->Draw();
+
+	//L15: Draw GUI
+	app->guiManager->Draw();
 
 	DebugPathfinding();
 

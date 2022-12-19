@@ -6,6 +6,7 @@
 #include "Item.h"
 #include "EnemyAir.h"
 #include "EnemyFloor.h"
+#include "GuiButton.h"
 struct SDL_Texture;
 
 class Scene : public Module
@@ -67,6 +68,10 @@ private:
 	// L12: Debug pathfing
 	iPoint origin;
 	bool originSelected = false;
+
+	// L15: TODO 2: Declare a GUI Button and create it using the GuiManager
+	GuiButton* btn1;
+	GuiButton* btn2;
 
 };
 

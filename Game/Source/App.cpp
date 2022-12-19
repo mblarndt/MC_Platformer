@@ -62,9 +62,10 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(fadeToBlack);
 	AddModule(pathfinding);
 	AddModule(animation);
+	AddModule(guiManager);
 	// Render last to swap buffer
 	AddModule(render);
-	AddModule(guiManager);
+	
 }
 
 // Destructor
