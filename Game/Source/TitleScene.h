@@ -44,8 +44,12 @@ private:
 	// L15: TODO 2: Declare a GUI Button and create it using the GuiManager
 	GuiButton* btn1;
 	GuiButton* btn2;
+	GuiButton* btn3;
 
 	float duration;
+
+	int click1FxId;
+	int click2FxId;
 
 };
 

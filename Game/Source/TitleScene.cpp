@@ -58,8 +58,10 @@ bool TitleScene::Start()
 	app->win->GetWindowSize(w, h);
 	btn1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "StartButton", { 100, (int)w / 10,     190, 66 }, this);
 	btn2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "ExitButton", { 100, (int)w / 10 * 3, 190, 66 }, this);
-	btn2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "OptionsButton", { 100, (int)w / 10 * 2, 190, 66 }, this);
+	btn3 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "OptionsButton", { 100, (int)w / 10 * 2, 190, 66 }, this);
 
+	click1FxId = app->audio->LoadFx("Assets/Audio/Fx/click1.ogg");
+	click2FxId = app->audio->LoadFx("Assets/Audio/Fx/click2.ogg");
 	return true;
 }
 
@@ -89,6 +91,13 @@ bool TitleScene::Update(float dt)
 
 	if(btn1->state == GuiControlState::PRESSED)
 		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
+
+	if (btn1->state == GuiControlState::FOCUSED)
+		app->audio->PlayFx(click1FxId);
+	if (btn2->state == GuiControlState::FOCUSED)
+		app->audio->PlayFx(click1FxId);
+	if (btn3->state == GuiControlState::FOCUSED)
+		app->audio->PlayFx(click1FxId);
 
 	
 
