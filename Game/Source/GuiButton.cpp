@@ -12,7 +12,10 @@ GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(
 	canClick = true;
 	drawBasic = false;
 
-	buttonTex = app->tex->Load("Assets/Textures/button_texture_atlas.png");
+	if(id == 1)
+		buttonTex = app->tex->Load("Assets/Textures/button_start.png");
+	if (id == 2)
+		buttonTex = app->tex->Load("Assets/Textures/button_exit.png");
 
 }
 
@@ -86,7 +89,7 @@ bool GuiButton::Draw(Render* render)
 	{
 		SDL_Rect rect = { 0,141,190,66 };
 		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
-		//render->DrawRectangle(bounds, 255, 255, 255, 200);
+		
 
 	} break;
 

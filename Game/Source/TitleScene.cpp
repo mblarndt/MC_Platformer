@@ -56,8 +56,8 @@ bool TitleScene::Start()
 
 	uint w, h;
 	app->win->GetWindowSize(w, h);
-	btn1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "Test1", { 100, (int)w / 10,     190, 66 }, this);
-	btn2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "Test2", { 100, (int)w / 10 * 2, 190, 66 }, this);
+	btn1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "StartButton", { 100, (int)w / 10,     190, 66 }, this);
+	btn2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "ExitButton", { 100, (int)w / 10 * 2, 190, 66 }, this);
 
 	return true;
 }
@@ -86,6 +86,11 @@ bool TitleScene::Update(float dt)
 		app->fadeToBlack->DoFadeToBlack(2);
 	}
 
+	if(btn1->state == GuiControlState::PRESSED)
+		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
+
+	
+
 	//L15: Draw GUI
 	app->guiManager->Draw();
 
@@ -98,6 +103,9 @@ bool TitleScene::PostUpdate()
 	bool ret = true;
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		ret = false;
+
+	if (btn2->state == GuiControlState::PRESSED)
 		ret = false;
 
 
