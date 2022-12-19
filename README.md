@@ -3,6 +3,7 @@
 ## Description
 
 Our submission for the class platformer project, based on Mojang's "Minecraft" easthetic. In this game you play as a Minecraft mob known as Slime. The player has to navigate the level through jumping in order to reach the end.
+Enemies can be killed by shoothing collectable "Slime Balls".
 
 ## Key Features
 
@@ -11,11 +12,14 @@ Our submission for the class platformer project, based on Mojang's "Minecraft" e
  - Configuration variables set in xml file (different from save/load)
  - SFX and Music
  - Animations
+ - Enemies with pathfinding
+ - Killable enemies
 
 ## Controls
 
  - A: Move Left*
  - D: Move Right*
+ - E: Shoot
  - SPACE: Jump
 
  *Movement is automated, just need to press it once to go left or right.
@@ -24,7 +28,7 @@ Our submission for the class platformer project, based on Mojang's "Minecraft" e
   - F3: Move to the start of the level (the one you are on)
   - F5: Save State
   - F6: Load State
-  - F9: Show colliders
+  - F9: Show colliders & enemy paths
 
 ## Developers
 
