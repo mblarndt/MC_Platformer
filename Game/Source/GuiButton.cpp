@@ -16,6 +16,8 @@ GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(
 		buttonTex = app->tex->Load("Assets/Textures/button_start.png");
 	if (id == 2)
 		buttonTex = app->tex->Load("Assets/Textures/button_exit.png");
+	if (id == 3)
+		buttonTex = app->tex->Load("Assets/Textures/button_options.png");
 
 }
 
