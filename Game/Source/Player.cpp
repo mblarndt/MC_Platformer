@@ -134,7 +134,7 @@ bool Player::Start() {
 	pbody = app->physics->CreateRectangle(position.x + (width/2), position.y + (height/2), width, height, bodyType::DYNAMIC);
 
 
-	shapeR.SetAsBox(0.01, 0.01, b2Vec2(0.3, 0), 0);
+	/*shapeR.SetAsBox(0.01, 0.01, b2Vec2(0.3, 0), 0);
 	shapeL.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
 	shapeT.SetAsBox(0.01, 0.01, b2Vec2( 0, -0.3), 0);
 	shapeB.SetAsBox(0.01, 0.01, b2Vec2(0, 0.29), 0);
@@ -145,7 +145,7 @@ bool Player::Start() {
 	fixtureDefR.density = 0;
 	fixtureDefL.density = 0.1f;
 	fixtureDefT.density = 0.2f;
-	fixtureDefB.density = 0.3f;
+	fixtureDefB.density = 0.3f;*/
 	//pbody->body->CreateFixture(&fixtureDefR);
 	//pbody->body->CreateFixture(&fixtureDefL);
 	//pbody->body->CreateFixture(&fixtureDefT);
