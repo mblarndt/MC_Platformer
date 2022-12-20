@@ -45,10 +45,11 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
+	AddModule(audio);
 	AddModule(input);
 	AddModule(win);
 	AddModule(tex);
-	AddModule(audio);
+	
 	//L07 DONE 2: Add Physics module
 	AddModule(physics);
 

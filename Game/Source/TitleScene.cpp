@@ -56,9 +56,9 @@ bool TitleScene::Start()
 
 	uint w, h;
 	app->win->GetWindowSize(w, h);
-	btn1 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "StartButton", { 100, (int)w / 10,     190, 66 }, this);
-	btn2 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "ExitButton", { 100, (int)w / 10 * 3, 190, 66 }, this);
-	btn3 = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "OptionsButton", { 100, (int)w / 10 * 2, 190, 66 }, this);
+	buttons[0] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "StartButton", { 100, (int)w / 10,     190, 66 }, this);
+	buttons[1] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "ExitButton", { 100, (int)w / 10 * 3, 190, 66 }, this);
+	buttons[2] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "OptionsButton", { 100, (int)w / 10 * 2, 190, 66 }, this);
 
 	click1FxId = app->audio->LoadFx("Assets/Audio/Fx/click1.ogg");
 	click2FxId = app->audio->LoadFx("Assets/Audio/Fx/click2.ogg");
@@ -89,15 +89,25 @@ bool TitleScene::Update(float dt)
 		app->fadeToBlack->DoFadeToBlack(2);
 	}
 
-	if(btn1->state == GuiControlState::PRESSED)
+	if (buttons[0]->state == GuiControlState::PRESSED) {
 		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
+	}
 
-	if (btn1->state == GuiControlState::FOCUSED)
-		app->audio->PlayFx(click1FxId);
-	if (btn2->state == GuiControlState::FOCUSED)
-		app->audio->PlayFx(click1FxId);
-	if (btn3->state == GuiControlState::FOCUSED)
-		app->audio->PlayFx(click1FxId);
+
+	for (int i = 0; i < numButtons; i++) {
+		GuiControl* button = buttons[i];
+		GuiControlState* preState = preStates[i];
+
+		if (*preState != button->state) {
+			if (button->state == GuiControlState::FOCUSED) {
+				app->audio->PlayFx(click1FxId);
+			}
+			if (buttons[0]->state == GuiControlState::PRESSED) {
+				app->audio->PlayFx(click2FxId);
+			}
+			*preState = button->state;
+		}
+	}
 
 	
 
@@ -115,7 +125,7 @@ bool TitleScene::PostUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 
-	if (btn2->state == GuiControlState::PRESSED)
+	if (buttons[2]->state == GuiControlState::PRESSED)
 		ret = false;
 
 

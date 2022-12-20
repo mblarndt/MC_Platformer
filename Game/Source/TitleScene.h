@@ -46,10 +46,22 @@ private:
 	GuiButton* btn2;
 	GuiButton* btn3;
 
+	GuiControlState preState1;
+	GuiControlState preState2;
+	GuiControlState preState3;
+
+	const int numButtons = 3;
+	GuiButton* buttons[3] = { btn1, btn2, btn3 };
+	GuiControlState* preStates[3] = { &preState1, &preState2, &preState3 };
+
+
+
 	float duration;
 
 	int click1FxId;
 	int click2FxId;
+
+	
 
 };
 
