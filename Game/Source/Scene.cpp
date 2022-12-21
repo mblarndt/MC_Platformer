@@ -16,6 +16,7 @@
 #include "EnemyFloor.h"
 #include "GuiManager.h"
 #include "GuiButton.h"
+#include "FadeToBlack.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -38,60 +39,13 @@ bool Scene::Awake(pugi::xml_node& config)
 
 	//L02: DONE 3: Instantiate the player using the entity manager
 	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER, config.child("player"));
-
 	return ret;
 }
 
 // Called before the first frame
 bool Scene::Start()
 {
-	bool retLoad = app->map->Load();
-
-	// L12 Create walkability map
-	if (retLoad) {
-		int w, h;
-		uchar* data = NULL;
-
-		bool retWalkMap = app->map->CreateWalkabilityMap(w, h, &data);
-		if (retWalkMap) app->pathfinding->SetMap(w, h, data);
-
-		RELEASE_ARRAY(data);
-
-	}
-
-
-	if (app->map->mapData.type == MapTypes::MAPTYPE_ISOMETRIC) {
-		uint width, height;
-		app->win->GetWindowSize(width, height);
-		app->render->camera.x = width / 2;
-
-		// Texture to highligh mouse position 
-		mouseTileTex = app->tex->Load("Assets/Maps/path.png");
-
-		// Texture to show path origin 
-		originTex = app->tex->Load("Assets/Maps/x.png");
-	}
-
-	if (app->map->mapData.type == MapTypes::MAPTYPE_ORTHOGONAL) {
-
-		// Texture to highligh mouse position 
-		mouseTileTex = app->tex->Load("Assets/Maps/path_square.png");
-
-		// Texture to show path origin 
-		originTex = app->tex->Load("Assets/Maps/x_square.png");
-
-	}
-
-	
-	// L04: DONE 7: Set the window title with map/tileset info
-	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
-		app->map->mapData.width,
-		app->map->mapData.height,
-		app->map->mapData.tileWidth,
-		app->map->mapData.tileHeight,
-		app->map->mapData.tilesets.Count());
-
-	app->win->SetTitle(title.GetString());
+	bool ret = SceneStart(1);
 
 	return true;
 }
@@ -100,6 +54,7 @@ bool Scene::Start()
 bool Scene::PreUpdate()
 {
 	return true;
+	LOG("Scene PreUpdate Finished");
 }
 
 // Called each loop iteration
@@ -112,12 +67,16 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		app->LoadGameRequest();
 
+	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+		app->fadeToBlack->SwitchMap(2);
+
 	// Draw map
 	app->map->Draw();
 
 	DebugPathfinding();
 
 	return true;
+	LOG("Scene Update Finished");
 }
 
 bool Scene::PostUpdate()
@@ -241,6 +200,58 @@ void Scene::DebugPathfinding() {
 		iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
 		app->render->DrawTexture(originTex, originScreen.x, originScreen.y);
 	}
+}
+
+bool Scene::SceneStart(int level)
+{
+	
+	if (level == 1)
+		fileName = "Assets/Maps/Level1.tmx";
+	else if (level == 2)
+		fileName = "Assets/Maps/Level2.tmx";
+	else
+		LOG("No Map found");
+
+	bool retLoad = app->map->Load(fileName);
+
+	// L12 Create walkability map
+	if (retLoad) {
+		int w, h;
+		uchar* data = NULL;
+
+		bool retWalkMap = app->map->CreateWalkabilityMap(w, h, &data);
+		if (retWalkMap) app->pathfinding->SetMap(w, h, data);
+
+		RELEASE_ARRAY(data);
+
+		LOG("Finished createing Walkability Map");
+
+	}
+
+	
+
+
+	// Texture to highligh mouse position 
+	mouseTileTex = app->tex->Load("Assets/Maps/path_square.png");
+	// Texture to show path origin 
+	originTex = app->tex->Load("Assets/Maps/x_square.png");
+
+	LOG("Loaded Tile Textures");
+
+	// L04: DONE 7: Set the window title with map/tileset info
+	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
+		app->map->mapData.width,
+		app->map->mapData.height,
+		app->map->mapData.tileWidth,
+		app->map->mapData.tileHeight,
+		app->map->mapData.tilesets.Count());
+
+	app->win->SetTitle(title.GetString());
+
+	LOG("Title set");
+
+
+	return retLoad;
 }
 
 

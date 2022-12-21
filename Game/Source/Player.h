@@ -71,6 +71,8 @@ public:
 	bool CamTransition(int start, int stop);
 
 	void Bump();
+
+	void Reset();
 	
 	//Player Physics Body
 	PhysBody* pbody;

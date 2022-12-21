@@ -13,6 +13,7 @@
 #include "Bullet.h"
 #include "EntityManager.h"
 #include "Window.h"
+#include "FadeToBlack.h"
 
 Player::Player(pugi::xml_node paras) : Entity(EntityType::PLAYER)
 {
@@ -156,7 +157,7 @@ bool Player::Start() {
 	pbody->ctype = ColliderType::PLAYER;
 
 	//Activate Collision Detection
-	pbody->listener = this;
+	//pbody->listener = this;
 
 	pbody->body->SetFixedRotation(true);
 
@@ -274,9 +275,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		break;
 	case ColliderType::DEATH:
 		//LOG("Collision DEATH");
-		frameCounter = 0;
-		app->audio->PlayFx(hitFxId);
-		playerDeath = true;
+		//frameCounter = 0;
+		//app->audio->PlayFx(hitFxId);
+		//playerDeath = true;
+		app->fadeToBlack->SwitchMap(2);
 		break;
 	case ColliderType::FINISH:
 		//LOG("Collision FINISH");
@@ -528,4 +530,9 @@ bool Player::CamTransition(int start, int stop)
 
 void Player::Bump() {
 	
+}
+
+void Player::Reset() {
+	position.x = 200;
+	position.y = 300;
 }

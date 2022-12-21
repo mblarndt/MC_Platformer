@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Window.h"
 #include "Player.h"
+#include "Map.h"
 #include "Box2D/Box2D/Box2D.h"
 
 // Tell the compiler to reference the compiled Box2D libraries

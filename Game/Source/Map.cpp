@@ -212,43 +212,65 @@ bool Map::CleanUp()
 {
     LOG("Unloading map");
 
-    // L04: DONE 2: Make sure you clean up any memory allocated from tilesets/map
-	ListItem<TileSet*>* item;
-	item = mapData.tilesets.start;
 
-	while (item != NULL)
-	{
-		RELEASE(item->data);
-		item = item->next;
-	}
-	mapData.tilesets.Clear();
+    // Remove all tilesets
+    ListItem<TileSet*>* item;
+    item = mapData.tilesets.start;
 
-    // L05: DONE 2: clean up all layer data
-    // Remove all layers
-    ListItem<MapLayer*>* layerItem;
-    layerItem = mapData.maplayers.start;
-
-    while (layerItem != NULL)
+    while (item != NULL)
     {
-        RELEASE(layerItem->data);
-        layerItem = layerItem->next;
+        SDL_DestroyTexture(item->data->texture);
+
+        RELEASE(item->data);
+        item = item->next;
     }
+    mapData.tilesets.Clear();
+
+    // Remove all layers
+    ListItem<MapLayer*>* item2;
+    item2 = mapData.maplayers.start;
+
+    while (item2 != NULL)
+    {
+        RELEASE(item2->data);
+        item2 = item2->next;
+    }
+    mapData.maplayers.Clear();
+
+    //Object cleanup
+    ListItem<ObjectGroups*>* item3;
+    item3 = app->map->mapData.objectgroups.start;
+
+    while (item3 != NULL)
+    {
+       // if (item3->data->object != NULL)
+        //    delete[] item3->data->object;
+
+        delete item3->data;
+
+        item3 = item3->next;
+    }
+
+    app->map->mapData.objectgroups.Clear();
+
+    // Clean up the pugui tree
+    
+    mapFileXML.reset();
 
     return true;
 }
 
 // Load new map
-bool Map::Load()
+bool Map::Load(const char* fileCName)
 {
     bool ret = true;
 
-    pugi::xml_document mapFileXML;
-    pugi::xml_parse_result result = mapFileXML.load_file(mapFileName.GetString());
+    pugi::xml_parse_result result = mapFileXML.load_file(fileCName);
     //pugi::xml_parse_result nameResult = mapFileXML.load_file(mapFileName.GetString());
 
     if(result == NULL)
     {
-        LOG("Could not load map xml file %s. pugi error: %s", mapFileName, result.description());
+        LOG("Could not load map xml file %s. pugi error: %s", mapNamePath, result.description());
         ret = false;
     }
 
@@ -266,6 +288,7 @@ bool Map::Load()
     if (ret == true)
     {
         ret = LoadAllLayers(mapFileXML.child("map"));
+        LOG("AllLayers loaded");
     }
 
 
@@ -273,7 +296,7 @@ bool Map::Load()
     {
         // L04: DONE 5: LOG all the data loaded iterate all tilesets and LOG everything
        
-        LOG("Successfully parsed map XML file :%s", mapFileName.GetString());
+        LOG("Successfully parsed map XML file :%s", SString(fileCName).GetString());
         LOG("width : %d height : %d",mapData.width,mapData.height);
         LOG("tile_width : %d tile_height : %d",mapData.tileWidth, mapData.tileHeight);
         
@@ -292,6 +315,8 @@ bool Map::Load()
         // L05: DONE 4: LOG the info for each loaded layer
         ListItem<MapLayer*>* mapLayer;
         mapLayer = mapData.maplayers.start;
+
+        LOG("MapLayer----");
 
         while (mapLayer != NULL) {
             LOG("id : %d name : %s", mapLayer->data->id, mapLayer->data->name.GetString());
@@ -530,6 +555,7 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         case ObjectTypes::OBJECTTYPE_SOLID:
             PhysBody* floor = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
             floor->ctype = ColliderType::FLOOR;
+            bodys.Add(floor);
         }
        
 

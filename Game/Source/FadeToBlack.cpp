@@ -138,7 +138,27 @@ bool FadeToBlack::FadeToBlackScene(char* scene, float time)
 
 bool FadeToBlack::SwitchMap(int level)
 {
-	return false;
+
+	bool ret = true;
+	LOG("Switching Maps...");
+
+	
+	//app->render->camera.x = 0;
+	//app->render->camera.y = 0;
+	app->entityManager->CleanUp();
+	app->map->CleanUp();
+	app->physics->CleanUp();
+	app->physics->Start();
+
+	
+
+	
+
+
+	app->scene->SceneStart(level);		//Load specified map
+	//app->player->ResetPlayer();	//Reset Player
+
+	return ret;
 }
 
 bool FadeToBlack::SwitchScenes(char* scene)

@@ -25,8 +25,6 @@ TitleScene::TitleScene() : Module()
 TitleScene::~TitleScene()
 {}
 
-
-
 // Called before render is available
 bool TitleScene::Awake(pugi::xml_node& config)
 {
@@ -80,17 +78,11 @@ bool TitleScene::Update(float dt)
 	//SDL_SetTextureAlphaMod(logo, accumulatedTime * 10.0f);
 	app->render->DrawTexture(logo, 0, 0);
 
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-	{
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
 	}
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-	{
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
 		app->fadeToBlack->DoFadeToBlack(2);
-	}
-
-	if (buttons[0]->state == GuiControlState::PRESSED) {
-		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
 	}
 
 
@@ -104,12 +96,11 @@ bool TitleScene::Update(float dt)
 			}
 			if (buttons[0]->state == GuiControlState::PRESSED) {
 				app->audio->PlayFx(click2FxId);
+				app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
 			}
 			*preState = button->state;
 		}
 	}
-
-	
 
 	//L15: Draw GUI
 	app->guiManager->Draw();
@@ -122,12 +113,8 @@ bool TitleScene::PostUpdate()
 {
 	bool ret = true;
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (buttons[1]->state == GuiControlState::PRESSED)
 		ret = false;
-
-	if (buttons[2]->state == GuiControlState::PRESSED)
-		ret = false;
-
 
 	return ret;
 }
@@ -136,8 +123,7 @@ bool TitleScene::PostUpdate()
 bool TitleScene::CleanUp()
 {
 	LOG("Freeing TitleScene");
+	app->tex->UnLoad(logo);
 
 	return true;
 }
-
-

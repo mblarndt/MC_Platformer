@@ -52,6 +52,9 @@ public:
 
 	void DebugPathfinding();
 
+	void SpawnPlayer();
+
+	bool SceneStart(int level);
 public:
 
 	//L02: DONE 3: Declare a Player attribute 
@@ -59,6 +62,10 @@ public:
 	Item* itemptr;
 	EnemyAir* enemyairptr;
 	EnemyFloor* enemyfloorptr;
+
+	pugi::xml_node playerparams;
+
+	const char* fileName;
 
 private:
 	SDL_Texture* img;
