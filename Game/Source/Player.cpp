@@ -27,146 +27,12 @@ Player::~Player() {
 
 bool Player::Awake() {
 
-	//Get and initialize Player parameters from XML
-	lives = parameters.child("stats").attribute("lives").as_int();
-	health = parameters.child("stats").attribute("health").as_int();
-	bullets = parameters.child("stats").attribute("bullets").as_int();
-
-	speed = parameters.child("movement").attribute("speed").as_int();
-	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
-
-	//Menu Position
-	menu.x = parameters.child("menu").attribute("x").as_int();
-	menu.y = parameters.child("menu").attribute("y").as_int();
-
-	//Camera Offset from Player
-	camOffset = parameters.child("cam").attribute("offset").as_int();
-
-	//Texture Variables
-	texturePath = parameters.child("textures").child("player").attribute("path").as_string();
-	width = parameters.child("textures").child("player").attribute("width").as_int();
-	height = parameters.child("textures").child("player").attribute("height").as_int();
-
-	deathPath = parameters.child("textures").child("death").attribute("path").as_string();
-	deathWidth = parameters.child("textures").child("death").attribute("width").as_int();
-	deathHeight = parameters.child("textures").child("death").attribute("height").as_int();
-
-	finishPath = parameters.child("textures").child("finish").attribute("path").as_string();
-	finishWidth = parameters.child("textures").child("finish").attribute("width").as_int();
-	finishHeight = parameters.child("textures").child("finish").attribute("height").as_int();
-
-	//Audio Variables
-	hitFxPath = parameters.child("audio").child("hit").attribute("path").as_string();
-	pickCoinFxPath = parameters.child("audio").child("pickcoin").attribute("path").as_string();
-	backmusicPath = parameters.child("audio").child("music").attribute("path").as_string();
-
-	//Player Variables
-	
-
-	//Idle
-	idle.row = parameters.child("animations").child("idle").attribute("row").as_int();
-	idle.startCol = parameters.child("animations").child("idle").attribute("startcol").as_int();
-	idle.endCol = parameters.child("animations").child("idle").attribute("endcol").as_int();
-
-	//MoveRight
-	movementRight.row = parameters.child("animations").child("moveright").attribute("row").as_int();
-	movementRight.startCol = parameters.child("animations").child("moveright").attribute("startcol").as_int();
-	movementRight.endCol = parameters.child("animations").child("moveright").attribute("endcol").as_int();
-
-	//MoveLeft
-	movementLeft.row = parameters.child("animations").child("moveleft").attribute("row").as_int();
-	movementLeft.startCol = parameters.child("animations").child("moveleft").attribute("startcol").as_int();
-	movementLeft.endCol = parameters.child("animations").child("moveleft").attribute("endcol").as_int();
-
-	//Jump Up
-	jumpUp.row = parameters.child("animations").child("jumpup").attribute("row").as_int();
-	jumpUp.startCol = parameters.child("animations").child("jumpup").attribute("startcol").as_int();
-	jumpUp.endCol = parameters.child("animations").child("jumpup").attribute("endcol").as_int();
-
-	//Jump Down
-	jumpDown.row = parameters.child("animations").child("jumpdown").attribute("row").as_int();
-	jumpDown.startCol = parameters.child("animations").child("jumpdown").attribute("startcol").as_int();
-	jumpDown.endCol = parameters.child("animations").child("jumpdown").attribute("endcol").as_int();
-
-	//Jump Down
-	jumpStart.row = parameters.child("animations").child("jumpstart").attribute("row").as_int();
-	jumpStart.startCol = parameters.child("animations").child("jumpstart").attribute("startcol").as_int();
-	jumpStart.endCol = parameters.child("animations").child("jumpstart").attribute("endcol").as_int();
-
-	//Jump Down
-	jumpEnd.row = parameters.child("animations").child("jumpend").attribute("row").as_int();
-	jumpEnd.startCol = parameters.child("animations").child("jumpend").attribute("startcol").as_int();
-	jumpEnd.endCol = parameters.child("animations").child("jumpend").attribute("endcol").as_int();
-
-	spriteHeight = row = parameters.child("animations").attribute("height").as_int();
-	spriteWidth = column = parameters.child("animations").attribute("width").as_int();
-
-	idle.width = movementLeft.width = movementRight.width = jumpUp.width = jumpDown.width = jumpStart.width = jumpEnd.width = spriteWidth;
-	idle.height = movementLeft.height = movementRight.height = jumpUp.height = jumpDown.height = jumpStart.height = jumpEnd.height = spriteHeight;
-
 	return true;
 }
 
 bool Player::Start() {
 
-	//initilize textures
-	texture = app->tex->Load(texturePath);
-	texDeath = app->tex->Load(deathPath);
-	texFinish = app->tex->Load(finishPath);
-	
-	//Initialize Audio Fx
-	hitFxId = app->audio->LoadFx(hitFxPath);
-	pickCoinFxId = app->audio->LoadFx(pickCoinFxPath);
-
-	//Initialize States and Values 
-	startGame = false;
-	remainingPixels = 0;
-
-	//Animations
-	idle = app->animation->CreateAnimation(idle, true, 0.1f);
-    movementRight = app->animation->CreateAnimation(movementRight, true, 0.1f);
-	movementLeft = app->animation->CreateAnimation(movementLeft, true, 0.1f);
-	jumpUp = app->animation->CreateAnimation(jumpUp, true, 0.1f);
-	jumpDown = app->animation->CreateAnimation(jumpDown, true, 0.1f);
-	jumpEnd = app->animation->CreateAnimation(jumpEnd, false, 0.2f);
-	jumpStart = app->animation->CreateAnimation(jumpStart, false, 0.2f);	
-	
-	// L07 TODO 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateRectangle(position.x + (width/2), position.y + (height/2), width, height, bodyType::DYNAMIC);
-
-
-	/*shapeR.SetAsBox(0.01, 0.01, b2Vec2(0.3, 0), 0);
-	shapeL.SetAsBox(0.01, 0.01, b2Vec2(-0.3, 0), 0);
-	shapeT.SetAsBox(0.01, 0.01, b2Vec2( 0, -0.3), 0);
-	shapeB.SetAsBox(0.01, 0.01, b2Vec2(0, 0.29), 0);
-	fixtureDefR.shape = &shapeR;
-	fixtureDefL.shape = &shapeL;
-	fixtureDefT.shape = &shapeT;
-	fixtureDefB.shape = &shapeB;
-	fixtureDefR.density = 0;
-	fixtureDefL.density = 0.1f;
-	fixtureDefT.density = 0.2f;
-	fixtureDefB.density = 0.3f;*/
-	//pbody->body->CreateFixture(&fixtureDefR);
-	//pbody->body->CreateFixture(&fixtureDefL);
-	//pbody->body->CreateFixture(&fixtureDefT);
-	//pbody->body->CreateFixture(&fixtureDefB);
-
-  
-	// L07 DONE 7: Assign collider type
-	pbody->ctype = ColliderType::PLAYER;
-
-	//Activate Collision Detection
-	//pbody->listener = this;
-
-	pbody->body->SetFixedRotation(true);
-
-
-	app->render->camera.x = menu.x;
-
-	currentAnimation = &idle;
-
-	toDelete = false;
+	InitPlayer();
 
 	return true;
 }
@@ -189,7 +55,7 @@ bool Player::Update()
 	if (startGame == true) {
 
 		//Main Loop starts when CamTransition finished
-		if (CamTransition(0, spawn.x) && levelFinish == false) {
+		if (levelFinish == false) {
 
 
 			if (playerDeath == false) {
@@ -232,22 +98,6 @@ bool Player::CleanUp()
 // L07 DONE 6: Define OnCollision function for the player. Check the virtual function on Entity class
 void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
-	b2Fixture* fix1 = contact->GetFixtureA();
-	b2Fixture* fix2 = contact->GetFixtureB();
-
-	if (fix2->GetDensity() == 0) {
-		//velocitx.x = -speed;
-		//health = health - 1;
-		//LOG("Health: %s", health);
-	}
-	if (fix2->GetDensity() == 0.1f) {
-		//velocitx.x = speed;
-		//health = health - 1;
-	}
-	if (fix2->GetDensity() == 0.2f) {
-	}
-	if (fix2->GetDensity() == 0.3f) {
-	}
 
 	switch (physB->ctype)
 	{
@@ -535,4 +385,125 @@ void Player::Bump() {
 void Player::Reset() {
 	position.x = 200;
 	position.y = 300;
+}
+
+void Player::InitPlayer() {
+	//Get and initialize Player parameters from XML
+	lives = parameters.child("stats").attribute("lives").as_int();
+	health = parameters.child("stats").attribute("health").as_int();
+	bullets = parameters.child("stats").attribute("bullets").as_int();
+
+	speed = parameters.child("movement").attribute("speed").as_int();
+	jumpforce = parameters.child("movement").attribute("jumpforce").as_float();
+
+	//Menu Position
+	menu.x = parameters.child("menu").attribute("x").as_int();
+	menu.y = parameters.child("menu").attribute("y").as_int();
+
+	//Camera Offset from Player
+	camOffset = parameters.child("cam").attribute("offset").as_int();
+
+	//Texture Variables
+	texturePath = parameters.child("textures").child("player").attribute("path").as_string();
+	width = parameters.child("textures").child("player").attribute("width").as_int();
+	height = parameters.child("textures").child("player").attribute("height").as_int();
+
+	deathPath = parameters.child("textures").child("death").attribute("path").as_string();
+	deathWidth = parameters.child("textures").child("death").attribute("width").as_int();
+	deathHeight = parameters.child("textures").child("death").attribute("height").as_int();
+
+	finishPath = parameters.child("textures").child("finish").attribute("path").as_string();
+	finishWidth = parameters.child("textures").child("finish").attribute("width").as_int();
+	finishHeight = parameters.child("textures").child("finish").attribute("height").as_int();
+
+	//Audio Variables
+	hitFxPath = parameters.child("audio").child("hit").attribute("path").as_string();
+	pickCoinFxPath = parameters.child("audio").child("pickcoin").attribute("path").as_string();
+	backmusicPath = parameters.child("audio").child("music").attribute("path").as_string();
+
+	//Player Variables
+
+
+	//Idle
+	idle.row = parameters.child("animations").child("idle").attribute("row").as_int();
+	idle.startCol = parameters.child("animations").child("idle").attribute("startcol").as_int();
+	idle.endCol = parameters.child("animations").child("idle").attribute("endcol").as_int();
+
+	//MoveRight
+	movementRight.row = parameters.child("animations").child("moveright").attribute("row").as_int();
+	movementRight.startCol = parameters.child("animations").child("moveright").attribute("startcol").as_int();
+	movementRight.endCol = parameters.child("animations").child("moveright").attribute("endcol").as_int();
+
+	//MoveLeft
+	movementLeft.row = parameters.child("animations").child("moveleft").attribute("row").as_int();
+	movementLeft.startCol = parameters.child("animations").child("moveleft").attribute("startcol").as_int();
+	movementLeft.endCol = parameters.child("animations").child("moveleft").attribute("endcol").as_int();
+
+	//Jump Up
+	jumpUp.row = parameters.child("animations").child("jumpup").attribute("row").as_int();
+	jumpUp.startCol = parameters.child("animations").child("jumpup").attribute("startcol").as_int();
+	jumpUp.endCol = parameters.child("animations").child("jumpup").attribute("endcol").as_int();
+
+	//Jump Down
+	jumpDown.row = parameters.child("animations").child("jumpdown").attribute("row").as_int();
+	jumpDown.startCol = parameters.child("animations").child("jumpdown").attribute("startcol").as_int();
+	jumpDown.endCol = parameters.child("animations").child("jumpdown").attribute("endcol").as_int();
+
+	//Jump Down
+	jumpStart.row = parameters.child("animations").child("jumpstart").attribute("row").as_int();
+	jumpStart.startCol = parameters.child("animations").child("jumpstart").attribute("startcol").as_int();
+	jumpStart.endCol = parameters.child("animations").child("jumpstart").attribute("endcol").as_int();
+
+	//Jump Down
+	jumpEnd.row = parameters.child("animations").child("jumpend").attribute("row").as_int();
+	jumpEnd.startCol = parameters.child("animations").child("jumpend").attribute("startcol").as_int();
+	jumpEnd.endCol = parameters.child("animations").child("jumpend").attribute("endcol").as_int();
+
+	spriteHeight = row = parameters.child("animations").attribute("height").as_int();
+	spriteWidth = column = parameters.child("animations").attribute("width").as_int();
+
+	idle.width = movementLeft.width = movementRight.width = jumpUp.width = jumpDown.width = jumpStart.width = jumpEnd.width = spriteWidth;
+	idle.height = movementLeft.height = movementRight.height = jumpUp.height = jumpDown.height = jumpStart.height = jumpEnd.height = spriteHeight;
+
+
+
+	//initilize textures
+	texture = app->tex->Load(texturePath);
+	texDeath = app->tex->Load(deathPath);
+	texFinish = app->tex->Load(finishPath);
+
+	//Initialize Audio Fx
+	hitFxId = app->audio->LoadFx(hitFxPath);
+	pickCoinFxId = app->audio->LoadFx(pickCoinFxPath);
+
+	//Initialize States and Values 
+	startGame = false;
+	remainingPixels = 0;
+
+	//Animations
+	idle = app->animation->CreateAnimation(idle, true, 0.1f);
+	movementRight = app->animation->CreateAnimation(movementRight, true, 0.1f);
+	movementLeft = app->animation->CreateAnimation(movementLeft, true, 0.1f);
+	jumpUp = app->animation->CreateAnimation(jumpUp, true, 0.1f);
+	jumpDown = app->animation->CreateAnimation(jumpDown, true, 0.1f);
+	jumpEnd = app->animation->CreateAnimation(jumpEnd, false, 0.2f);
+	jumpStart = app->animation->CreateAnimation(jumpStart, false, 0.2f);
+
+	// L07 TODO 5: Add physics to the player - initialize physics body
+	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, bodyType::DYNAMIC);
+
+	// L07 DONE 7: Assign collider type
+	pbody->ctype = ColliderType::PLAYER;
+
+	//Activate Collision Detection
+	pbody->listener = this;
+
+	pbody->body->SetFixedRotation(true);
+
+
+	app->render->camera.x = menu.x;
+
+	currentAnimation = &idle;
+
+	toDelete = false;
 }

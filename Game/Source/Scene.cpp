@@ -36,16 +36,15 @@ bool Scene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 	
+	playerparams = config;
 
-	//L02: DONE 3: Instantiate the player using the entity manager
-	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER, config.child("player"));
 	return ret;
 }
 
 // Called before the first frame
 bool Scene::Start()
 {
-	bool ret = SceneStart(1);
+	bool ret = SceneStart(2);
 
 	return true;
 }
@@ -204,6 +203,7 @@ void Scene::DebugPathfinding() {
 
 bool Scene::SceneStart(int level)
 {
+	SpawnPlayer();
 	
 	if (level == 1)
 		fileName = "Assets/Maps/Level1.tmx";
@@ -252,6 +252,10 @@ bool Scene::SceneStart(int level)
 
 
 	return retLoad;
+}
+
+void Scene::SpawnPlayer() {
+	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER, playerparams.child("player"));
 }
 
 

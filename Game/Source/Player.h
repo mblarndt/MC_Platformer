@@ -73,6 +73,8 @@ public:
 	void Bump();
 
 	void Reset();
+
+	void InitPlayer();
 	
 	//Player Physics Body
 	PhysBody* pbody;

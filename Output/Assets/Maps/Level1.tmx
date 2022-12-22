@@ -6,7 +6,6 @@
  <tileset firstgid="121" name="MapMetadata" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="2" columns="2">
   <image source="MapMetadata.png" width="67" height="34"/>
  </tileset>
- <objectgroup id="10" name="Items"/>
  <objectgroup id="8" name="Colliders">
   <object id="1" name="Ground" class="solid" x="1024" y="352" width="800" height="128"/>
   <object id="4" name="Ground" class="solid" x="1440" y="320" width="224" height="32"/>
