@@ -32,6 +32,14 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	bool MainMenuButtons();
+
+	bool SettingsButtons();
+
+	bool StartButtons();
+
+	bool NoButtons();
+
 	void AutomaticTransition();
 
 public:
@@ -45,14 +53,20 @@ private:
 	GuiButton* btn1;
 	GuiButton* btn2;
 	GuiButton* btn3;
+	GuiButton* btn4;
+	GuiButton* btn5;
+	GuiButton* btn6;
 
 	GuiControlState preState1;
 	GuiControlState preState2;
 	GuiControlState preState3;
+	GuiControlState preState4;
+	GuiControlState preState5;
+	GuiControlState preState6;
 
-	const int numButtons = 3;
-	GuiButton* buttons[3] = { btn1, btn2, btn3 };
-	GuiControlState* preStates[3] = { &preState1, &preState2, &preState3 };
+	const int numButtons = 6;
+	GuiButton* buttons[6] = { btn1, btn2, btn3, btn4, btn5, btn6 };
+	GuiControlState* preStates[6] = { &preState1, &preState2, &preState3, &preState4, &preState5, &preState6 };
 
 
 

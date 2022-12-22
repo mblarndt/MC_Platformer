@@ -150,12 +150,9 @@ bool FadeToBlack::SwitchMap(int level)
 	app->physics->CleanUp();
 	app->physics->Start();
 
-	
-
-	
-
-
+	app->scene->SpawnPlayer();
 	app->scene->SceneStart(level);		//Load specified map
+	
 	//app->player->ResetPlayer();	//Reset Player
 
 	return ret;
@@ -168,7 +165,7 @@ bool FadeToBlack::SwitchScenes(char* scene)
 
 		if (scene == "LogoScene")
 		{
-			app->scene->CleanUp();
+			
 			app->scene->active = false;
 			app->map->active = false;
 			app->physics->active = false;

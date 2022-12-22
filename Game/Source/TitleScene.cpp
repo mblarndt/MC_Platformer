@@ -52,14 +52,22 @@ bool TitleScene::Start()
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
 
+
+	//Button Setup
 	uint w, h;
 	app->win->GetWindowSize(w, h);
 	buttons[0] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "StartButton", { 100, (int)w / 10,     190, 66 }, this);
 	buttons[1] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "ExitButton", { 100, (int)w / 10 * 3, 190, 66 }, this);
 	buttons[2] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "OptionsButton", { 100, (int)w / 10 * 2, 190, 66 }, this);
+	buttons[3] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "Level 1", { 100+200, (int)w / 10,     190, 66 }, this);
+	buttons[4] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "Level 2", { 100+200, (int)w / 10 * 2, 190, 66 }, this);
+	buttons[5] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "Back", { 100+200, (int)w / 10 * 3, 190, 66 }, this);
 
+	//Load Button Click Sounds
 	click1FxId = app->audio->LoadFx("Assets/Audio/Fx/click1.ogg");
 	click2FxId = app->audio->LoadFx("Assets/Audio/Fx/click2.ogg");
+
+	MainMenuButtons();
 	return true;
 }
 
@@ -78,14 +86,7 @@ bool TitleScene::Update(float dt)
 	//SDL_SetTextureAlphaMod(logo, accumulatedTime * 10.0f);
 	app->render->DrawTexture(logo, 0, 0);
 
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
-		app->fadeToBlack->DoFadeToBlack(2);
-	}
-
-
+	//Button Click Sound
 	for (int i = 0; i < numButtons; i++) {
 		GuiControl* button = buttons[i];
 		GuiControlState* preState = preStates[i];
@@ -94,13 +95,34 @@ bool TitleScene::Update(float dt)
 			if (button->state == GuiControlState::FOCUSED) {
 				app->audio->PlayFx(click1FxId);
 			}
-			if (buttons[0]->state == GuiControlState::PRESSED) {
+			if (button->state == GuiControlState::PRESSED) {
 				app->audio->PlayFx(click2FxId);
-				app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
 			}
 			*preState = button->state;
 		}
 	}
+
+	//Check for Button Click
+	//Start Button
+	if (buttons[0]->state == GuiControlState::PRESSED)
+		StartButtons();
+
+	//Level 1 Button
+	if (buttons[3]->state == GuiControlState::PRESSED) {
+		NoButtons();
+		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
+	}
+		
+	//Level 2 Button
+	if (buttons[4]->state == GuiControlState::PRESSED) {
+		NoButtons();
+		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
+	}
+		
+	//Back Button
+	if (buttons[5]->state == GuiControlState::PRESSED)
+		MainMenuButtons();
+
 
 	//L15: Draw GUI
 	app->guiManager->Draw();
@@ -113,6 +135,7 @@ bool TitleScene::PostUpdate()
 {
 	bool ret = true;
 
+	//Exit Button
 	if (buttons[1]->state == GuiControlState::PRESSED)
 		ret = false;
 
@@ -124,6 +147,44 @@ bool TitleScene::CleanUp()
 {
 	LOG("Freeing TitleScene");
 	app->tex->UnLoad(logo);
+
+	return true;
+}
+
+bool TitleScene::MainMenuButtons() {
+		buttons[3]->state = GuiControlState::DISABLED;
+		buttons[4]->state = GuiControlState::DISABLED;
+		buttons[5]->state = GuiControlState::DISABLED;
+		buttons[0]->state = GuiControlState::NORMAL;
+		buttons[1]->state = GuiControlState::NORMAL;
+		buttons[2]->state = GuiControlState::NORMAL;
+	return true;
+}
+
+bool TitleScene::SettingsButtons()
+{
+	return false;
+}
+
+bool TitleScene::StartButtons()
+{
+		buttons[0]->state = GuiControlState::DISABLED;
+		buttons[1]->state = GuiControlState::DISABLED;
+		buttons[2]->state = GuiControlState::DISABLED;
+		buttons[3]->state = GuiControlState::NORMAL;
+		buttons[4]->state = GuiControlState::NORMAL;
+		buttons[5]->state = GuiControlState::NORMAL;
+	
+	return true;
+}
+
+bool TitleScene::NoButtons() {
+	buttons[0]->state = GuiControlState::DISABLED;
+	buttons[1]->state = GuiControlState::DISABLED;
+	buttons[2]->state = GuiControlState::DISABLED;
+	buttons[3]->state = GuiControlState::DISABLED;
+	buttons[4]->state = GuiControlState::DISABLED;
+	buttons[5]->state = GuiControlState::DISABLED;
 
 	return true;
 }
