@@ -44,7 +44,7 @@ bool Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Scene::Start()
 {
-	bool ret = SceneStart(1);
+	//bool ret = SceneStart(2);
 
 	return true;
 }
@@ -68,6 +68,8 @@ bool Scene::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		app->fadeToBlack->SwitchMap(2);
+	if (app->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
+		SpawnPlayer();
 
 	// Draw map
 	app->map->Draw();
@@ -220,9 +222,6 @@ bool Scene::SceneStart(int level)
 		LOG("Finished createing Walkability Map");
 
 	}
-
-	
-
 
 	// Texture to highligh mouse position 
 	mouseTileTex = app->tex->Load("Assets/Maps/path_square.png");

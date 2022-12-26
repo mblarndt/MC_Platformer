@@ -16,9 +16,10 @@
 #include "FadeToBlack.h"
 
 Player::Player(pugi::xml_node paras) : Entity(EntityType::PLAYER)
-{
+{	
+	//parameters = paras;
 	name.Create("Player");
-	parameters = paras;
+	
 }
 
 Player::~Player() {
@@ -27,7 +28,13 @@ Player::~Player() {
 
 bool Player::Awake() {
 
-	
+	pugi::xml_document config;
+	pugi::xml_node playerNode;
+	pugi::xml_parse_result parseResult = config.load_file("config.xml");
+	if (parseResult) {
+		playerNode = config.child("config").child("scene").child("player");
+	}
+	parameters = playerNode;
 	return true;
 }
 
@@ -96,7 +103,8 @@ bool Player::Update()
 
 bool Player::CleanUp()
 {
-	app->physics->world->DestroyBody(pbody->body);
+	toDelete = true;
+	//app->physics->world->DestroyBody(pbody->body);
 	return true;
 }
 
@@ -132,8 +140,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		//LOG("Collision DEATH");
 		//frameCounter = 0;
 		//app->audio->PlayFx(hitFxId);
-		playerDeath = true;
-		//app->fadeToBlack->SwitchMap(2);
+		//playerDeath = true;
+		app->fadeToBlack->SwitchMap(2);
 		break;
 	case ColliderType::FINISH:
 		//LOG("Collision FINISH");

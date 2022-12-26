@@ -110,6 +110,7 @@ bool TitleScene::Update(float dt)
 	//Level 1 Button
 	if (buttons[3]->state == GuiControlState::PRESSED) {
 		NoButtons();
+		app->scene->SceneStart(1);
 		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
 		app->scene->playerptr->camTransition = true;
 	}
@@ -117,7 +118,9 @@ bool TitleScene::Update(float dt)
 	//Level 2 Button
 	if (buttons[4]->state == GuiControlState::PRESSED) {
 		NoButtons();
+		app->scene->SceneStart(2);
 		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
+		app->scene->playerptr->camTransition = true;
 	}
 		
 	//Back Button

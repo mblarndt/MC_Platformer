@@ -145,15 +145,14 @@ bool FadeToBlack::SwitchMap(int level)
 	
 	//app->render->camera.x = 0;
 	//app->render->camera.y = 0;
+	app->scene->playerptr->CleanUp();
 	app->entityManager->CleanUp();
 	app->map->CleanUp();
 	app->physics->CleanUp();
 	app->physics->Start();
 
-	app->scene->SpawnPlayer();
+	//app->scene->SpawnPlayer();
 	app->scene->SceneStart(level);		//Load specified map
-	
-	//app->player->ResetPlayer();	//Reset Player
 
 	return ret;
 }
