@@ -27,12 +27,15 @@ Player::~Player() {
 
 bool Player::Awake() {
 
+	
 	return true;
 }
 
 bool Player::Start() {
 
 	InitPlayer();
+	camTransition = false;
+	//position = spawn = app->map->playerSpawn;
 
 	return true;
 }
@@ -45,14 +48,16 @@ bool Player::Update()
 		gameOver = true;
 
 	//Activate Game
-	if (startGame == false) {
-		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-			app->audio->PlayMusic(backmusicPath);
-			startGame = true;
-		}
+	if (camTransition == true) {
+		CamTransition(0, spawn.x);
+		app->audio->PlayMusic(backmusicPath);
+		startGame = true;
+		camTransition = false;
 	}
 
 	if (startGame == true) {
+		
+		
 
 		//Main Loop starts when CamTransition finished
 		if (levelFinish == false) {
@@ -127,8 +132,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		//LOG("Collision DEATH");
 		//frameCounter = 0;
 		//app->audio->PlayFx(hitFxId);
-		//playerDeath = true;
-		app->fadeToBlack->SwitchMap(2);
+		playerDeath = true;
+		//app->fadeToBlack->SwitchMap(2);
 		break;
 	case ColliderType::FINISH:
 		//LOG("Collision FINISH");
@@ -358,12 +363,6 @@ void Player::PlayerCamera()
 	}
 }
 
-void Player::InitSpawn(pugi::xml_node itemNode)
-{
-	position.x = spawn.x = itemNode.attribute("x").as_int();
-	position.y = spawn.y = itemNode.attribute("y").as_int();
-}
-
 bool Player::CamTransition(int start, int stop)
 {
 	bool ret = false;
@@ -488,6 +487,10 @@ void Player::InitPlayer() {
 	jumpDown = app->animation->CreateAnimation(jumpDown, true, 0.1f);
 	jumpEnd = app->animation->CreateAnimation(jumpEnd, false, 0.2f);
 	jumpStart = app->animation->CreateAnimation(jumpStart, false, 0.2f);
+
+	spawn = position = app->map->playerSpawn;
+	LOG("Player Spawn Position X: %i", spawn.x);
+	LOG("Player Spawn Position Y: %i", spawn.y);
 
 	// L07 TODO 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateRectangle(position.x + (width / 2), position.y + (height / 2), width, height, bodyType::DYNAMIC);

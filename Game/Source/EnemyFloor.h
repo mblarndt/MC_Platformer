@@ -22,6 +22,8 @@ public:
 
 	EnemyFloor(pugi::xml_node paras);
 
+	pugi::xml_node paramaters;
+
 	virtual ~EnemyFloor();
 
 	bool Awake();

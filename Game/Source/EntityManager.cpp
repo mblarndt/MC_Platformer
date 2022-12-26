@@ -26,17 +26,17 @@ bool EntityManager::Awake(pugi::xml_node& config)
 	LOG("Loading Entity Manager");
 	bool ret = true;
 
-	//Iterates over the entities and calls the Awake
-	ListItem<Entity*>* item;
-	Entity* pEntity = NULL;
+	////Iterates over the entities and calls the Awake
+	//ListItem<Entity*>* item;
+	//Entity* pEntity = NULL;
 
-	for (item = entities.start; item != NULL && ret == true; item = item->next)
-	{
-		pEntity = item->data;
+	//for (item = entities.start; item != NULL && ret == true; item = item->next)
+	//{
+	//	pEntity = item->data;
 
-		if (pEntity->active == false) continue;
-		ret = item->data->Awake();
-	}
+	//	if (pEntity->active == false) continue;
+	//	//ret = item->data->Awake();
+	//}
 
 	return ret;
 
@@ -46,17 +46,17 @@ bool EntityManager::Start() {
 
 	bool ret = true; 
 
-	//Iterates over the entities and calls Startj
-	ListItem<Entity*>* item;
-	Entity* pEntity = NULL;
+	////Iterates over the entities and calls Startj
+	//ListItem<Entity*>* item;
+	//Entity* pEntity = NULL;
 
-	for (item = entities.start; item != NULL && ret == true; item = item->next)
-	{
-		pEntity = item->data;
+	//for (item = entities.start; item != NULL && ret == true; item = item->next)
+	//{
+	//	pEntity = item->data;
 
-		if (pEntity->active == false) continue;
-		ret = item->data->Start();
-	}
+	//	if (pEntity->active == false) continue;
+	//	ret = item->data->Start();
+	//}
 
 	return ret;
 }
@@ -108,7 +108,11 @@ Entity* EntityManager::CreateEntity(EntityType type, pugi::xml_node paras)
 	}
 
 	// Created entities are added to the list
+	entity->Awake();
+	entity->Start();
 	AddEntity(entity);
+	
+	
 
 	return entity;
 }

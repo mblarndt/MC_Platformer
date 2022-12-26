@@ -111,6 +111,7 @@ bool TitleScene::Update(float dt)
 	if (buttons[3]->state == GuiControlState::PRESSED) {
 		NoButtons();
 		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
+		app->scene->playerptr->camTransition = true;
 	}
 		
 	//Level 2 Button

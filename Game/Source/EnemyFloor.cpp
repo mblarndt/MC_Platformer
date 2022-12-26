@@ -17,6 +17,7 @@
 EnemyFloor::EnemyFloor(pugi::xml_node paras) : Entity(EntityType::ENEMYFLOOR)
 {
 	name.Create("EnemyFloor");
+	parameters = paras;
 }
 
 EnemyFloor::~EnemyFloor() {
@@ -25,6 +26,7 @@ EnemyFloor::~EnemyFloor() {
 
 bool EnemyFloor::Awake() {
 
+	InitSpawn(parameters);
 	return true;
 }
 

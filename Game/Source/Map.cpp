@@ -539,7 +539,9 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
             cstr->ctype = ColliderType::CHECKPOINT;
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_PLAYERSPAWN) {
-            app->scene->InitPlayerSpawn(object);
+            playerSpawn.x = object.attribute("x").as_int();
+            playerSpawn.y = object.attribute("y").as_int();
+            app->scene->SpawnPlayer();
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_ITEM) {
             app->scene->CreateItem(object);

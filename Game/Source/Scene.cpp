@@ -44,7 +44,7 @@ bool Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Scene::Start()
 {
-	bool ret = SceneStart(2);
+	bool ret = SceneStart(1);
 
 	return true;
 }
@@ -165,22 +165,15 @@ void Scene::CreateBullet(pugi::xml_node itemNode, int x, int y, int direction)
 	bullet->BulletInitialisation(itemNode, x, y, direction);
 }
 
-void Scene::InitPlayerSpawn(pugi::xml_node itemNode)
-{
-	playerptr->InitSpawn(itemNode);
-}
 
 void Scene::InitEnemyAirSpawn(pugi::xml_node itemNode)
 {
 	enemyairptr = (EnemyAir*)app->entityManager->CreateEntity(EntityType::ENEMYAIR, itemNode);
-	enemyairptr->InitSpawn(itemNode);
-
 }
 
 void Scene::InitEnemyFloorSpawn(pugi::xml_node itemNode)
 {
 	enemyfloorptr = (EnemyFloor*)app->entityManager->CreateEntity(EntityType::ENEMYFLOOR, itemNode);
-	enemyfloorptr->InitSpawn(itemNode);
 }
 
 void Scene::DebugPathfinding() {
@@ -203,7 +196,7 @@ void Scene::DebugPathfinding() {
 
 bool Scene::SceneStart(int level)
 {
-	SpawnPlayer();
+	//SpawnPlayer();
 	
 	if (level == 1)
 		fileName = "Assets/Maps/Level1.tmx";

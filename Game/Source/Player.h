@@ -113,6 +113,12 @@ public:
 
 	bool deadTextureOn;
 
+	iPoint spawn;
+
+	bool startGame;
+
+	bool camTransition;
+
 private:
 
 	//Texture Variables
@@ -141,11 +147,11 @@ private:
 	//Player, Camera and Game States
 	bool playerDeath;
 	bool levelFinish;
-	bool startGame;
+	
 	bool gameOver;
 
 	//Position Variables
-	iPoint spawn;
+	
 	iPoint menu;
 	int camOffset;
 	int remainingPixels;
@@ -178,10 +184,6 @@ private:
 	int spriteHeight;
 	int row;
 	int column;
-
-
-	
-	
 };
 
 #endif // __PLAYER_H__

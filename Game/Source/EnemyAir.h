@@ -41,6 +41,8 @@ public:
 
 	void InitSpawn(pugi::xml_node itemNode);
 
+	pugi::xml_node parameters;
+
 	enum BehaviourState {
 		IDLE,
 		CHASE,

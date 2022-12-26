@@ -16,6 +16,7 @@
 
 EnemyAir::EnemyAir(pugi::xml_node paras) : Entity(EntityType::ENEMYAIR)
 {
+	parameters = paras;
 	name.Create("EnemyAir");
 }
 
@@ -24,7 +25,7 @@ EnemyAir::~EnemyAir() {
 }
 
 bool EnemyAir::Awake() {
-
+	InitSpawn(parameters);
 	return true;
 }
 
