@@ -32,7 +32,7 @@ bool EnemyFloor::Awake() {
 
 bool EnemyFloor::Start() {
 
-	health = 2;
+	health = maxHealth = 2;
 
 	return true;
 }
@@ -212,6 +212,7 @@ void EnemyFloor::RenderEntity()
 
 	if (!app->scene->playerptr->deadTextureOn)
 	{
+		HealthBar();
 		currentAnimation->Update();
 		SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 		app->render->DrawTexture(texture, position.x, position.y, &rect1);
@@ -236,4 +237,10 @@ void EnemyFloor::UpdateAnim()
 	{
 		currentAnimation = &idle;
 	}
+}
+
+void EnemyFloor::HealthBar() {
+	healthPerc = ((100 / maxHealth) * health);
+	SDL_Rect healthbar = { (position.x - 5), position.y - 10, healthPerc * 0.5, 5 };
+	app->render->DrawRectangle(healthbar, 255, 0, 0, 255, true, true);
 }
