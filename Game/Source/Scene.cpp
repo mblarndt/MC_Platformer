@@ -1,6 +1,7 @@
 #include "App.h"
 #include "Input.h"
 #include "Textures.h"
+#include "Render.h"
 #include "Audio.h"
 #include "Render.h"
 #include "Window.h"
@@ -59,6 +60,7 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	//MainButtons();
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		app->SaveGameRequest();
@@ -71,6 +73,14 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
 		SpawnPlayer();
 
+	
+	//app->render->DrawLine(app->render->camera.x * (-1), 0, 1024, 480, 255, 255, 255, 255, true);
+
+
+	//GUI();
+
+
+	//app->guiManager->Draw();
 	// Draw map
 	app->map->Draw();
 
@@ -84,8 +94,7 @@ bool Scene::PostUpdate()
 {
 	bool ret = true;
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
+
 
 	return ret;
 }
@@ -94,6 +103,15 @@ bool Scene::PostUpdate()
 bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
+	// free memory for all pointers
+	delete playerptr;
+	delete enemyairptr;
+	delete enemyfloorptr;
+
+	// clear pointers
+	playerptr = nullptr;
+	enemyairptr = nullptr;
+	enemyfloorptr = nullptr;
 
 	return true;
 }
@@ -199,6 +217,7 @@ void Scene::DebugPathfinding() {
 bool Scene::SceneStart(int level)
 {
 	//SpawnPlayer();
+	//ButtonSetup();
 	
 	if (level == 1)
 		fileName = "Assets/Maps/Level1.tmx";
@@ -240,6 +259,8 @@ bool Scene::SceneStart(int level)
 
 	app->win->SetTitle(title.GetString());
 
+	
+
 	LOG("Title set");
 
 
@@ -249,6 +270,74 @@ bool Scene::SceneStart(int level)
 void Scene::SpawnPlayer() {
 	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER, playerparams.child("player"));
 }
+
+//void Scene::GUI() {
+//	//Check for Button Click
+//	//Load Button
+//	if (buttons[0]->state == GuiControlState::PRESSED)
+//		app->SaveGameRequest();
+//
+//	//Save Button
+//	if (buttons[1]->state == GuiControlState::PRESSED) {
+//		app->LoadGameRequest();
+//	}
+//
+//	//Settings Button
+//	if (buttons[2]->state == GuiControlState::PRESSED) {
+//	}
+//
+//	//Menu Button
+//	if (buttons[3]->state == GuiControlState::PRESSED) {
+//		NoButtons();
+//		app->fadeToBlack->FadeToBlackScene("TitleScene", 0.5);
+//	}
+//
+//
+//	
+//}
+//
+//
+//bool Scene::MainButtons() {
+//	buttons[0]->state = GuiControlState::NORMAL;
+//	buttons[1]->state = GuiControlState::NORMAL;
+//	buttons[2]->state = GuiControlState::NORMAL;
+//	buttons[3]->state = GuiControlState::NORMAL;
+//
+//	return true;
+//}
+//
+//bool Scene::SettingsButtons()
+//{
+//	return false;
+//}
+//
+//
+//bool Scene::NoButtons() {
+//	for (int i = 0; i < numButtons; i++) {
+//		buttons[i]->state = GuiControlState::DISABLED;
+//	}
+//
+//	return true;
+//}
+//
+//bool Scene::ButtonSetup() {
+//	//Button Setup
+//	uint w, h;
+//	app->win->GetWindowSize(w, h);
+//	buttons[0] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, "SaveButton", { 100, (int)w / 10,     190, 66 }, this);
+//	buttons[1] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, "LoadButton", { 100, (int)w / 10 * 3, 190, 66 }, this);
+//	buttons[2] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "SettingsButton", { 100, (int)w / 10 * 2, 190, 66 }, this);
+//	buttons[3] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, "MenuButton", { 100 + 200, (int)w / 10,     190, 66 }, this);
+//
+//	//Load Button Click Sounds
+//	click1FxId = app->audio->LoadFx("Assets/Audio/Fx/click1.ogg");
+//	click2FxId = app->audio->LoadFx("Assets/Audio/Fx/click2.ogg");
+//
+//	//MainButtons();
+//	//NoButtons();
+//
+//	return true;
+//}
 
 
 

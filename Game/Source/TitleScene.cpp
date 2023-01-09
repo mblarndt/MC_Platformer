@@ -46,6 +46,7 @@ bool TitleScene::Awake(pugi::xml_node& config)
 bool TitleScene::Start()
 {
 	app->fadeToBlack->activeScene = "TitleScene";
+	app->scene->active = false;
 
 	logo = app->tex->Load(texturePath);
 
@@ -183,6 +184,10 @@ bool TitleScene::StartButtons()
 }
 
 bool TitleScene::NoButtons() {
+	//for (int i = 0; i < numButtons; i++) {
+	//	buttons[i]->state = GuiControlState::DISABLED;
+	//}
+
 	buttons[0]->state = GuiControlState::DISABLED;
 	buttons[1]->state = GuiControlState::DISABLED;
 	buttons[2]->state = GuiControlState::DISABLED;

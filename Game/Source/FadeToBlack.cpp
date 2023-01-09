@@ -145,14 +145,17 @@ bool FadeToBlack::SwitchMap(int level)
 	
 	//app->render->camera.x = 0;
 	//app->render->camera.y = 0;
-	app->scene->playerptr->CleanUp();
-	app->entityManager->CleanUp();
+	
 	app->map->CleanUp();
-	app->physics->CleanUp();
+	app->scene->CleanUp();
+	//app->entityManager->CleanUp();
+	//app->physics->CleanUp();
+	
 	app->physics->Start();
 
 	//app->scene->SpawnPlayer();
 	app->scene->SceneStart(level);		//Load specified map
+	app->scene->playerptr->position = iPoint(300, 300);
 
 	return ret;
 }
@@ -164,7 +167,6 @@ bool FadeToBlack::SwitchScenes(char* scene)
 
 		if (scene == "LogoScene")
 		{
-			
 			app->scene->active = false;
 			app->map->active = false;
 			app->physics->active = false;
@@ -179,6 +181,7 @@ bool FadeToBlack::SwitchScenes(char* scene)
 			app->map->active = false;
 			app->physics->active = false;
 			app->input->active = true;
+			//app->scene->CleanUp();
 		}
 		if (scene == "Scene")
 		{

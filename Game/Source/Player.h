@@ -75,6 +75,8 @@ public:
 	void Reset();
 
 	void InitPlayer();
+
+	void HealthBar();
 	
 	//Player Physics Body
 	PhysBody* pbody;
@@ -107,6 +109,8 @@ public:
 	//playerState state;
 	int bullets;
 	int health;
+	int maxHealth;
+	float healthPerc;
 	int lives;
 
 	int lastcamPos;
@@ -118,6 +122,8 @@ public:
 	bool startGame;
 
 	bool camTransition;
+
+	iPoint camPos;
 
 private:
 

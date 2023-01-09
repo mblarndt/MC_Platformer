@@ -24,6 +24,8 @@ public:
 
 	SDL_Texture* buttonTex;
 
+	GuiControlState preState;
+
 };
 
 #endif // __GUIBUTTON_H__

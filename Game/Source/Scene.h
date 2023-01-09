@@ -54,6 +54,16 @@ public:
 
 	void SpawnPlayer();
 
+	void GUI();
+
+	bool MainButtons();
+
+	bool SettingsButtons();
+
+	bool NoButtons();
+
+	bool ButtonSetup();
+
 	bool SceneStart(int level);
 public:
 
@@ -75,6 +85,26 @@ private:
 	// L12: Debug pathfing
 	iPoint origin;
 	bool originSelected = false;
+
+
+	// L15: TODO 2: Declare a GUI Button and create it using the GuiManager
+	GuiButton* btn1;
+	GuiButton* btn2;
+	GuiButton* btn3;
+	GuiButton* btn4;
+
+	GuiControlState preState1;
+	GuiControlState preState2;
+	GuiControlState preState3;
+	GuiControlState preState4;
+
+	const int numButtons = 4;
+	GuiButton* buttons[4] = { btn1, btn2, btn3, btn4 };
+	GuiControlState* preStates[4] = { &preState1, &preState2, &preState3, &preState4 };
+
+	int click1FxId;
+	int click2FxId;
+
 
 
 

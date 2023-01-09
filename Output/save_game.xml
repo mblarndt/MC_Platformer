@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <save_state>
+	<audio />
 	<input />
 	<window />
 	<textures />
-	<audio />
 	<physics />
 	<scene>
-		<player x="1573" y="290" health="7" bullets="82" />
-		<enemyair x="1467" y="263" health="0" />
-		<enemyfloor x="1387" y="305" health="2" />
+		<player x="4709" y="322" health="2" bullets="1" />
+		<enemyair x="3548" y="239" health="2" />
+		<enemyfloor x="4079" y="341" health="0" />
 	</scene>
 	<entitymanager />
 	<map />
@@ -16,7 +16,9 @@
 	<logoScene />
 	<fade />
 	<pathfinding />
+	<animation />
+	<guiManager />
 	<renderer>
-		<camera x="-1276" y="0" />
+		<camera x="-4093" y="0" />
 	</renderer>
 </save_state>

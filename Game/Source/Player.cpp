@@ -14,6 +14,7 @@
 #include "EntityManager.h"
 #include "Window.h"
 #include "FadeToBlack.h"
+#include "TitleScene.h"
 
 Player::Player(pugi::xml_node paras) : Entity(EntityType::PLAYER)
 {	
@@ -83,7 +84,7 @@ bool Player::Update()
 				/*----------------------------Rendering Player--------------------------*/
 				RenderEntity();
 
-				
+				HealthBar();
 
 			}
 		}
@@ -139,9 +140,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	case ColliderType::DEATH:
 		//LOG("Collision DEATH");
 		//frameCounter = 0;
-		//app->audio->PlayFx(hitFxId);
-		//playerDeath = true;
-		app->fadeToBlack->SwitchMap(2);
+		app->audio->PlayFx(hitFxId);
+		playerDeath = true;
+		//app->fadeToBlack->SwitchMap(2);
 		break;
 	case ColliderType::FINISH:
 		//LOG("Collision FINISH");
@@ -293,6 +294,7 @@ void Player::HandleMovement()
 	else if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
 		Shoot();
 	}
+
 	
 	else {
 		velocitx.y = pbody->body->GetLinearVelocity().y;
@@ -322,6 +324,7 @@ void Player::HandleDeath(bool dead)
 				health = 5;
 				position.x = spawn.x;
 				position.y = spawn.y;
+				app->render->camera.x = 0;
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 				velocitx.x = 0;
 				playerDeath = false;
@@ -341,11 +344,14 @@ void Player::HandleFinish(bool finish)
 		app->render->DrawTexture(texFinish, app->render->camera.x * (-1), 0, &rect);
 
 		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-			position.x = spawn.x;
+			/*position.x = spawn.x;
 			position.y = spawn.y;
 			pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
-			velocitx.x = 0;
+			velocitx.x = 0;*/
+
 			levelFinish = false;
+			app->fadeToBlack->SwitchScenes("TitleScene");
+			app->titleScene->Start();
 		}
 	}
 }
@@ -397,7 +403,7 @@ void Player::Reset() {
 void Player::InitPlayer() {
 	//Get and initialize Player parameters from XML
 	lives = parameters.child("stats").attribute("lives").as_int();
-	health = parameters.child("stats").attribute("health").as_int();
+	health = maxHealth = parameters.child("stats").attribute("health").as_int();
 	bullets = parameters.child("stats").attribute("bullets").as_int();
 
 	speed = parameters.child("movement").attribute("speed").as_int();
@@ -517,4 +523,14 @@ void Player::InitPlayer() {
 	currentAnimation = &idle;
 
 	toDelete = false;
+}
+
+void Player::HealthBar() {
+	healthPerc = ((100 / maxHealth) * health);
+	camPos = iPoint(app->render->camera.x, app->render->camera.y);
+	SDL_Rect healthbar = { (camPos.x * (-1) + 412), 25, healthPerc * 2, 20 };
+	int thickness = 5;
+	SDL_Rect stroke = { healthbar.x - thickness, healthbar.y - thickness, 200 + thickness * 2, healthbar.h + 2 * thickness };
+	app->render->DrawRectangle(stroke, 0, 0, 0, 255, true, true);
+	app->render->DrawRectangle(healthbar, 255, 0, 0, 255, true, true);
 }
