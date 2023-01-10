@@ -103,30 +103,6 @@ bool TitleScene::Update(float dt)
 		}
 	}
 
-	//Check for Button Click
-	//Start Button
-	if (buttons[0]->state == GuiControlState::PRESSED)
-		StartButtons();
-
-	//Level 1 Button
-	if (buttons[3]->state == GuiControlState::PRESSED) {
-		NoButtons();
-		app->scene->SceneStart(1);
-		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
-		app->scene->playerptr->camTransition = true;
-	}
-		
-	//Level 2 Button
-	if (buttons[4]->state == GuiControlState::PRESSED) {
-		NoButtons();
-		app->scene->SceneStart(2);
-		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
-		app->scene->playerptr->camTransition = true;
-	}
-		
-	//Back Button
-	if (buttons[5]->state == GuiControlState::PRESSED)
-		MainMenuButtons();
 
 
 	//L15: Draw GUI
@@ -195,5 +171,40 @@ bool TitleScene::NoButtons() {
 	buttons[4]->state = GuiControlState::DISABLED;
 	buttons[5]->state = GuiControlState::DISABLED;
 
+	return true;
+}
+
+bool TitleScene::OnGuiMouseClickEvent(GuiControl* control)
+{
+	// L15: DONE 5: Implement the OnGuiMouseClickEvent method
+	LOG("Event by %d ", control->id);
+
+	switch (control->id)
+	{
+	case 1:
+		LOG("Button 1 click");
+		StartButtons();
+		break;
+
+	case 4:
+		LOG("Button 4: Start Level 1");
+		NoButtons();
+		app->scene->SceneStart(1);
+		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
+		app->scene->playerptr->camTransition = true;
+		break;
+	
+	case 5:
+		LOG("Button 5: Start Level 2");
+		NoButtons();
+		app->scene->SceneStart(2);
+		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
+		app->scene->playerptr->camTransition = true;
+		break;
+
+	case 6:
+		LOG("Button 6: Back to Main Menu");
+		MainMenuButtons();
+	}
 	return true;
 }

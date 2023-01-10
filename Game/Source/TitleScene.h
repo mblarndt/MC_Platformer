@@ -40,6 +40,8 @@ public:
 
 	bool NoButtons();
 
+	bool OnGuiMouseClickEvent(GuiControl* control);
+
 	void AutomaticTransition();
 
 public:

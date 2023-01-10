@@ -13,6 +13,7 @@
 #include <math.h>
 #include "SDL_image/include/SDL_image.h"
 #include "Item.h"
+#include "Optick/include/optick.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -87,6 +88,8 @@ bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 
 void Map::Draw()
 {
+    OPTICK_EVENT();
+
     if(mapLoaded == false)
         return;
 
