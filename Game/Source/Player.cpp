@@ -85,9 +85,6 @@ bool Player::Update()
 
 		//When Player collides with Lava he spawns at start again	
 		HandleDeath(playerDeath);
-
-		//If Player finished Level
-		HandleFinish(levelFinish);
 			
 		Debug();
 		
@@ -303,17 +300,11 @@ void Player::HandleDeath(bool dead)
 		if (frameCounter < 30) {
 			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 			app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
-			deadTextureOn = true;
 			frameCounter++;
 		}
 		else {
-
-			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
-			app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
-			SDL_Rect rect = { 0, 0, 1024, 480 };
-			app->render->DrawTexture(texDeath, app->render->camera.x * -1, 0, &rect);
 			deadTextureOn = true;
-			//frameCounter++;
+
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 				health = 5;
 				position.x = spawn.x;
@@ -327,30 +318,6 @@ void Player::HandleDeath(bool dead)
 		}
 	}
 
-}
-
-void Player::HandleFinish(bool finish)
-{
-	if (finish) {
-		SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
-		app->render->DrawTexture(texture, position.x - 15, position.y - 10, &rect1);
-		SDL_Rect rect = { 0, 0, app->win->width, 480 };
-		app->render->DrawTexture(texFinish, app->render->camera.x * (-1), 0, &rect);
-
-		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-			/*position.x = spawn.x;
-			position.y = spawn.y;
-			pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
-			velocitx.x = 0;*/
-
-			/*
-			levelFinish = false;
-			app->fadeToBlack->SwitchScenes("TitleScene");
-			app->titleScene->Start();*/
-
-			app->fadeToBlack->SwitchMap(2);
-		}
-	}
 }
 
 void Player::RenderEntity()
@@ -425,14 +392,6 @@ void Player::InitPlayer() {
 	width = parameters.child("textures").child("player").attribute("width").as_int();
 	height = parameters.child("textures").child("player").attribute("height").as_int();
 
-	deathPath = parameters.child("textures").child("death").attribute("path").as_string();
-	deathWidth = parameters.child("textures").child("death").attribute("width").as_int();
-	deathHeight = parameters.child("textures").child("death").attribute("height").as_int();
-
-	finishPath = parameters.child("textures").child("finish").attribute("path").as_string();
-	finishWidth = parameters.child("textures").child("finish").attribute("width").as_int();
-	finishHeight = parameters.child("textures").child("finish").attribute("height").as_int();
-
 	//Audio Variables
 	hitFxPath = parameters.child("audio").child("hit").attribute("path").as_string();
 	pickCoinFxPath = parameters.child("audio").child("pickcoin").attribute("path").as_string();
@@ -486,8 +445,6 @@ void Player::InitPlayer() {
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);
-	texDeath = app->tex->Load(deathPath);
-	texFinish = app->tex->Load(finishPath);
 
 	//Initialize Audio Fx
 	hitFxId = app->audio->LoadFx(hitFxPath);

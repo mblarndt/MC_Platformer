@@ -73,14 +73,26 @@ public:
 	EnemyAir* enemyairptr;
 	EnemyFloor* enemyfloorptr;
 
-	pugi::xml_node playerparams;
+	pugi::xml_node params;
 
 	const char* fileName;
+
+
 
 private:
 	SDL_Texture* img;
 	SDL_Texture* mouseTileTex = nullptr;
 	SDL_Texture* originTex = nullptr;
+
+	SDL_Texture* deathTex;
+	const char* deathTexPath;
+	int deathTexW;
+	int deathTexH;
+
+	SDL_Texture* finishTex;
+	const char* finishTexPath;
+	int finishTexW;
+	int finishTexH;
 
 	// L12: Debug pathfing
 	iPoint origin;

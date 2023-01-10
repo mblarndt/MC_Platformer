@@ -125,6 +125,10 @@ public:
 
 	iPoint camPos;
 
+	//Player, Camera and Game States
+	bool playerDeath;
+	bool levelFinish;
+
 private:
 
 	//Texture Variables
@@ -133,15 +137,7 @@ private:
 	int width;
 	int height;
 
-	SDL_Texture* texDeath;
-	const char* deathPath;
-	int deathWidth;
-	int deathHeight;
 	
-	SDL_Texture* texFinish;
-	const char* finishPath;
-	int finishWidth;
-	int finishHeight;
 
 	//FX-Sound Variables
 	int hitFxId;
@@ -150,9 +146,7 @@ private:
 	const char* hitFxPath;
 	const char* backmusicPath;
 	
-	//Player, Camera and Game States
-	bool playerDeath;
-	bool levelFinish;
+	
 	
 	bool gameOver;
 

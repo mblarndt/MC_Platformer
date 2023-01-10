@@ -23,13 +23,15 @@
 
 
   <scene>
+	  <textures>
+		  <death path="Assets/Textures/dead3.png" width="1024" height="480"/>
+		  <finish path="Assets/Textures/finish.png" width="1024" height="480"/>
+	  </textures>
 	  <player>
 		  <menu x="0" y="0"/>
 		  <cam offset="300"/>
 		  <textures>
 			  <player path="Assets/Textures/Slime_Spritesheet.png" width="30" height="30"/>
-			  <death path="Assets/Textures/dead3.png" width="1024" height="480"/>
-			  <finish path="Assets/Textures/finish.png" width="1024" height="480"/>
 		  </textures>
 		  <animations width ="60" height="40">
 			  <idle row="0" startcol="0" endcol="1"/>

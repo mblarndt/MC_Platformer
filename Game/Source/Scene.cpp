@@ -37,7 +37,17 @@ bool Scene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 	
-	playerparams = config;
+	params = config;
+
+	pugi::xml_node finishTextures = config.child("textures").child("finish");
+	finishTexPath = finishTextures.attribute("path").as_string();
+	finishTexW = finishTextures.attribute("width").as_int();
+	finishTexH = finishTextures.attribute("height").as_int();
+
+	pugi::xml_node deathTextures = config.child("textures").child("death");
+	deathTexPath = deathTextures.attribute("path").as_string();
+	deathTexW = deathTextures.attribute("width").as_int();
+	deathTexH = deathTextures.attribute("height").as_int();
 
 	return ret;
 }
@@ -45,6 +55,8 @@ bool Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Scene::Start()
 {
+	deathTex = app->tex->Load(deathTexPath);
+	finishTex = app->tex->Load(finishTexPath);
 
 	return true;
 }
@@ -73,13 +85,27 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
 		app->fadeToBlack->SwitchMap(2);
 
+	if (playerptr->levelFinish) {
+		SDL_Rect rect = { 0, 0, app->win->width, 480 };
+		app->render->DrawTexture(finishTex, app->render->camera.x * (-1), 0, &rect);
+
+		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+			app->fadeToBlack->SwitchMap(2);
+		}
+	}
+	else if (playerptr->deadTextureOn) {
+		SDL_Rect rect = { 0, 0, 1024, 480 };
+		app->render->DrawTexture(deathTex, app->render->camera.x * -1, 0, &rect);
+	}
+
+	else(app->map->Draw());
 
 	//GUI();
 
 
 	//app->guiManager->Draw();
 	// Draw map
-	app->map->Draw();
+
 
 	DebugPathfinding();
 
