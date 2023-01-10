@@ -29,13 +29,7 @@ Player::~Player() {
 
 bool Player::Awake() {
 
-	pugi::xml_document config;
-	pugi::xml_node playerNode;
-	pugi::xml_parse_result parseResult = config.load_file("config.xml");
-	if (parseResult) {
-		playerNode = config.child("config").child("scene").child("player");
-	}
-	parameters = playerNode;
+	
 	return true;
 }
 
@@ -349,9 +343,12 @@ void Player::HandleFinish(bool finish)
 			pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 			velocitx.x = 0;*/
 
+			/*
 			levelFinish = false;
 			app->fadeToBlack->SwitchScenes("TitleScene");
-			app->titleScene->Start();
+			app->titleScene->Start();*/
+
+			app->fadeToBlack->SwitchMap(2);
 		}
 	}
 }
@@ -401,6 +398,13 @@ void Player::Reset() {
 }
 
 void Player::InitPlayer() {
+
+	pugi::xml_document config;
+	pugi::xml_parse_result parseResult = config.load_file("config.xml");
+	if (parseResult) {
+		parameters = config.child("config").child("scene").child("player");
+	}
+
 	//Get and initialize Player parameters from XML
 	lives = parameters.child("stats").attribute("lives").as_int();
 	health = maxHealth = parameters.child("stats").attribute("health").as_int();

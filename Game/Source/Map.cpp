@@ -230,34 +230,28 @@ bool Map::CleanUp()
     mapData.tilesets.Clear();
 
     // Remove all layers
-    ListItem<MapLayer*>* item2;
-    item2 = mapData.maplayers.start;
+    ListItem<MapLayer*>* layerItem;
+    layerItem = mapData.maplayers.start;
 
-    while (item2 != NULL)
+    while (layerItem != NULL)
     {
-        RELEASE(item2->data);
-        item2 = item2->next;
+        RELEASE(layerItem->data);
+        layerItem = layerItem->next;
     }
     mapData.maplayers.Clear();
 
     //Object cleanup
-    ListItem<ObjectGroups*>* item3;
-    item3 = app->map->mapData.objectgroups.start;
-
-    while (item3 != NULL)
+    ListItem<ObjectGroups*>* groupItem;
+    groupItem = mapData.objectgroups.start;
+    
+    while (groupItem != NULL)
     {
-       // if (item3->data->object != NULL)
-        //    delete[] item3->data->object;
-
-        delete item3->data;
-
-        item3 = item3->next;
+        RELEASE(groupItem->data);
+        groupItem = groupItem->next;
     }
-
-    app->map->mapData.objectgroups.Clear();
+    mapData.objectgroups.Clear();
 
     // Clean up the pugui tree
-    
     mapFileXML.reset();
 
     return true;
@@ -544,7 +538,7 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->type == ObjectTypes::OBJECTTYPE_PLAYERSPAWN) {
             playerSpawn.x = object.attribute("x").as_int();
             playerSpawn.y = object.attribute("y").as_int();
-            app->scene->SpawnPlayer();
+            //app->scene->SpawnPlayer();
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_ITEM) {
             app->scene->CreateItem(object);

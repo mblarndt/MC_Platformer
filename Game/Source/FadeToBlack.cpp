@@ -141,21 +141,20 @@ bool FadeToBlack::SwitchMap(int level)
 
 	bool ret = true;
 	LOG("Switching Maps...");
-
-	
-	//app->render->camera.x = 0;
-	//app->render->camera.y = 0;
 	
 	app->map->CleanUp();
 	app->scene->CleanUp();
-	//app->entityManager->CleanUp();
-	//app->physics->CleanUp();
+	app->entityManager->CleanUp();
 	
-	app->physics->Start();
+	b2Body* body = app->physics->world->GetBodyList();
+	while (body != NULL)
+	{
+		app->physics->world->DestroyBody(app->physics->world->GetBodyList());
+		body = body->GetNext();
+	}
 
 	//app->scene->SpawnPlayer();
 	app->scene->SceneStart(level);		//Load specified map
-	app->scene->playerptr->position = iPoint(300, 300);
 
 	return ret;
 }

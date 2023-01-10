@@ -45,7 +45,6 @@ bool Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Scene::Start()
 {
-	//bool ret = SceneStart(2);
 
 	return true;
 }
@@ -69,12 +68,10 @@ bool Scene::Update(float dt)
 		app->LoadGameRequest();
 
 	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
-		app->fadeToBlack->SwitchMap(2);
-	if (app->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
-		SpawnPlayer();
+		app->fadeToBlack->SwitchMap(1);
 
-	
-	//app->render->DrawLine(app->render->camera.x * (-1), 0, 1024, 480, 255, 255, 255, 255, true);
+	if (app->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
+		app->fadeToBlack->SwitchMap(2);
 
 
 	//GUI();
@@ -103,15 +100,6 @@ bool Scene::PostUpdate()
 bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
-	// free memory for all pointers
-	delete playerptr;
-	delete enemyairptr;
-	delete enemyfloorptr;
-
-	// clear pointers
-	playerptr = nullptr;
-	enemyairptr = nullptr;
-	enemyfloorptr = nullptr;
 
 	return true;
 }
@@ -185,7 +173,6 @@ void Scene::CreateBullet(pugi::xml_node itemNode, int x, int y, int direction)
 	bullet->BulletInitialisation(itemNode, x, y, direction);
 }
 
-
 void Scene::InitEnemyAirSpawn(pugi::xml_node itemNode)
 {
 	enemyairptr = (EnemyAir*)app->entityManager->CreateEntity(EntityType::ENEMYAIR, itemNode);
@@ -216,16 +203,18 @@ void Scene::DebugPathfinding() {
 
 bool Scene::SceneStart(int level)
 {
-	//SpawnPlayer();
-	//ButtonSetup();
-	
-	if (level == 1)
+	switch (level)
+	{
+	case 1:
 		fileName = "Assets/Maps/Level1.tmx";
-	else if (level == 2)
+		break;
+	case 2:
 		fileName = "Assets/Maps/Level2.tmx";
-	else
+	default:
 		LOG("No Map found");
-
+		break;
+	}
+		
 	bool retLoad = app->map->Load(fileName);
 
 	// L12 Create walkability map
@@ -237,8 +226,6 @@ bool Scene::SceneStart(int level)
 		if (retWalkMap) app->pathfinding->SetMap(w, h, data);
 
 		RELEASE_ARRAY(data);
-
-		LOG("Finished createing Walkability Map");
 
 	}
 
@@ -259,16 +246,15 @@ bool Scene::SceneStart(int level)
 
 	app->win->SetTitle(title.GetString());
 
-	
-
-	LOG("Title set");
-
+	SpawnPlayer();
 
 	return retLoad;
 }
 
 void Scene::SpawnPlayer() {
-	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER, playerparams.child("player"));
+	pugi::xml_node playerNode;
+	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER, playerNode);
+	playerptr->camTransition = true;
 }
 
 //void Scene::GUI() {

@@ -46,17 +46,7 @@ bool EntityManager::Start() {
 
 	bool ret = true; 
 
-	////Iterates over the entities and calls Startj
-	//ListItem<Entity*>* item;
-	//Entity* pEntity = NULL;
-
-	//for (item = entities.start; item != NULL && ret == true; item = item->next)
-	//{
-	//	pEntity = item->data;
-
-	//	if (pEntity->active == false) continue;
-	//	ret = item->data->Start();
-	//}
+	
 
 	return ret;
 }
@@ -70,7 +60,7 @@ bool EntityManager::CleanUp()
 
 	while (item != NULL && ret == true)
 	{
-		ret = item->data->CleanUp();
+		if(item->data->active) ret = item->data->CleanUp();
 		item = item->prev;
 	}
 
