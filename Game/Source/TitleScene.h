@@ -59,6 +59,8 @@ private:
 	GuiButton* btn5;
 	GuiButton* btn6;
 
+	GuiSlider* slider;
+
 	GuiControlState preState1;
 	GuiControlState preState2;
 	GuiControlState preState3;
@@ -69,6 +71,8 @@ private:
 	const int numButtons = 6;
 	GuiButton* buttons[6] = { btn1, btn2, btn3, btn4, btn5, btn6 };
 	GuiControlState* preStates[6] = { &preState1, &preState2, &preState3, &preState4, &preState5, &preState6 };
+
+	
 
 
 

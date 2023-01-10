@@ -39,6 +39,7 @@ bool Scene::Awake(pugi::xml_node& config)
 	
 	params = config;
 
+	//Load from config
 	pugi::xml_node finishTextures = config.child("textures").child("finish");
 	finishTexPath = finishTextures.attribute("path").as_string();
 	finishTexW = finishTextures.attribute("width").as_int();
@@ -48,6 +49,9 @@ bool Scene::Awake(pugi::xml_node& config)
 	deathTexPath = deathTextures.attribute("path").as_string();
 	deathTexW = deathTextures.attribute("width").as_int();
 	deathTexH = deathTextures.attribute("height").as_int();
+
+
+	ButtonSetup();
 
 	return ret;
 }
@@ -85,6 +89,10 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
 		app->fadeToBlack->SwitchMap(2);
 
+
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		MainButtons();
+
 	if (playerptr->levelFinish) {
 		SDL_Rect rect = { 0, 0, app->win->width, 480 };
 		app->render->DrawTexture(finishTex, app->render->camera.x * (-1), 0, &rect);
@@ -93,6 +101,7 @@ bool Scene::Update(float dt)
 			app->fadeToBlack->SwitchMap(2);
 		}
 	}
+
 	else if (playerptr->deadTextureOn) {
 		SDL_Rect rect = { 0, 0, 1024, 480 };
 		app->render->DrawTexture(deathTex, app->render->camera.x * -1, 0, &rect);
@@ -100,11 +109,8 @@ bool Scene::Update(float dt)
 
 	else(app->map->Draw());
 
-	//GUI();
 
-
-	//app->guiManager->Draw();
-	// Draw map
+	app->guiManager->Draw();
 
 
 	DebugPathfinding();
@@ -283,73 +289,75 @@ void Scene::SpawnPlayer() {
 	playerptr->camTransition = true;
 }
 
-//void Scene::GUI() {
-//	//Check for Button Click
-//	//Load Button
-//	if (buttons[0]->state == GuiControlState::PRESSED)
-//		app->SaveGameRequest();
-//
-//	//Save Button
-//	if (buttons[1]->state == GuiControlState::PRESSED) {
-//		app->LoadGameRequest();
-//	}
-//
-//	//Settings Button
-//	if (buttons[2]->state == GuiControlState::PRESSED) {
-//	}
-//
-//	//Menu Button
-//	if (buttons[3]->state == GuiControlState::PRESSED) {
-//		NoButtons();
-//		app->fadeToBlack->FadeToBlackScene("TitleScene", 0.5);
-//	}
-//
-//
-//	
-//}
-//
-//
-//bool Scene::MainButtons() {
-//	buttons[0]->state = GuiControlState::NORMAL;
-//	buttons[1]->state = GuiControlState::NORMAL;
-//	buttons[2]->state = GuiControlState::NORMAL;
-//	buttons[3]->state = GuiControlState::NORMAL;
-//
-//	return true;
-//}
-//
-//bool Scene::SettingsButtons()
-//{
-//	return false;
-//}
-//
-//
-//bool Scene::NoButtons() {
-//	for (int i = 0; i < numButtons; i++) {
-//		buttons[i]->state = GuiControlState::DISABLED;
-//	}
-//
-//	return true;
-//}
-//
-//bool Scene::ButtonSetup() {
-//	//Button Setup
-//	uint w, h;
-//	app->win->GetWindowSize(w, h);
-//	buttons[0] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, "SaveButton", { 100, (int)w / 10,     190, 66 }, this);
-//	buttons[1] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, "LoadButton", { 100, (int)w / 10 * 3, 190, 66 }, this);
-//	buttons[2] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "SettingsButton", { 100, (int)w / 10 * 2, 190, 66 }, this);
-//	buttons[3] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, "MenuButton", { 100 + 200, (int)w / 10,     190, 66 }, this);
-//
-//	//Load Button Click Sounds
-//	click1FxId = app->audio->LoadFx("Assets/Audio/Fx/click1.ogg");
-//	click2FxId = app->audio->LoadFx("Assets/Audio/Fx/click2.ogg");
-//
-//	//MainButtons();
-//	//NoButtons();
-//
-//	return true;
-//}
 
+bool Scene::MainButtons() {
+	buttons[0]->state = GuiControlState::NORMAL;
+	buttons[1]->state = GuiControlState::NORMAL;
+	buttons[2]->state = GuiControlState::NORMAL;
+	buttons[3]->state = GuiControlState::NORMAL;
+
+	return true;
+}
+
+bool Scene::SettingsButtons()
+{
+	return false;
+}
+
+
+bool Scene::NoButtons() {
+	for (int i = 0; i < numButtons; i++) {
+		buttons[i]->state = GuiControlState::DISABLED;
+	}
+
+	return true;
+}
+
+bool Scene::ButtonSetup() {
+	//Button Setup
+	uint w, h;
+	app->win->GetWindowSize(w, h);
+	buttons[0] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "SaveButton", { 100, (int)w / 10,     190, 66 }, this);
+	buttons[1] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "LoadButton", { 100, (int)w / 10 * 3, 190, 66 }, this);
+	buttons[2] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "SettingsButton", { 100, (int)w / 10 * 2, 190, 66 }, this);
+	buttons[3] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "MenuButton", { 100 + 200, (int)w / 10,     190, 66 }, this);
+
+	//Load Button Click Sounds
+	click1FxId = app->audio->LoadFx("Assets/Audio/Fx/click1.ogg");
+	click2FxId = app->audio->LoadFx("Assets/Audio/Fx/click2.ogg");
+
+	NoButtons();
+
+	return true;
+}
+
+
+bool Scene::OnGuiMouseClickEvent(GuiControl* control)
+{
+	// L15: DONE 5: Implement the OnGuiMouseClickEvent method
+	LOG("Event by %d ", control->id);
+
+	switch (control->id)
+	{
+	case 7:
+		LOG("Button 7: Save Game");
+		app->SaveGameRequest();
+		break;
+	case 8:
+		LOG("Button 8: Load Game");
+		app->LoadGameRequest();
+		break;
+	case 3:
+		LOG("Button 9: Settings");
+		break;
+	case 9:
+		LOG("Button 9: Go To Menu");
+		NoButtons();
+		app->fadeToBlack->FadeToBlackScene("TitleScene", 0.5);
+		break;
+	}
+
+	return true;
+}
 
 

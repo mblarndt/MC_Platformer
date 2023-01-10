@@ -5,6 +5,7 @@
 
 #include "Point.h"
 #include "SString.h"
+#include "Timer.h"
 
 class GuiButton : public GuiControl
 {
@@ -25,6 +26,13 @@ public:
 	SDL_Texture* buttonTex;
 
 	GuiControlState preState;
+
+	uint click1FxId;
+	uint click2FxId;
+
+	Timer t;
+
+	GuiControlState previousState;
 
 };
 

@@ -3,6 +3,7 @@
 #include "App.h"
 #include "Audio.h"
 #include "Textures.h"
+#include "Timer.h"
 
 GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(GuiControlType::BUTTON, id)
 {
@@ -11,6 +12,10 @@ GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(
 
 	canClick = true;
 	drawBasic = false;
+
+	//Load Button Click Sounds
+	click1FxId = app->audio->LoadFx("Assets/Audio/Fx/click1.ogg");
+	click2FxId = app->audio->LoadFx("Assets/Audio/Fx/click2.ogg");
 
 	if(id == 1)
 		buttonTex = app->tex->Load("Assets/Textures/button_start.png");
@@ -31,6 +36,7 @@ GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(
 	if (id == 9)
 		buttonTex = app->tex->Load("Assets/Textures/button_menu.png");
 
+
 }
 
 GuiButton::~GuiButton()
@@ -45,14 +51,23 @@ bool GuiButton::Update(float dt)
 		// L15: TODO 3: Update the state of the GUiButton according to the mouse position
 		app->input->GetMousePosition(mouseX, mouseY);
 
+		
+
 		if ((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
 			(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
 		{
 			state = GuiControlState::FOCUSED;
 
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
+			if (previousState != state) {
+				app->audio->PlayFx(click1FxId);
+			}
+
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
 			{
-				state = GuiControlState::PRESSED;
+				if (previousState != state) {
+					state = GuiControlState::PRESSED;
+					app->audio->PlayFx(click2FxId);
+				}
 			}
 
 			// If mouse button pressed -> Generate event!
@@ -66,6 +81,7 @@ bool GuiButton::Update(float dt)
 			state = GuiControlState::NORMAL;
 		}
 
+		previousState = state;
 	}
 
 	return false;

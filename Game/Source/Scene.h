@@ -64,6 +64,8 @@ public:
 
 	bool ButtonSetup();
 
+	bool OnGuiMouseClickEvent(GuiControl* control);
+
 	bool SceneStart(int level);
 public:
 
