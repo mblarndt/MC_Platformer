@@ -60,6 +60,8 @@ public:
 
 	void HandleDeath(bool dead);
 
+	void HandleGameOver(bool over);
+
 	void HandleFinish(bool finish);
 
 	void RenderEntity();
@@ -77,6 +79,8 @@ public:
 	void InitPlayer();
 
 	void HealthBar();
+
+	void PlayerGUI(bool show);
 	
 	//Player Physics Body
 	PhysBody* pbody;
@@ -129,6 +133,8 @@ public:
 	bool playerDeath;
 	bool levelFinish;
 
+	bool showGUI;
+
 private:
 
 	//Texture Variables
@@ -136,6 +142,8 @@ private:
 	const char* texturePath;
 	int width;
 	int height;
+
+	SDL_Texture* heartTex;
 
 	
 

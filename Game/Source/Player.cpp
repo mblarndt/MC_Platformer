@@ -65,9 +65,9 @@ bool Player::Update()
 		if (levelFinish == false) {
 
 
-			if (playerDeath == false) {
+			if (playerDeath == false && gameOver == false) {
 				
-
+				showGUI = true;
 				/*----------------------------Follow Camera--------------------------*/
 				PlayerCamera();
 				/*----------------------------Get State of Player--------------------------*/
@@ -78,13 +78,19 @@ bool Player::Update()
 				/*----------------------------Rendering Player--------------------------*/
 				RenderEntity();
 
-				HealthBar();
+				PlayerGUI(showGUI);
 
 			}
 		}
 
 		//When Player collides with Lava he spawns at start again	
 		HandleDeath(playerDeath);
+
+		HandleGameOver(gameOver);
+
+		
+
+		
 			
 		Debug();
 		
@@ -129,11 +135,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		jumpcount = 0;
 		break;
 	case ColliderType::DEATH:
-		//LOG("Collision DEATH");
-		//frameCounter = 0;
 		app->audio->PlayFx(hitFxId);
 		playerDeath = true;
-		//app->fadeToBlack->SwitchMap(2);
 		break;
 	case ColliderType::FINISH:
 		//LOG("Collision FINISH");
@@ -296,6 +299,25 @@ void Player::HandleMovement()
 void Player::HandleDeath(bool dead)
 {
 	if (dead) {
+		
+		lives = lives - 1;
+				
+		health = 5;
+		position.x = spawn.x;
+		position.y = spawn.y;
+		app->render->camera.x = 0;
+		pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+		velocitx.x = 0;
+		playerDeath = false;
+		deadTextureOn = false;
+	}
+
+}
+
+void Player::HandleGameOver(bool over)
+{
+	if (over) {
+
 		currentAnimation = &jumpStart;
 		if (frameCounter < 30) {
 			SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
@@ -306,13 +328,14 @@ void Player::HandleDeath(bool dead)
 			deadTextureOn = true;
 
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+				lives = 3;
 				health = 5;
 				position.x = spawn.x;
 				position.y = spawn.y;
 				app->render->camera.x = 0;
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 				velocitx.x = 0;
-				playerDeath = false;
+				gameOver = false;
 				deadTextureOn = false;
 			}
 		}
@@ -445,6 +468,7 @@ void Player::InitPlayer() {
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);
+	heartTex = app->tex->Load("Assets/Textures/heart.png");
 
 	//Initialize Audio Fx
 	hitFxId = app->audio->LoadFx(hitFxPath);
@@ -484,6 +508,31 @@ void Player::InitPlayer() {
 	currentAnimation = &idle;
 
 	toDelete = false;
+
+	LOG("Lives after Start %i", lives);
+}
+
+void Player::PlayerGUI(bool show) {
+	if (show) {
+		HealthBar();
+
+		switch (lives) {
+		case 3:
+			app->render->DrawTexture(heartTex, camPos.x * (-1) + 20, 20);
+			app->render->DrawTexture(heartTex, camPos.x * (-1) + 55, 20);
+			app->render->DrawTexture(heartTex, camPos.x * (-1) + 90, 20);
+			break;
+		case 2:
+			app->render->DrawTexture(heartTex, camPos.x * (-1) + 20, 20);
+			app->render->DrawTexture(heartTex, camPos.x * (-1) + 55, 20);
+			break;
+		case 1:
+			app->render->DrawTexture(heartTex, camPos.x * (-1) + 20, 20);
+			break;
+		}
+
+		
+	}
 }
 
 void Player::HealthBar() {

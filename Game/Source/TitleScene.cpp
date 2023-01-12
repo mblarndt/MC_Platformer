@@ -70,6 +70,9 @@ bool TitleScene::Start()
 	SDL_Rect sliderRect = { 300, 250, 300,38 };
 	slider1 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 13, "Slider 1", sliderRect, this);
 
+	SDL_Rect sliderRect2 = { 300, 200, 300,38 };
+	slider2 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 14, "Slider 1", sliderRect2, this);
+
 	//Load Button Click Sounds
 	click1FxId = app->audio->LoadFx("Assets/Audio/Fx/click1.ogg");
 	click2FxId = app->audio->LoadFx("Assets/Audio/Fx/click2.ogg");
@@ -92,9 +95,6 @@ bool TitleScene::Update(float dt)
 		
 	//SDL_SetTextureAlphaMod(logo, accumulatedTime * 10.0f);
 	app->render->DrawTexture(logo, 0, 0);
-
-	if (settings)
-		app->render->DrawTexture(settingsBox, 332, 30);
 
 	//L15: Draw GUI
 	app->guiManager->Draw();
@@ -133,6 +133,7 @@ bool TitleScene::MainMenuButtons() {
 		buttons[1]->state = GuiControlState::NORMAL;
 		buttons[2]->state = GuiControlState::NORMAL;
 		slider1->state = GuiControlState::DISABLED;
+		slider2->state = GuiControlState::DISABLED;
 	return true;
 }
 
@@ -145,6 +146,7 @@ bool TitleScene::SettingsButtons()
 	buttons[4]->state = GuiControlState::DISABLED;
 	buttons[5]->state = GuiControlState::NORMAL;
 	slider1->state = GuiControlState::NORMAL;
+	slider2->state = GuiControlState::NORMAL;
 
 	return false;
 }
@@ -158,6 +160,7 @@ bool TitleScene::StartButtons()
 		buttons[4]->state = GuiControlState::NORMAL;
 		buttons[5]->state = GuiControlState::NORMAL;
 		slider1->state = GuiControlState::DISABLED;
+		slider2->state = GuiControlState::DISABLED;
 	
 	return true;
 }
@@ -175,6 +178,7 @@ bool TitleScene::NoButtons() {
 	buttons[5]->state = GuiControlState::DISABLED;
 
 	slider1->state = GuiControlState::DISABLED;
+	slider2->state = GuiControlState::DISABLED;
 
 	return true;
 }

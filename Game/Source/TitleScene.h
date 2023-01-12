@@ -47,6 +47,7 @@ public:
 
 public:
 	GuiSlider* slider1;
+	GuiSlider* slider2;
 
 private:
 	SDL_Rect logoRect;
