@@ -153,7 +153,6 @@ bool FadeToBlack::SwitchMap(int level)
 		body = body->GetNext();
 	}
 
-	//app->scene->SpawnPlayer();
 	app->scene->SceneStart(level);		//Load specified map
 
 	return ret;
@@ -187,8 +186,8 @@ bool FadeToBlack::SwitchScenes(char* scene)
 			app->scene->active = true;
 			app->logoScene->active = false;
 			app->map->active = true;
-			app->physics->active = true;
 			app->titleScene->active = false;
+			app->physics->active = true;
 			app->input->active = true;
 		}
 

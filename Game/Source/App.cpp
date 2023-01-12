@@ -14,6 +14,7 @@
 #include "Pathfinding.h"
 #include "Animation.h"
 #include "GuiManager.h"
+#include "Gui.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -44,6 +45,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	pathfinding = new PathFinding();
 	animation = new Animation();
 	guiManager = new GuiManager();
+	gui = new Gui();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -66,6 +68,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(pathfinding);
 	AddModule(animation);
 	AddModule(guiManager);
+	AddModule(gui);
 	// Render last to swap buffer
 	AddModule(render);
 	
