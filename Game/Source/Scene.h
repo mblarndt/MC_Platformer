@@ -54,18 +54,6 @@ public:
 
 	void SpawnPlayer();
 
-	void GUI();
-
-	bool MainButtons();
-
-	bool SettingsButtons();
-
-	bool NoButtons();
-
-	bool ButtonSetup();
-
-	bool OnGuiMouseClickEvent(GuiControl* control);
-
 	bool SceneStart(int level);
 public:
 
@@ -119,7 +107,7 @@ private:
 	int click1FxId;
 	int click2FxId;
 
-
+	bool toggle;
 
 
 };

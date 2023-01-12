@@ -70,6 +70,7 @@ public:
 	bool start;
 	bool settings;
 	bool exit;
+	bool nothing;
 
 private:
 	

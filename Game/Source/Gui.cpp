@@ -53,7 +53,16 @@ bool Gui::Update(float dt)
 		MainMenuButtons();
 		mainMenu = false;
 	}
-		
+
+	if (settings) {
+		SettingsButtons();
+		settings = false;
+	}
+
+	if (nothing) {
+		NoButtons();
+		nothing = false;
+	}
 
 
 	//app->guiManager->Draw();

@@ -1,6 +1,8 @@
 #include "GuiManager.h"
 #include "App.h"
 #include "Textures.h"
+#include "Scene.h"
+#include "Render.h"
 
 #include "GuiButton.h"
 #include "GuiSlider.h"
@@ -91,6 +93,7 @@ bool GuiManager::Draw() {
 
 	while (control != nullptr)
 	{
+		//control->data->bounds.x =;
 		control->data->Draw(app->render);
 		control = control->next;
 	}
