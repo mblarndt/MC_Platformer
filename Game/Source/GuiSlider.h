@@ -2,44 +2,29 @@
 #define __GUISLIDER_H__
 
 #include "GuiControl.h"
-#include "Point.h"
-#include "SString.h"
 
 class GuiSlider : public GuiControl
 {
 public:
+    GuiSlider(uint32 id, SDL_Rect bounds, int minValue, int maxValue);
+    virtual ~GuiSlider();
 
-	GuiSlider(uint32 id, SDL_Rect bounds, bool draggable, int sliderposition);
-	virtual ~GuiSlider();
+    bool Update(float dt);
+    bool Draw(Render* render);
 
-	//Methods
-	bool Update(float dt);
+    void SetValue(int value);
+    int GetValue();
 
-	bool Draw(Render* render);
+private:
+    int minValue;
+    int maxValue;
+    int value;
+    int knobX;
+    SDL_Texture* knobTex;
+    SDL_Texture* barTex;
 
-	float SliderValue();
-
-
-	//Vars
-	SDL_Rect clickable_rect;
-	
-	SDL_Rect bar;
-	SDL_Rect thumb;
-	SDL_Rect thumb_hovered;
-
-	SDL_Texture* texture;
-
-	bool hovered;
-	
-	int thumb_offset;
-	
-	int sliderpos;
-
-	int mouseX, mouseY;
-	unsigned int click;
-
-	bool canClick = true;
-	bool drawBasic = false;
+    int mouseX, mouseY;
+    unsigned int click;
 };
 
 #endif // __GUISLIDER_H__

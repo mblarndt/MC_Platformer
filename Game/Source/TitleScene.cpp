@@ -61,12 +61,12 @@ bool TitleScene::Start()
 	buttons[0] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "StartButton", { 100, (int)w / 10,     190, 66 }, this);
 	buttons[1] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "ExitButton", { 100, (int)w / 10 * 3, 190, 66 }, this);
 	buttons[2] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "OptionsButton", { 100, (int)w / 10 * 2, 190, 66 }, this);
-	buttons[3] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "Level 1", { 100, (int)w / 10,     190, 66 }, this);
-	buttons[4] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "Level 2", { 100, (int)w / 10 * 2, 190, 66 }, this);
-	buttons[5] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "Back", { 100, (int)w / 10 * 3, 190, 66 }, this);
+	buttons[3] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "Level 1", { 100+200, (int)w / 10,     190, 66 }, this);
+	buttons[4] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "Level 2", { 100+200, (int)w / 10 * 2, 190, 66 }, this);
+	buttons[5] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "Back", { 100+200, (int)w / 10 * 3, 190, 66 }, this);
 
-	SDL_Rect sliderRect = { 30,30, 150,30 };
-	//slider1 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 13, "Slider 1", sliderRect, this, sliderRect);
+	SDL_Rect sliderRect = { 100,30, 300,38 };
+	GuiSlider* slider1 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 13, "Slider 1", sliderRect, this);
 
 	//Load Button Click Sounds
 	click1FxId = app->audio->LoadFx("Assets/Audio/Fx/click1.ogg");

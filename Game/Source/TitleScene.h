@@ -59,8 +59,6 @@ private:
 	GuiButton* btn5;
 	GuiButton* btn6;
 
-	GuiSlider* slider;
-
 	GuiControlState preState1;
 	GuiControlState preState2;
 	GuiControlState preState3;
