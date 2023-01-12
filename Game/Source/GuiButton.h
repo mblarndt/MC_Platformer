@@ -30,7 +30,7 @@ public:
 	uint click1FxId;
 	uint click2FxId;
 
-	Timer t;
+	int boundx;
 
 	GuiControlState previousState;
 

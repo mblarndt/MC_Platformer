@@ -4,6 +4,8 @@
 #include "Audio.h"
 #include "Textures.h"
 #include "Timer.h"
+#include "Render.h"
+#include "Log.h"
 
 GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(GuiControlType::BUTTON, id)
 {
@@ -36,7 +38,7 @@ GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(
 	if (id == 9)
 		buttonTex = app->tex->Load("Assets/Textures/button_menu.png");
 
-
+	boundx = bounds.x;
 }
 
 GuiButton::~GuiButton()
@@ -46,14 +48,16 @@ GuiButton::~GuiButton()
 
 bool GuiButton::Update(float dt)
 {
+	int camX = app->render->camera.x;
+	bounds.x = camX * (-1) + boundx;
+
 	if (state != GuiControlState::DISABLED)
 	{
 		// L15: TODO 3: Update the state of the GUiButton according to the mouse position
+
 		app->input->GetMousePosition(mouseX, mouseY);
 
-		
-
-		if ((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
+		if (((mouseX - camX)> bounds.x) && ((mouseX - camX) < (bounds.x + bounds.w)) &&
 			(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
 		{
 			state = GuiControlState::FOCUSED;

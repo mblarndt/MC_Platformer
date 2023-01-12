@@ -7,6 +7,7 @@
 #include "GuiButton.h"
 #include "GuiSlider.h"
 #include "Audio.h"
+#include "Log.h"
 
 GuiManager::GuiManager() :Module()
 {
@@ -93,7 +94,6 @@ bool GuiManager::Draw() {
 
 	while (control != nullptr)
 	{
-		//control->data->bounds.x =;
 		control->data->Draw(app->render);
 		control = control->next;
 	}

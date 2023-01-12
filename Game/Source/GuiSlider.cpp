@@ -19,7 +19,7 @@ GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, int minValue, int maxValue) : G
 
     SetValue(50);
     
-    
+    boundx = bounds.x;
 }
 
 GuiSlider::~GuiSlider()
@@ -29,11 +29,14 @@ GuiSlider::~GuiSlider()
 
 bool GuiSlider::Update(float dt)
 {
+    int camX = app->render->camera.x;
+    bounds.x = app->render->camera.x * (-1) + boundx;
+
     if (state != GuiControlState::DISABLED)
     {
         app->input->GetMousePosition(mouseX, mouseY);
 
-        if ((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
+        if (((mouseX - camX) > bounds.x) && ((mouseX - camX) < (bounds.x + bounds.w)) &&
             (mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
         {
             state = GuiControlState::FOCUSED;

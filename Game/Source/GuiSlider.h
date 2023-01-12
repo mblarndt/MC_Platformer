@@ -25,6 +25,8 @@ private:
 
     int mouseX, mouseY;
     unsigned int click;
+
+    int boundx;
 };
 
 #endif // __GUISLIDER_H__
