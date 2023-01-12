@@ -66,7 +66,7 @@ bool TitleScene::Start()
 	buttons[5] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "Back", { 100+200, (int)w / 10 * 3, 190, 66 }, this);
 
 	SDL_Rect sliderRect = { 100,30, 300,38 };
-	GuiSlider* slider1 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 13, "Slider 1", sliderRect, this);
+	slider1 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 13, "Slider 1", sliderRect, this);
 
 	//Load Button Click Sounds
 	click1FxId = app->audio->LoadFx("Assets/Audio/Fx/click1.ogg");
@@ -125,11 +125,19 @@ bool TitleScene::MainMenuButtons() {
 		buttons[0]->state = GuiControlState::NORMAL;
 		buttons[1]->state = GuiControlState::NORMAL;
 		buttons[2]->state = GuiControlState::NORMAL;
+		slider1->state = GuiControlState::DISABLED;
 	return true;
 }
 
 bool TitleScene::SettingsButtons()
 {
+	buttons[0]->state = GuiControlState::DISABLED;
+	buttons[1]->state = GuiControlState::DISABLED;
+	buttons[2]->state = GuiControlState::DISABLED;
+	buttons[3]->state = GuiControlState::DISABLED;
+	buttons[4]->state = GuiControlState::DISABLED;
+	buttons[5]->state = GuiControlState::NORMAL;
+	slider1->state = GuiControlState::NORMAL;
 	return false;
 }
 
@@ -141,6 +149,7 @@ bool TitleScene::StartButtons()
 		buttons[3]->state = GuiControlState::NORMAL;
 		buttons[4]->state = GuiControlState::NORMAL;
 		buttons[5]->state = GuiControlState::NORMAL;
+		slider1->state = GuiControlState::DISABLED;
 	
 	return true;
 }
@@ -157,6 +166,8 @@ bool TitleScene::NoButtons() {
 	buttons[4]->state = GuiControlState::DISABLED;
 	buttons[5]->state = GuiControlState::DISABLED;
 
+	slider1->state = GuiControlState::DISABLED;
+
 	return true;
 }
 
@@ -170,6 +181,10 @@ bool TitleScene::OnGuiMouseClickEvent(GuiControl* control)
 	case 1:
 		LOG("Button 1 click");
 		StartButtons();
+		break;
+	case 3:
+		LOG("Button 3 click");
+		SettingsButtons();
 		break;
 
 	case 4:

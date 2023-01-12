@@ -2,6 +2,7 @@
 #define __TITLE_SCENE_H__
 
 #include "Module.h"
+#include "GuiSlider.h"
 
 struct SDL_Texture;
 
@@ -45,6 +46,7 @@ public:
 	void AutomaticTransition();
 
 public:
+	GuiSlider* slider1;
 
 private:
 	SDL_Rect logoRect;
