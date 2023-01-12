@@ -10,9 +10,10 @@
 GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, int minValue, int maxValue) : GuiControl(GuiControlType::SLIDER, id)
 {
     this->bounds = bounds;
-    this->bounds.w = bounds.w - 38;
-    this->minValue = minValue;
-    this->maxValue = maxValue;
+    this->bounds.h = 38;
+    this->bounds.w = 300 - 38;
+    this->minValue = 0;
+    this->maxValue = 100;
     knobTex = app->tex->Load("Assets/Textures/Slime.png");
     barTex = app->tex->Load("Assets/Textures/SliderBar.png");
 
@@ -44,20 +45,18 @@ bool GuiSlider::Update(float dt)
             }
         }
         else {
-            if (state == GuiControlState::PRESSED) {
+            if (state == GuiControlState::PRESSED && app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) != KeyState::KEY_UP) {
                 knobX = mouseX - bounds.x;
                 if (knobX < 0) knobX = 0;
                 if (knobX > bounds.w) knobX = bounds.w;
                 
                 NotifyObserver();
-                
             }
             else {
                 state = GuiControlState::NORMAL;
             }
         }
         value = minValue + (maxValue - minValue) * (knobX / (float)bounds.w);
-        //LOG("Slider Value: %i", value);
 
     }
 
@@ -79,7 +78,7 @@ bool GuiSlider::Draw(Render* render)
     default:
     {
         render->DrawTexture(barTex, bounds.x, bounds.y);
-        render->DrawTexture(knobTex, knobX + 104, bounds.y + 4);
+        render->DrawTexture(knobTex, bounds.x + knobX + 4 , bounds.y + 4);
     } break;
     
 

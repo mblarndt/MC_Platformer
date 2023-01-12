@@ -53,6 +53,13 @@ private:
 	SDL_Texture* logo;
 	const char* texturePath;
 
+	SDL_Rect settingsRect;
+	SDL_Texture* settingsBox;
+	const char* settingsBoxPath;
+
+	bool settings;
+	bool exit;
+
 	// L15: TODO 2: Declare a GUI Button and create it using the GuiManager
 	GuiButton* btn1;
 	GuiButton* btn2;

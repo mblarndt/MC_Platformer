@@ -39,6 +39,7 @@ bool TitleScene::Awake(pugi::xml_node& config)
 	logoRect.w = 1024;
 
 	texturePath = "Assets/Textures/background1.png";
+	settingsBoxPath = "Assets/Textures/SettingsBox.png";
 
 	return ret;
 }
@@ -50,6 +51,7 @@ bool TitleScene::Start()
 	app->scene->active = false;
 
 	logo = app->tex->Load(texturePath);
+	settingsBox = app->tex->Load(settingsBoxPath);
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
@@ -65,7 +67,7 @@ bool TitleScene::Start()
 	buttons[4] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "Level 2", { 100+200, (int)w / 10 * 2, 190, 66 }, this);
 	buttons[5] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "Back", { 100+200, (int)w / 10 * 3, 190, 66 }, this);
 
-	SDL_Rect sliderRect = { 100,30, 300,38 };
+	SDL_Rect sliderRect = { 300, 250, 300,38 };
 	slider1 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 13, "Slider 1", sliderRect, this);
 
 	//Load Button Click Sounds
@@ -91,8 +93,13 @@ bool TitleScene::Update(float dt)
 	//SDL_SetTextureAlphaMod(logo, accumulatedTime * 10.0f);
 	app->render->DrawTexture(logo, 0, 0);
 
+	if (settings)
+		app->render->DrawTexture(settingsBox, 332, 30);
+
 	//L15: Draw GUI
 	app->guiManager->Draw();
+
+	
 
 	return true;
 }
@@ -103,7 +110,7 @@ bool TitleScene::PostUpdate()
 	bool ret = true;
 
 	//Exit Button
-	if (buttons[1]->state == GuiControlState::PRESSED)
+	if (exit)
 		ret = false;
 
 	return ret;
@@ -138,6 +145,7 @@ bool TitleScene::SettingsButtons()
 	buttons[4]->state = GuiControlState::DISABLED;
 	buttons[5]->state = GuiControlState::NORMAL;
 	slider1->state = GuiControlState::NORMAL;
+
 	return false;
 }
 
@@ -182,8 +190,13 @@ bool TitleScene::OnGuiMouseClickEvent(GuiControl* control)
 		LOG("Button 1 click");
 		StartButtons();
 		break;
+	case 2:
+		LOG("Button 1 click");
+		exit = true;
+		break;
 	case 3:
 		LOG("Button 3 click");
+		settings = true;
 		SettingsButtons();
 		break;
 
@@ -205,6 +218,7 @@ bool TitleScene::OnGuiMouseClickEvent(GuiControl* control)
 
 	case 6:
 		LOG("Button 6: Back to Main Menu");
+		settings = false;
 		MainMenuButtons();
 	}
 	return true;
