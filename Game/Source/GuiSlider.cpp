@@ -4,6 +4,7 @@
 #include "GuiSlider.h"
 #include "Textures.h"
 #include "Scene.h"
+#include "Log.h"
 
 
 GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, int minValue, int maxValue) : GuiControl(GuiControlType::SLIDER, id)
@@ -42,21 +43,24 @@ bool GuiSlider::Update(float dt)
             }
         }
         else {
-            state = GuiControlState::NORMAL;
+            if (state == GuiControlState::PRESSED) {
+                knobX = mouseX - bounds.x;
+                if (knobX < 0) knobX = 0;
+                if (knobX > bounds.w) knobX = bounds.w;
+                value = minValue + (maxValue - minValue) * (knobX / (float)bounds.w);
+                NotifyObserver();
+                LOG("Slider Value: %i", value);
+            }
+            else {
+                state = GuiControlState::NORMAL;
+            }
         }
 
-        if (state == GuiControlState::PRESSED)
-        {
-            knobX = mouseX - bounds.x;
-            if (knobX < 0) knobX = 0;
-            if (knobX > bounds.w) knobX = bounds.w;
-            value = minValue + (maxValue - minValue) * (knobX / (float)bounds.w);
-            NotifyObserver();
-        }
     }
 
     return false;
 }
+
 
 bool GuiSlider::Draw(Render* render)
 {
