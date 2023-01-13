@@ -146,6 +146,7 @@ private:
 	int height;
 
 	SDL_Texture* heartTex;
+	SDL_Texture* slimeball;
 
 	
 

@@ -86,8 +86,6 @@ bool Player::Update()
 		//When Player collides with Lava he spawns at start again	
 		HandleDeath(playerDeath);
 
-		//HandleGameOver(gameOver);
-
 		
 
 		
@@ -471,6 +469,7 @@ void Player::InitPlayer() {
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 	heartTex = app->tex->Load("Assets/Textures/heart.png");
+	slimeball = app->tex->Load("Assets/Textures/slimeball.png");
 
 	//Initialize Audio Fx
 	hitFxId = app->audio->LoadFx(hitFxPath);
@@ -511,7 +510,7 @@ void Player::InitPlayer() {
 
 	toDelete = false;
 
-	LOG("Lives after Start %i", lives);
+	
 }
 
 void Player::PlayerGUI(bool show) {
@@ -532,6 +531,8 @@ void Player::PlayerGUI(bool show) {
 			app->render->DrawTexture(heartTex, camPos.x * (-1) + 20, 20);
 			break;
 		}
+
+		app->render->DrawTexture(slimeball, camPos.x * (-1) + 100, 80);
 
 		
 	}

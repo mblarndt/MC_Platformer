@@ -20,6 +20,8 @@
 #include "FadeToBlack.h"
 #include "Gui.h"
 #include "TitleScene.h"
+#include "SDL/include/SDL.h"
+#include "SDL_ttf/include/SDL_ttf.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -67,8 +69,6 @@ bool Scene::Start()
 	deathTex = app->tex->Load(deathTexPath);
 	finishTex = app->tex->Load(finishTexPath);
 
-	
-
 	return true;
 }
 
@@ -82,6 +82,9 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+
+
+
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		app->SaveGameRequest();
@@ -95,7 +98,7 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
 		app->fadeToBlack->SwitchMap(2);
 
-	if (app->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
 		if (toggle) {
 			app->gui->nothing = true;
 			toggle = false;
@@ -132,6 +135,8 @@ bool Scene::Update(float dt)
 
 	
 	app->guiManager->Draw();
+
+	app->render->DrawText("Lol", 20, 20, 20, 20, { 255,255,255 });
 
 
 	DebugPathfinding();

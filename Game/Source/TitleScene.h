@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "GuiSlider.h"
 
+
 struct SDL_Texture;
 
 class TitleScene : public Module
@@ -39,6 +40,9 @@ public:
 public:
 	GuiSlider* slider1;
 	GuiSlider* slider2;
+
+	GuiButton* button1;
+
 
 private:
 	SDL_Rect logoRect;

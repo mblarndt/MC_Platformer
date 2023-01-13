@@ -14,6 +14,7 @@
 #include "GuiSlider.h"
 #include "Gui.h"
 
+
 #include "Defs.h"
 #include "Log.h"
 #include "TitleScene.h"
@@ -42,6 +43,8 @@ bool TitleScene::Awake(pugi::xml_node& config)
 	texturePath = "Assets/Textures/background1.png";
 	settingsBoxPath = "Assets/Textures/SettingsBox.png";
 
+
+
 	return ret;
 }
 
@@ -58,6 +61,9 @@ bool TitleScene::Start()
 	app->render->camera.y = 0;
 
 	app->gui->mainMenu = true;
+
+	
+
 	return true;
 }
 
@@ -79,7 +85,7 @@ bool TitleScene::Update(float dt)
 	//L15: Draw GUI
 	app->guiManager->Draw();
 
-	
+	app->render->DrawText("Test", 100, 100, 100, 50, { 255,255,255 });
 
 	return true;
 }
