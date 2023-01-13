@@ -134,6 +134,8 @@ public:
 	bool levelFinish;
 
 	bool showGUI;
+	bool gameOver;
+
 
 private:
 
@@ -156,7 +158,7 @@ private:
 	
 	
 	
-	bool gameOver;
+	
 
 	//Position Variables
 	

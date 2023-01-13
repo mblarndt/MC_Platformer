@@ -86,7 +86,7 @@ bool Player::Update()
 		//When Player collides with Lava he spawns at start again	
 		HandleDeath(playerDeath);
 
-		HandleGameOver(gameOver);
+		//HandleGameOver(gameOver);
 
 		
 
@@ -328,7 +328,7 @@ void Player::HandleGameOver(bool over)
 			deadTextureOn = true;
 
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-				lives = 3;
+				/*lives = 3;
 				health = 5;
 				position.x = spawn.x;
 				position.y = spawn.y;
@@ -336,7 +336,9 @@ void Player::HandleGameOver(bool over)
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 				velocitx.x = 0;
 				gameOver = false;
-				deadTextureOn = false;
+				deadTextureOn = false;*/
+
+				
 			}
 		}
 	}
