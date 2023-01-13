@@ -136,8 +136,6 @@ bool Scene::Update(float dt)
 	
 	app->guiManager->Draw();
 
-	app->render->DrawText("Lol", 20, 20, 20, 20, { 255,255,255 });
-
 
 	DebugPathfinding();
 

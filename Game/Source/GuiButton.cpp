@@ -19,24 +19,26 @@ GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(
 	click1FxId = app->audio->LoadFx("Assets/Audio/Fx/click1.ogg");
 	click2FxId = app->audio->LoadFx("Assets/Audio/Fx/click2.ogg");
 
-	if(id == 1)
-		buttonTex = app->tex->Load("Assets/Textures/button_start.png");
-	if (id == 2)
-		buttonTex = app->tex->Load("Assets/Textures/button_exit.png");
-	if (id == 3)
-		buttonTex = app->tex->Load("Assets/Textures/button_options.png");
-	if (id == 4)
-		buttonTex = app->tex->Load("Assets/Textures/button_level1.png");
-	if (id == 5)
-		buttonTex = app->tex->Load("Assets/Textures/button_level2.png");
-	if (id == 6)
-		buttonTex = app->tex->Load("Assets/Textures/button_back.png");
-	if (id == 7)
-		buttonTex = app->tex->Load("Assets/Textures/button_save.png");
-	if (id == 8)
-		buttonTex = app->tex->Load("Assets/Textures/button_load.png");
-	if (id == 9)
-		buttonTex = app->tex->Load("Assets/Textures/button_menu.png");
+	buttonTex = app->tex->Load("Assets/Textures/buttons.png");
+
+	//if(id == 1)
+	//	buttonTex = app->tex->Load("Assets/Textures/button_start.png");
+	//if (id == 2)
+	//	buttonTex = app->tex->Load("Assets/Textures/button_exit.png");
+	//if (id == 3)
+	//	buttonTex = app->tex->Load("Assets/Textures/button_options.png");
+	//if (id == 4)
+	//	buttonTex = app->tex->Load("Assets/Textures/button_level1.png");
+	//if (id == 5)
+	//	buttonTex = app->tex->Load("Assets/Textures/button_level2.png");
+	//if (id == 6)
+	//	buttonTex = app->tex->Load("Assets/Textures/button_back.png");
+	//if (id == 7)
+	//	buttonTex = app->tex->Load("Assets/Textures/button_save.png");
+	//if (id == 8)
+	//	buttonTex = app->tex->Load("Assets/Textures/button_load.png");
+	//if (id == 9)
+	//	buttonTex = app->tex->Load("Assets/Textures/button_menu.png");
 
 	boundx = bounds.x;
 }
@@ -87,12 +89,13 @@ bool GuiButton::Update(float dt)
 
 		previousState = state;
 	}
-
+	
 	return false;
 }
 
 bool GuiButton::Draw(Render* render)
 {
+
 
 	// Draw the right button depending on state
 	switch (state)
@@ -108,6 +111,7 @@ bool GuiButton::Draw(Render* render)
 		//render->DrawRectangle(bounds, 255, 0, 0, 255);
 		SDL_Rect rect = {0,70,190,66};
 		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+		
 
 	} break;
 
@@ -117,6 +121,7 @@ bool GuiButton::Draw(Render* render)
 		//render->DrawRectangle(bounds, 255, 255, 255, 160);
 		SDL_Rect rect = { 0,0,190,66 };
 		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+		
 
 	} break;
 	case GuiControlState::PRESSED:
@@ -127,12 +132,18 @@ bool GuiButton::Draw(Render* render)
 
 	} break;
 
-	case GuiControlState::SELECTED: render->DrawRectangle(bounds, 0, 255, 0, 255);
+	case GuiControlState::SELECTED: 
+	{
+		render->DrawRectangle(bounds, 0, 255, 0, 255);
 		break;
-
+	}
+		
 	default:
 		break;
 	}
-
+	if (state != GuiControlState::DISABLED)
+	{
+		app->render->DrawText(text.GetString(), bounds.x + 5, bounds.y + 5, bounds.w - 10, bounds.h - 10, { 255,255,255 });
+	}
 	return false;
 }

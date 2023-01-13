@@ -85,8 +85,6 @@ bool TitleScene::Update(float dt)
 	//L15: Draw GUI
 	app->guiManager->Draw();
 
-	app->render->DrawText("Test", 100, 100, 100, 50, { 255,255,255 });
-
 	return true;
 }
 
