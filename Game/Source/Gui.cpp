@@ -29,12 +29,13 @@ bool Gui::Start()
 	//Button Setup
 	uint w, h;
 	app->win->GetWindowSize(w, h);
-	buttons[0] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "START", { 100, (int)w / 10,     190, 66 }, this);
-	buttons[1] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "EXIT", { 100, (int)w / 10 * 3, 190, 66 }, this);
-	buttons[2] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "SETTINGS", { 100, (int)w / 10 * 2, 190, 66 }, this);
+	buttons[0] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "START", { 100, (int)w / 13,     190, 66 }, this);
+	buttons[1] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "EXIT", { 100, (int)w / 13 * 4, 190, 66 }, this);
+	buttons[2] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "SETTINGS", { 100, (int)w / 13 * 2, 190, 66 }, this);
 	buttons[3] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "LEVEL 1", { 100 + 200, (int)w / 10,     190, 66 }, this);
 	buttons[4] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "LEVEL 2", { 100 + 200, (int)w / 10 * 2, 190, 66 }, this);
-	buttons[5] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "BACK", { 100 + 200, (int)w / 10 * 3, 190, 66 }, this);
+	buttons[5] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "BACK", { 100 + 200, (int)w / 13 * 3, 190, 66 }, this);
+	buttons[6] = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, "CREDITS", { 100, (int)w / 13 * 3, 190, 66 }, this);
 
 	SDL_Rect sliderRect = { 300, 250, 300,38 };
 	slider1 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 13, "Slider 1", sliderRect, this);

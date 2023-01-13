@@ -21,25 +21,6 @@ GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(
 
 	buttonTex = app->tex->Load("Assets/Textures/buttons.png");
 
-	//if(id == 1)
-	//	buttonTex = app->tex->Load("Assets/Textures/button_start.png");
-	//if (id == 2)
-	//	buttonTex = app->tex->Load("Assets/Textures/button_exit.png");
-	//if (id == 3)
-	//	buttonTex = app->tex->Load("Assets/Textures/button_options.png");
-	//if (id == 4)
-	//	buttonTex = app->tex->Load("Assets/Textures/button_level1.png");
-	//if (id == 5)
-	//	buttonTex = app->tex->Load("Assets/Textures/button_level2.png");
-	//if (id == 6)
-	//	buttonTex = app->tex->Load("Assets/Textures/button_back.png");
-	//if (id == 7)
-	//	buttonTex = app->tex->Load("Assets/Textures/button_save.png");
-	//if (id == 8)
-	//	buttonTex = app->tex->Load("Assets/Textures/button_load.png");
-	//if (id == 9)
-	//	buttonTex = app->tex->Load("Assets/Textures/button_menu.png");
-
 	boundx = bounds.x;
 }
 
@@ -143,7 +124,7 @@ bool GuiButton::Draw(Render* render)
 	}
 	if (state != GuiControlState::DISABLED)
 	{
-		app->render->DrawText(text.GetString(), bounds.x + 5, bounds.y + 5, bounds.w - 10, bounds.h - 10, { 255,255,255 });
+		app->render->DrawText(text.GetString(), bounds.x + 5, bounds.y + 5, bounds.w - 10, bounds.h - 10, { 255,255,255 }, true);
 	}
 	return false;
 }

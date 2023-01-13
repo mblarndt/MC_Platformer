@@ -53,7 +53,7 @@ bool Render::Awake(pugi::xml_node& config)
 	TTF_Init();
 
 	//load a font into memory
-	font = TTF_OpenFont("Assets/Fonts/arial/arial.ttf", 18);
+	font = TTF_OpenFont("Assets/Fonts/Minecraft/Minecraft-Regular.otf", 18);
 
 	return ret;
 }
@@ -240,14 +240,21 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 	return ret;
 }
 
-bool Render::DrawText(const char* text, int posx, int posy, int w, int h, SDL_Color color) {
+bool Render::DrawText(const char* text, int posx, int posy, int w, int h, SDL_Color color, bool center) {
+	int textX, textY;
 	SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 
 	int texW = 0;
 	int texH = 0;
 	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-	SDL_Rect dstrect = { posx, posy, w, h };
+
+	if (center) {
+		textX = posx + (w - texW) / 2;
+		textY = posy + (h - texH) / 2;
+	}
+
+	SDL_Rect dstrect = { textX, textY, texW, texH };
 
 	SDL_RenderCopy(renderer, texture, NULL, &dstrect);
 

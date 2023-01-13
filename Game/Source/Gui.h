@@ -61,10 +61,14 @@ public:
 	GuiButton* btn4;
 	GuiButton* btn5;
 	GuiButton* btn6;
+	GuiButton* btn7;
+	GuiButton* btn8;
+	GuiButton* btn9;
+	GuiButton* btn10;
 
 
-	const int numButtons = 6;
-	GuiButton* buttons[6] = { btn1, btn2, btn3, btn4, btn5, btn6 };
+	int numButtons = 10;
+	GuiButton* buttons[10] = { btn1, btn2, btn3, btn4, btn5, btn6 , btn7, btn8, btn9, btn10 };
 
 	bool mainMenu;
 	bool start;
