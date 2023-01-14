@@ -9,30 +9,31 @@
 
 GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(GuiControlType::BUTTON, id)
 {
-	this->bounds = bounds;
-	this->text = text;
+    this->bounds = bounds;
+    this->text = text;
 
-	canClick = true;
-	drawBasic = false;
+    canClick = true;
+    drawBasic = false;
 
-	//Load Button Click Sounds
-	click1FxId = app->audio->LoadFx("Assets/Audio/Fx/click1.ogg");
-	click2FxId = app->audio->LoadFx("Assets/Audio/Fx/click2.ogg");
+    //Load Button Click Sounds
+    click1FxId = app->audio->LoadFx("Assets/Audio/Fx/click1.ogg");
+    click2FxId = app->audio->LoadFx("Assets/Audio/Fx/click2.ogg");
 
-	buttonTex = app->tex->Load("Assets/Textures/buttons.png");
+    buttonTex = app->tex->Load("Assets/Textures/buttons.png");
 
-	boundx = bounds.x;
+    boundx = bounds.x;
 }
 
 GuiButton::~GuiButton()
 {
-	delete buttonTex;
+    delete buttonTex;
 }
 
 bool GuiButton::Update(float dt)
 {
-	int camX = app->render->camera.x;
-	bounds.x = camX * (-1) + boundx;
+
+    int camX = app->render->camera.x;
+    bounds.x = camX * (-1) + boundx;
 
 	if (state != GuiControlState::DISABLED)
 	{
@@ -40,7 +41,7 @@ bool GuiButton::Update(float dt)
 
 		app->input->GetMousePosition(mouseX, mouseY);
 
-		if (((mouseX - camX)> bounds.x) && ((mouseX - camX) < (bounds.x + bounds.w)) &&
+		if (((mouseX - camX) > bounds.x) && ((mouseX - camX) < (bounds.x + bounds.w)) &&
 			(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
 		{
 			state = GuiControlState::FOCUSED;
@@ -60,7 +61,15 @@ bool GuiButton::Update(float dt)
 			// If mouse button pressed -> Generate event!
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP)
 			{
-				NotifyObserver();
+				//Check if the button can be clicked
+				if (canClick)
+				{
+					NotifyObserver();
+					canClick = false;
+				}
+			}
+			else {
+				canClick = true;
 			}
 
 		}
@@ -70,8 +79,10 @@ bool GuiButton::Update(float dt)
 
 		previousState = state;
 	}
-	
+	else
+		canClick = false;
 	return false;
+
 }
 
 bool GuiButton::Draw(Render* render)
@@ -82,7 +93,7 @@ bool GuiButton::Draw(Render* render)
 	switch (state)
 	{
 
-	case GuiControlState::DISABLED: 
+	case GuiControlState::DISABLED:
 	{
 		render->DrawRectangle(bounds, 0, 0, 0, 0);
 	} break;
@@ -90,9 +101,9 @@ bool GuiButton::Draw(Render* render)
 	case GuiControlState::NORMAL:
 	{
 		//render->DrawRectangle(bounds, 255, 0, 0, 255);
-		SDL_Rect rect = {0,70,190,66};
+		SDL_Rect rect = { 0,70,190,66 };
 		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
-		
+
 
 	} break;
 
@@ -102,23 +113,23 @@ bool GuiButton::Draw(Render* render)
 		//render->DrawRectangle(bounds, 255, 255, 255, 160);
 		SDL_Rect rect = { 0,0,190,66 };
 		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
-		
+
 
 	} break;
 	case GuiControlState::PRESSED:
 	{
 		SDL_Rect rect = { 0,141,190,66 };
 		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
-		
+
 
 	} break;
 
-	case GuiControlState::SELECTED: 
+	case GuiControlState::SELECTED:
 	{
 		render->DrawRectangle(bounds, 0, 255, 0, 255);
 		break;
 	}
-		
+
 	default:
 		break;
 	}

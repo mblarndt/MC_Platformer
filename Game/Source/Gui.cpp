@@ -35,10 +35,10 @@ bool Gui::Start()
 	creditsBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, "CREDITS",  { 100, (int)w / 13 * 3, 190, 66 }, this);
 	exitBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "EXIT",        { 100, (int)w / 13 * 4, 190, 66 }, this);
 
-	continueBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, "CONTINUE",{ 100 + 200, (int)w / 13,      190, 66 }, this);
-	lvl1Btn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "LEVEL 1", { 100 + 200, (int)w / 13 * 2,  190, 66 }, this);
-	lvl2Btn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "LEVEL 2", { 100 + 200, (int)w / 13 * 3,  190, 66 }, this);
-	backBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "BACK",    { 100 + 200, (int)w / 13 * 4,  190, 66 }, this);
+	continueBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, "CONTINUE",{ 100, (int)w / 13,      190, 66 }, this);
+	lvl1Btn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "LEVEL 1", { 100, (int)w / 13 * 2,  190, 66 }, this);
+	lvl2Btn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "LEVEL 2", { 100, (int)w / 13 * 3,  190, 66 }, this);
+	backBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "BACK",    { 100, (int)w / 13 * 4,  190, 66 }, this);
 
 	resumeBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, "RESUME", { 100 + 200, (int)w / 13 * 2,      190, 66 }, this);
 	saveBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, "SAVE",    { 100 + 200, (int)w / 13 * 3,      190, 66 }, this);
@@ -167,6 +167,9 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 	case 11:
 		LOG("Button 11: Load Game");
 		app->LoadGameRequest();
+		app->scene->playerptr->startGame = true;
+		app->scene->toggle = false;
+		NoButtons();
 		break;
 
 	case 12:
@@ -286,9 +289,10 @@ bool Gui::InGameMenu() {
 	saveBtn->state = GuiControlState::NORMAL;
 	loadBtn->state = GuiControlState::NORMAL;
 	resumeBtn->state = GuiControlState::NORMAL;
-
-	
 	titleBtn->state = GuiControlState::NORMAL;
+
+	slider1->state = GuiControlState::DISABLED;
+	slider2->state = GuiControlState::DISABLED;
 	return true;
 }
 

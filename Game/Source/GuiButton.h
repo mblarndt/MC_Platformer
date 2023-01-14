@@ -34,6 +34,8 @@ public:
 
 	GuiControlState previousState;
 
+	bool isPressed;
+
 };
 
 #endif // __GUIBUTTON_H__
