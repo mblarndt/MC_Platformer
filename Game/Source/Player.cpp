@@ -49,21 +49,9 @@ bool Player::Update()
 	if (lives == 0)
 		gameOver = true;
 
-	//Activate Game
-	if (camTransition == true) {
-		CamTransition(0, spawn.x);
-		app->audio->PlayMusic(backmusicPath);
-		startGame = true;
-		camTransition = false;
-	}
-
 	if (startGame == true) {
 		
-		
-
-		//Main Loop starts when CamTransition finished
 		if (levelFinish == false) {
-
 
 			if (playerDeath == false && gameOver == false) {
 				
@@ -86,10 +74,6 @@ bool Player::Update()
 		//When Player collides with Lava he spawns at start again	
 		HandleDeath(playerDeath);
 
-		
-
-		
-			
 		Debug();
 		
 	}
@@ -324,20 +308,6 @@ void Player::HandleGameOver(bool over)
 		}
 		else {
 			deadTextureOn = true;
-
-			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-				/*lives = 3;
-				health = 5;
-				position.x = spawn.x;
-				position.y = spawn.y;
-				app->render->camera.x = 0;
-				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
-				velocitx.x = 0;
-				gameOver = false;
-				deadTextureOn = false;*/
-
-				
-			}
 		}
 	}
 
@@ -508,6 +478,10 @@ void Player::InitPlayer() {
 
 	currentAnimation = &idle;
 
+	CamTransition(0, spawn.x);
+	app->audio->PlayMusic(backmusicPath);
+	startGame = true;
+
 	toDelete = false;
 
 	
@@ -533,6 +507,10 @@ void Player::PlayerGUI(bool show) {
 		}
 
 		app->render->DrawTexture(slimeball, camPos.x * (-1) + 100, 80);
+		
+		std::string str = std::to_string(bullets);
+		const char* c_str = str.c_str();
+		app->render->DrawText(c_str, 50, 80, 0, 0, "black", false);
 
 		
 	}

@@ -100,11 +100,11 @@ bool Scene::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
 		if (toggle) {
-			app->gui->nothing = true;
 			toggle = false;
+			app->gui->NoButtons();
 		}
 		else {
-			app->gui->settings = true;
+			app->gui->InGameMenu();
 			toggle = true;
 		}
 			
@@ -301,6 +301,8 @@ bool Scene::SceneStart(int level)
 		app->map->mapData.tilesets.Count());
 
 	app->win->SetTitle(title.GetString());
+
+	app->gui->ButtonInit();
 
 	SpawnPlayer();
 

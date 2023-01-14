@@ -67,7 +67,7 @@ public:
 
 	const char* fileName;
 
-
+	bool toggle;
 
 private:
 	SDL_Texture* img;
@@ -107,7 +107,7 @@ private:
 	int click1FxId;
 	int click2FxId;
 
-	bool toggle;
+
 
 
 };

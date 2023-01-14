@@ -60,9 +60,7 @@ bool TitleScene::Start()
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
 
-	app->gui->mainMenu = true;
-
-	
+	toggle = true;
 
 	return true;
 }
@@ -76,6 +74,11 @@ bool TitleScene::PreUpdate()
 // Called each loop iteration
 bool TitleScene::Update(float dt)
 {
+	if (toggle == true) {
+		app->gui->MainMenuButtons();
+		toggle = false;
+	}
+		
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
 		

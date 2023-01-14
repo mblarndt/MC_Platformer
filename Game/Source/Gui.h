@@ -49,32 +49,39 @@ public:
 
 	bool NoButtons();
 
+	bool InGameMenu();
+
+	bool ButtonInit();
+
 public:
 
 	GuiSlider* slider1;
 	GuiSlider* slider2;
 
 	// L15: TODO 2: Declare a GUI Button and create it using the GuiManager
-	GuiButton* btn1;
-	GuiButton* btn2;
-	GuiButton* btn3;
-	GuiButton* btn4;
-	GuiButton* btn5;
-	GuiButton* btn6;
-	GuiButton* btn7;
-	GuiButton* btn8;
-	GuiButton* btn9;
-	GuiButton* btn10;
 
-
-	int numButtons = 10;
-	GuiButton* buttons[10] = { btn1, btn2, btn3, btn4, btn5, btn6 , btn7, btn8, btn9, btn10 };
+	GuiButton* startBtn;
+	GuiButton* settingsBtn;
+	GuiButton* creditsBtn;
+	GuiButton* exitBtn;
+	GuiButton* continueBtn;
+	GuiButton* lvl1Btn;
+	GuiButton* lvl2Btn;
+	GuiButton* backBtn;
+	GuiButton* saveBtn;
+	GuiButton* loadBtn;
+	GuiButton* resumeBtn;
+	GuiButton* titleBtn;
 
 	bool mainMenu;
 	bool start;
 	bool settings;
 	bool exit;
 	bool nothing;
+
+	SDL_Texture* settingsBox;
+
+	bool toggle;
 
 private:
 	

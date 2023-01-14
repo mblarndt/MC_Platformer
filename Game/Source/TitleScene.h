@@ -43,6 +43,8 @@ public:
 
 	GuiButton* button1;
 
+	bool toggle;
+
 
 private:
 	SDL_Rect logoRect;

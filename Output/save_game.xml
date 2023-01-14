@@ -6,9 +6,9 @@
 	<textures />
 	<physics />
 	<scene>
-		<player x="4709" y="322" health="2" bullets="1" />
-		<enemyair x="3548" y="239" health="2" />
-		<enemyfloor x="4079" y="341" health="0" />
+		<player x="2401" y="281" health="1" bullets="6" />
+		<enemyair x="3424" y="191" health="2" />
+		<enemyfloor x="3910" y="335" health="2" />
 	</scene>
 	<entitymanager />
 	<map />
@@ -18,7 +18,8 @@
 	<pathfinding />
 	<animation />
 	<guiManager />
+	<gui />
 	<renderer>
-		<camera x="-4093" y="0" />
+		<camera x="-2100" y="0" />
 	</renderer>
 </save_state>

@@ -124,7 +124,8 @@ bool GuiButton::Draw(Render* render)
 	}
 	if (state != GuiControlState::DISABLED)
 	{
-		app->render->DrawText(text.GetString(), bounds.x + 5, bounds.y + 5, bounds.w - 10, bounds.h - 10, { 255,255,255 }, true);
+		bounds.x = bounds.x + app->render->camera.x;
+		app->render->DrawText(text.GetString(), bounds.x + 5, bounds.y + 5, bounds.w - 10, bounds.h - 10, "white");
 	}
 	return false;
 }

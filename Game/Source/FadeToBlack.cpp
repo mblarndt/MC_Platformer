@@ -14,6 +14,7 @@
 #include "External/SDL/include/SDL_render.h"
 #include "External/SDL/include/SDL_timer.h"
 #include "Physics.h"
+#include "Gui.h"
 
 FadeToBlack::FadeToBlack()
 {
@@ -133,6 +134,15 @@ bool FadeToBlack::FadeToBlackScene(char* scene, float time)
 		ret = true;
 	}
 
+	if (scene == "TitleScene") {
+		//CleanUp
+		app->map->CleanUp();
+		app->scene->CleanUp();
+		app->entityManager->CleanUp();
+	}
+
+	app->gui->toggle = true;
+
 	return ret;
 }
 
@@ -190,7 +200,6 @@ bool FadeToBlack::SwitchScenes(char* scene)
 			app->physics->active = true;
 			app->input->active = true;
 		}
-
 		activeScene = scene;
 	}
 
