@@ -85,8 +85,18 @@ bool TitleScene::Update(float dt)
 	//SDL_SetTextureAlphaMod(logo, accumulatedTime * 10.0f);
 	app->render->DrawTexture(logo, 0, 0);
 
+	if (app->gui->settings) {
+		//app->render->DrawTexture(settingsBox, 100 - app->render->camera.x, 0);
+		app->render->DrawTexture(settingsBox, 229 + app->render->camera.x, 30);
+		app->render->DrawText("Sound", 250 - app->render->camera.x, 145, 0, 0, "white", false);
+		app->render->DrawText("Music", 250 - app->render->camera.x, 200, 0, 0, "white", false);
+		app->render->DrawText("FX", 250 + app->render->camera.x, 250, 0, 0, "white", false);
+	}
+
 	//L15: Draw GUI
 	app->guiManager->Draw();
+
+
 
 	return true;
 }

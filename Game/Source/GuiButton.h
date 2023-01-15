@@ -35,6 +35,7 @@ public:
 	GuiControlState previousState;
 
 	bool isPressed;
+	bool selected;
 
 };
 

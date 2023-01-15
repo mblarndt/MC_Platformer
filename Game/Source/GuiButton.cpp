@@ -22,6 +22,8 @@ GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(
     buttonTex = app->tex->Load("Assets/Textures/buttons.png");
 
     boundx = bounds.x;
+
+	selected = false;
 }
 
 GuiButton::~GuiButton()
@@ -100,9 +102,14 @@ bool GuiButton::Draw(Render* render)
 
 	case GuiControlState::NORMAL:
 	{
-		//render->DrawRectangle(bounds, 255, 0, 0, 255);
-		SDL_Rect rect = { 0,70,190,66 };
-		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+		if (selected == true) {
+			SDL_Rect rect = { 0,0,190,66 };
+			render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+		}
+		else {
+			SDL_Rect rect = { 0,70,190,66 };
+			render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+		}
 
 
 	} break;
@@ -110,7 +117,6 @@ bool GuiButton::Draw(Render* render)
 	//L15: TODO 4: Draw the button according the GuiControl State
 	case GuiControlState::FOCUSED:
 	{
-		//render->DrawRectangle(bounds, 255, 255, 255, 160);
 		SDL_Rect rect = { 0,0,190,66 };
 		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
 

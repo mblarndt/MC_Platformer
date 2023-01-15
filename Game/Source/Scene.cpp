@@ -54,6 +54,8 @@ bool Scene::Awake(pugi::xml_node& config)
 	deathTexW = deathTextures.attribute("width").as_int();
 	deathTexH = deathTextures.attribute("height").as_int();
 
+	settingsBoxPath = "Assets/Textures/SettingsBox.png";
+
 
 	//ButtonSetup();
 
@@ -68,6 +70,7 @@ bool Scene::Start()
 
 	deathTex = app->tex->Load(deathTexPath);
 	finishTex = app->tex->Load(finishTexPath);
+	settingsBox = app->tex->Load(settingsBoxPath);
 
 	return true;
 }
@@ -134,8 +137,15 @@ bool Scene::Update(float dt)
 	}
 
 	else(app->map->Draw());
-
 	
+	if (app->gui->settings) {
+		//app->render->DrawTexture(settingsBox, 100 - app->render->camera.x, 0);
+		app->render->DrawTexture(settingsBox, 229 - app->render->camera.x, 30);
+		app->render->DrawText("Sound", 250 - app->render->camera.x, 145, 0, 0, "white", false);
+		app->render->DrawText("Music", 250 - app->render->camera.x, 200, 0, 0, "white", false);
+		app->render->DrawText("FX", 250 + app->render->camera.x, 250, 0, 0, "white", false);
+	}
+
 	app->guiManager->Draw();
 
 

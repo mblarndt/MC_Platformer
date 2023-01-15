@@ -70,6 +70,10 @@ public:
 	bool toggle;
 
 private:
+	SDL_Rect settingsRect;
+	SDL_Texture* settingsBox;
+	const char* settingsBoxPath;
+
 	SDL_Texture* img;
 	SDL_Texture* mouseTileTex = nullptr;
 	SDL_Texture* originTex = nullptr;

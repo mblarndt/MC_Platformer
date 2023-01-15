@@ -73,6 +73,9 @@ public:
 	GuiButton* loadBtn;
 	GuiButton* resumeBtn;
 	GuiButton* titleBtn;
+	GuiButton* audioBtn;
+	GuiButton* videoBtn;
+	GuiButton* gameBtn;
 
 	GuiToggle* vsyncToggle;
 

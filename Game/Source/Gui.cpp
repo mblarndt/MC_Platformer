@@ -45,32 +45,34 @@ bool Gui::Start()
 	loadBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, "LOAD",    { 100 + 200, (int)w / 13 * 4,  190, 66 }, this);
 	titleBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 12, "TITLE",  { 510, (int)w / 13 * 3,  190, 66 }, this);
 
-	vsyncToggle = (GuiToggle*)app->guiManager->CreateGuiControl(GuiControlType::TOGGLE, 13, "VSYNC", { 500, 50,  78, 48 }, this);
+	vsyncToggle = (GuiToggle*)app->guiManager->CreateGuiControl(GuiControlType::TOGGLE, 13, "VSYNC", { 350, 140,  78, 48 }, this);
 	vsyncToggle->toggle = app->render->VSYNC;
 
-	SDL_Rect sliderRect = { 300, 250, 300,38 };
+	SDL_Rect sliderRect = { 350, 250, 300,38 };
 	slider1 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 14, "Slider 1", sliderRect, this);
 
-	SDL_Rect sliderRect2 = { 300, 200, 300,38 };
+	SDL_Rect sliderRect2 = { 350, 200, 300,38 };
 	slider2 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 15, "Slider 2", sliderRect2, this);
+
+	audioBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 16, "AUDIO", { 229, 30, 190, 66 }, this);
+	videoBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 17, "VIDEO", { 229 + 188, 30,  190, 66 }, this);
+	gameBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 18, "GAME", { 229+376, 30,  190, 66 }, this);
 
 	settingsBox = app->tex->Load("Assets/Textures/settingsBox.png");
 
 	NoButtons();
 
+	audioBtn->selected = true;
 	toggle = false;
+
+	
 
 	return true;
 }
 
 bool Gui::Update(float dt)
 {
-	if (settings) {
-		//app->render->DrawTexture(settingsBox, 100 - app->render->camera.x, 0);
-		app->render->DrawText("Audio", 210 - app->render->camera.x, 150, 0, 0, "black", false);
-		app->render->DrawText("Music", 210 - app->render->camera.x, 200, 0, 0, "black", false);
-		app->render->DrawText("FX", 210 + app->render->camera.x, 250, 0, 0, "black", false);
-	}
+
 
 	ButtonInit();
 
@@ -185,6 +187,22 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 			app->render->VSYNC = false;
 		else
 			app->render->VSYNC = true;
+		break;
+	case 16:
+		audioBtn->selected = true;
+		videoBtn->selected = false;
+		gameBtn->selected = false;
+		break;
+	case 17:
+		audioBtn->selected = false;
+		videoBtn->selected = true;
+		gameBtn->selected = false;
+		break;
+	case 18:
+		audioBtn->selected = false;
+		videoBtn->selected = false;
+		gameBtn->selected = true;
+		break;
 }
 	
 	return true;
@@ -200,6 +218,7 @@ bool Gui::MainMenuButtons() {
 	continueBtn->state = GuiControlState::DISABLED;
 	lvl1Btn->state = GuiControlState::DISABLED;
 	lvl2Btn->state = GuiControlState::DISABLED;
+	backBtn->boundx = 100;
 	backBtn->state = GuiControlState::DISABLED;
 
 	saveBtn->state = GuiControlState::DISABLED;
@@ -207,6 +226,10 @@ bool Gui::MainMenuButtons() {
 	resumeBtn->state = GuiControlState::DISABLED;
 	titleBtn->state = GuiControlState::DISABLED;
 	vsyncToggle->state = GuiControlState::DISABLED;
+
+	audioBtn->state = GuiControlState::DISABLED;
+	videoBtn->state = GuiControlState::DISABLED;
+	gameBtn->state = GuiControlState::DISABLED;
 
 	slider1->state = GuiControlState::DISABLED;
 	slider2->state = GuiControlState::DISABLED;
@@ -224,14 +247,18 @@ bool Gui::SettingsButtons()
 	continueBtn->state = GuiControlState::DISABLED;
 	lvl1Btn->state = GuiControlState::DISABLED;
 	lvl2Btn->state = GuiControlState::DISABLED;
-	backBtn->boundx = 200;
+	backBtn->boundx = 350;
 	backBtn->state = GuiControlState::NORMAL;
 
 	saveBtn->state = GuiControlState::DISABLED;
 	loadBtn->state = GuiControlState::DISABLED;
 	resumeBtn->state = GuiControlState::DISABLED;
 	titleBtn->state = GuiControlState::DISABLED;
+
 	vsyncToggle->state = GuiControlState::NORMAL;
+	audioBtn->state = GuiControlState::NORMAL;
+	videoBtn->state = GuiControlState::NORMAL;
+	gameBtn->state = GuiControlState::NORMAL;
 
 	slider1->state = GuiControlState::NORMAL;
 	slider2->state = GuiControlState::NORMAL;
@@ -257,6 +284,10 @@ bool Gui::StartButtons()
 	titleBtn->state = GuiControlState::DISABLED;
 	vsyncToggle->state = GuiControlState::DISABLED;
 
+	audioBtn->state = GuiControlState::DISABLED;
+	videoBtn->state = GuiControlState::DISABLED;
+	gameBtn->state = GuiControlState::DISABLED;
+
 	slider1->state = GuiControlState::DISABLED;
 	slider2->state = GuiControlState::DISABLED;
 
@@ -279,6 +310,9 @@ bool Gui::NoButtons() {
 	resumeBtn->state = GuiControlState::DISABLED;
 	titleBtn->state = GuiControlState::DISABLED;
 	vsyncToggle->state = GuiControlState::DISABLED;
+	audioBtn->state = GuiControlState::DISABLED;
+	videoBtn->state = GuiControlState::DISABLED;
+	gameBtn->state = GuiControlState::DISABLED;
 
 	slider1->state = GuiControlState::DISABLED;
 	slider2->state = GuiControlState::DISABLED;
@@ -302,6 +336,10 @@ bool Gui::InGameMenu() {
 	resumeBtn->state = GuiControlState::NORMAL;
 	titleBtn->state = GuiControlState::NORMAL;
 	vsyncToggle->state = GuiControlState::DISABLED;
+
+	audioBtn->state = GuiControlState::DISABLED;
+	videoBtn->state = GuiControlState::DISABLED;
+	gameBtn->state = GuiControlState::DISABLED;
 
 	slider1->state = GuiControlState::DISABLED;
 	slider2->state = GuiControlState::DISABLED;
