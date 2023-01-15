@@ -27,23 +27,25 @@ bool Gui::Awake(pugi::xml_node& config)
 
 bool Gui::Start()
 {
-	//Button Setup
 	uint w, h;
 	app->win->GetWindowSize(w, h);
-	startBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "START",      { 100, (int)w / 13,     190, 66 }, this);
-	settingsBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "SETTINGS",{ 100, (int)w / 13 * 2, 190, 66 }, this);
-	creditsBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 7, "CREDITS",  { 100, (int)w / 13 * 3, 190, 66 }, this);
-	exitBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "EXIT",        { 100, (int)w / 13 * 4, 190, 66 }, this);
 
-	continueBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, "CONTINUE",{ 100, (int)w / 13,      190, 66 }, this);
-	lvl1Btn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "LEVEL 1", { 100, (int)w / 13 * 2,  190, 66 }, this);
-	lvl2Btn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "LEVEL 2", { 100, (int)w / 13 * 3,  190, 66 }, this);
-	backBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 6, "BACK",    { 100, (int)w / 13 * 4,  190, 66 }, this);
+	CreateButton(1, "START", 100, (int)w / 13, startBtn);
+	CreateButton(3, "SETTINGS", 100, (int)w / 13 * 2, settingsBtn);
+	CreateButton(7, "CREDITS", 100, (int)w / 13 * 3, creditsBtn);
+	CreateButton(2, "EXIT", 100, (int)w / 13 * 4, exitBtn);
+	CreateButton(8, "CONTINUE", 100, (int)w / 13, continueBtn);
+	CreateButton(4, "LEVEL 1", 100, (int)w / 13 * 2, lvl1Btn);
+	CreateButton(5, "LEVEL 2", 100, (int)w / 13 * 3, lvl2Btn);
+	CreateButton(6, "BACK", 100, (int)w / 13 * 4, backBtn);
+	CreateButton(9, "RESUME", 100 + 200, (int)w / 13 * 2, resumeBtn);
+	CreateButton(10, "SAVE", 100 + 200, (int)w / 13 * 3, saveBtn);
+	CreateButton(11, "LOAD", 100 + 200, (int)w / 13 * 4, loadBtn);
+	CreateButton(12, "TITLE", 510, (int)w / 13 * 3, titleBtn);
+	CreateButton(13, "AUDIO", 229, 30, audioBtn);
+	CreateButton(14, "VIDEO", 229 + 188, 30, videoBtn);
+	CreateButton(15, "GAME", 229 + 374, 30, gameBtn);
 
-	resumeBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, "RESUME", { 100 + 200, (int)w / 13 * 2,      190, 66 }, this);
-	saveBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 10, "SAVE",    { 100 + 200, (int)w / 13 * 3,      190, 66 }, this);
-	loadBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, "LOAD",    { 100 + 200, (int)w / 13 * 4,  190, 66 }, this);
-	titleBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 12, "TITLE",  { 510, (int)w / 13 * 3,  190, 66 }, this);
 
 	vsyncToggle = (GuiToggle*)app->guiManager->CreateGuiControl(GuiControlType::TOGGLE, 13, "VSYNC", { 350, 140,  78, 48 }, this);
 	vsyncToggle->toggle = app->render->VSYNC;
@@ -53,12 +55,6 @@ bool Gui::Start()
 
 	SDL_Rect sliderRect2 = { 350, 200, 300,38 };
 	slider2 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 15, "Slider 2", sliderRect2, this);
-
-	audioBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 16, "AUDIO", { 229, 30, 190, 66 }, this);
-	videoBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 17, "VIDEO", { 229 + 188, 30,  190, 66 }, this);
-	gameBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 18, "GAME", { 229+376, 30,  190, 66 }, this);
-
-	settingsBox = app->tex->Load("Assets/Textures/settingsBox.png");
 
 	NoButtons();
 
@@ -372,4 +368,13 @@ bool Gui::ButtonInit() {
 	}
 
 	return true;
+}
+
+
+bool Gui::CreateButton(int id, const char* label, int x, int y, GuiButton*& button)
+{
+	int w = 190;
+	int h = 66;
+	button = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, id, label, { x, y, w, h }, this);
+	return button != nullptr;
 }

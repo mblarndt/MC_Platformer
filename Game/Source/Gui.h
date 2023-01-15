@@ -54,7 +54,10 @@ public:
 
 	bool ButtonInit();
 
+	bool CreateButton(int id, const char* label, int x, int y, GuiButton*& button);
+
 public:
+	int numButtons;
 
 	GuiSlider* slider1;
 	GuiSlider* slider2;
