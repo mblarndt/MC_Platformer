@@ -189,7 +189,17 @@ bool FadeToBlack::SwitchScenes(char* scene)
 			app->map->active = false;
 			app->physics->active = false;
 			app->input->active = true;
-			//app->scene->CleanUp();
+
+			app->map->CleanUp();
+			app->scene->CleanUp();
+			app->entityManager->CleanUp();
+
+			b2Body* body = app->physics->world->GetBodyList();
+			while (body != NULL)
+			{
+				app->physics->world->DestroyBody(app->physics->world->GetBodyList());
+				body = body->GetNext();
+			}
 		}
 		if (scene == "Scene")
 		{

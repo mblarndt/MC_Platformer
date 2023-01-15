@@ -105,7 +105,9 @@ bool Scene::Update(float dt)
 		if (toggle) {
 			toggle = false;
 			app->gui->NoButtons();
+			app->gui->settings = false;
 			playerptr->startGame = true;
+			
 		}
 		else {
 			app->gui->InGameMenu();
@@ -139,12 +141,13 @@ bool Scene::Update(float dt)
 	else(app->map->Draw());
 	
 	if (app->gui->settings) {
-		//app->render->DrawTexture(settingsBox, 100 - app->render->camera.x, 0);
 		app->render->DrawTexture(settingsBox, 229 - app->render->camera.x, 30);
-		app->render->DrawText("Sound", 250 - app->render->camera.x, 145, 0, 0, "white", false);
-		app->render->DrawText("Music", 250 - app->render->camera.x, 200, 0, 0, "white", false);
-		app->render->DrawText("FX", 250 + app->render->camera.x, 250, 0, 0, "white", false);
+		app->render->DrawText("Sound", 250 , 145, 0, 0, "white", false);
+		app->render->DrawText("Music", 250, 200, 0, 0, "white", false);
+		app->render->DrawText("FX", 250, 250, 0, 0, "white", false);
 	}
+	if(toggle)
+		app->render->DrawTexture(settingsBox, 229 - app->render->camera.x, 30);
 
 	app->guiManager->Draw();
 
