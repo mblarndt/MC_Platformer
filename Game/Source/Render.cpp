@@ -5,7 +5,6 @@
 #include "Defs.h"
 #include "Log.h"
 
-#define VSYNC true
 
 Render::Render() : Module()
 {
@@ -23,6 +22,8 @@ Render::~Render()
 // Called before render is available
 bool Render::Awake(pugi::xml_node& config)
 {
+	VSYNC = true;
+
 	LOG("Create SDL rendering context");
 	bool ret = true;
 

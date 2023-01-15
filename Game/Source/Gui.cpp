@@ -45,13 +45,14 @@ bool Gui::Start()
 	loadBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, "LOAD",    { 100 + 200, (int)w / 13 * 4,  190, 66 }, this);
 	titleBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 12, "TITLE",  { 510, (int)w / 13 * 3,  190, 66 }, this);
 
-	vsyncToggle = (GuiToggle*)app->guiManager->CreateGuiControl(GuiControlType::TOGGLE, 12, "VSYNC", { 500, 50,  78, 48 }, this);
+	vsyncToggle = (GuiToggle*)app->guiManager->CreateGuiControl(GuiControlType::TOGGLE, 13, "VSYNC", { 500, 50,  78, 48 }, this);
+	vsyncToggle->toggle = app->render->VSYNC;
 
 	SDL_Rect sliderRect = { 300, 250, 300,38 };
-	slider1 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 13, "Slider 1", sliderRect, this);
+	slider1 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 14, "Slider 1", sliderRect, this);
 
 	SDL_Rect sliderRect2 = { 300, 200, 300,38 };
-	slider2 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 14, "Slider 2", sliderRect2, this);
+	slider2 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 15, "Slider 2", sliderRect2, this);
 
 	settingsBox = app->tex->Load("Assets/Textures/settingsBox.png");
 
@@ -179,6 +180,11 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 		app->titleScene->toggle = true;
 		app->scene->toggle = false;
 		break;
+	case 13:
+		if (app->render->VSYNC == true)
+			app->render->VSYNC = false;
+		else
+			app->render->VSYNC = true;
 }
 	
 	return true;
@@ -200,6 +206,7 @@ bool Gui::MainMenuButtons() {
 	loadBtn->state = GuiControlState::DISABLED;
 	resumeBtn->state = GuiControlState::DISABLED;
 	titleBtn->state = GuiControlState::DISABLED;
+	vsyncToggle->state = GuiControlState::DISABLED;
 
 	slider1->state = GuiControlState::DISABLED;
 	slider2->state = GuiControlState::DISABLED;
@@ -217,13 +224,13 @@ bool Gui::SettingsButtons()
 	continueBtn->state = GuiControlState::DISABLED;
 	lvl1Btn->state = GuiControlState::DISABLED;
 	lvl2Btn->state = GuiControlState::DISABLED;
+	backBtn->boundx = 200;
 	backBtn->state = GuiControlState::NORMAL;
 
 	saveBtn->state = GuiControlState::DISABLED;
 	loadBtn->state = GuiControlState::DISABLED;
 	resumeBtn->state = GuiControlState::DISABLED;
 	titleBtn->state = GuiControlState::DISABLED;
-
 	vsyncToggle->state = GuiControlState::NORMAL;
 
 	slider1->state = GuiControlState::NORMAL;
@@ -248,6 +255,7 @@ bool Gui::StartButtons()
 	loadBtn->state = GuiControlState::DISABLED;
 	resumeBtn->state = GuiControlState::DISABLED;
 	titleBtn->state = GuiControlState::DISABLED;
+	vsyncToggle->state = GuiControlState::DISABLED;
 
 	slider1->state = GuiControlState::DISABLED;
 	slider2->state = GuiControlState::DISABLED;
@@ -270,6 +278,7 @@ bool Gui::NoButtons() {
 	loadBtn->state = GuiControlState::DISABLED;
 	resumeBtn->state = GuiControlState::DISABLED;
 	titleBtn->state = GuiControlState::DISABLED;
+	vsyncToggle->state = GuiControlState::DISABLED;
 
 	slider1->state = GuiControlState::DISABLED;
 	slider2->state = GuiControlState::DISABLED;
@@ -292,6 +301,7 @@ bool Gui::InGameMenu() {
 	loadBtn->state = GuiControlState::NORMAL;
 	resumeBtn->state = GuiControlState::NORMAL;
 	titleBtn->state = GuiControlState::NORMAL;
+	vsyncToggle->state = GuiControlState::DISABLED;
 
 	slider1->state = GuiControlState::DISABLED;
 	slider2->state = GuiControlState::DISABLED;

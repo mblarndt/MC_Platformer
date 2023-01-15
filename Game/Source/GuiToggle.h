@@ -34,7 +34,10 @@ public:
 
 	GuiControlState previousState;
 
-	bool isPressed;
+	int height;
+	int width;
+
+	bool toggle;
 
 };
 

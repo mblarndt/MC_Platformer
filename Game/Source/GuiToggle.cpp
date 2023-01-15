@@ -20,8 +20,12 @@ GuiToggle::GuiToggle(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(
     click2FxId = app->audio->LoadFx("Assets/Audio/Fx/click2.ogg");
 
     buttonTex = app->tex->Load("Assets/Textures/toggle.png");
+	width = 78;
+	height = 48;
 
     boundx = bounds.x;
+
+	toggle = false;
 }
 
 GuiToggle::~GuiToggle()
@@ -55,6 +59,7 @@ bool GuiToggle::Update(float dt)
 				if (previousState != state) {
 					state = GuiControlState::PRESSED;
 					app->audio->PlayFx(click2FxId);
+					
 				}
 			}
 
@@ -66,6 +71,10 @@ bool GuiToggle::Update(float dt)
 				{
 					NotifyObserver();
 					canClick = false;
+					if (toggle == false)
+						toggle = true;
+					else
+						toggle = false;
 				}
 			}
 			else {
@@ -100,28 +109,41 @@ bool GuiToggle::Draw(Render* render)
 
 	case GuiControlState::NORMAL:
 	{
-		//render->DrawRectangle(bounds, 255, 0, 0, 255);
-		SDL_Rect rect = { 0,0,78,48 };
-		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
-
-
+		if (toggle == true) {
+			SDL_Rect rect = { 82,0,width,height };
+			render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+		}
+		else {
+			SDL_Rect rect = { 0,0,width,height };
+			render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+		}
 	} break;
 
 	//L15: TODO 4: Draw the button according the GuiControl State
 	case GuiControlState::FOCUSED:
 	{
-		//render->DrawRectangle(bounds, 255, 255, 255, 160);
-		SDL_Rect rect = { 0,0,190,66 };
-		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+		if (toggle == true) {
+			SDL_Rect rect = { 82,100,width,height };
+			render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+		}
+		else {
+			SDL_Rect rect = { 0,100,width,height };
+			render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+		}
+		
 
 
 	} break;
 	case GuiControlState::PRESSED:
 	{
-		SDL_Rect rect = { 0,141,190,66 };
-		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
-
-
+		if (toggle == true) {
+			SDL_Rect rect = { 82,50,width,height };
+			render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+		}
+		else {
+			SDL_Rect rect = { 0,50,width,height };
+			render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+		}
 	} break;
 
 	case GuiControlState::SELECTED:
