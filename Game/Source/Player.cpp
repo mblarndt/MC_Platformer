@@ -440,6 +440,7 @@ void Player::InitPlayer() {
 	texture = app->tex->Load(texturePath);
 	heartTex = app->tex->Load("Assets/Textures/heart.png");
 	slimeball = app->tex->Load("Assets/Textures/slimeball.png");
+	bulletsBG = app->tex->Load("Assets/Textures/bullets.png");
 
 	//Initialize Audio Fx
 	hitFxId = app->audio->LoadFx(hitFxPath);
@@ -506,11 +507,12 @@ void Player::PlayerGUI(bool show) {
 			break;
 		}
 
-		app->render->DrawTexture(slimeball, camPos.x * (-1) + 100, 80);
+		app->render->DrawTexture(bulletsBG, 20 - camPos.x, 60);
+		app->render->DrawTexture(slimeball, 88 - camPos.x, 72);
 		
-		std::string str = std::to_string(bullets);
+		std::string str = std::to_string(bullets) + " x";
 		const char* c_str = str.c_str();
-		app->render->DrawText(c_str, 50, 80, 0, 0, "black", false);
+		app->render->DrawText(c_str, 35, 58, 0, 0, "white", false);
 
 		
 	}

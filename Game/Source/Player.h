@@ -147,6 +147,7 @@ private:
 
 	SDL_Texture* heartTex;
 	SDL_Texture* slimeball;
+	SDL_Texture* bulletsBG;
 
 	
 
