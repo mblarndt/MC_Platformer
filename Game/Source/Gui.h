@@ -10,6 +10,7 @@
 #include "GuiButton.h"
 #include "GuiManager.h"
 #include "GuiSlider.h"
+#include "GuiToggle.h"
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
 
@@ -72,6 +73,8 @@ public:
 	GuiButton* loadBtn;
 	GuiButton* resumeBtn;
 	GuiButton* titleBtn;
+
+	GuiToggle* vsyncToggle;
 
 	bool mainMenu;
 	bool start;

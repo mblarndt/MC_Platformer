@@ -45,7 +45,7 @@ bool Gui::Start()
 	loadBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 11, "LOAD",    { 100 + 200, (int)w / 13 * 4,  190, 66 }, this);
 	titleBtn = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 12, "TITLE",  { 510, (int)w / 13 * 3,  190, 66 }, this);
 
-	
+	vsyncToggle = (GuiToggle*)app->guiManager->CreateGuiControl(GuiControlType::TOGGLE, 12, "VSYNC", { 500, 50,  78, 48 }, this);
 
 	SDL_Rect sliderRect = { 300, 250, 300,38 };
 	slider1 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 13, "Slider 1", sliderRect, this);
@@ -223,6 +223,8 @@ bool Gui::SettingsButtons()
 	loadBtn->state = GuiControlState::DISABLED;
 	resumeBtn->state = GuiControlState::DISABLED;
 	titleBtn->state = GuiControlState::DISABLED;
+
+	vsyncToggle->state = GuiControlState::NORMAL;
 
 	slider1->state = GuiControlState::NORMAL;
 	slider2->state = GuiControlState::NORMAL;

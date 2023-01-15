@@ -6,6 +6,7 @@
 
 #include "GuiButton.h"
 #include "GuiSlider.h"
+#include "GuiToggle.h"
 #include "Audio.h"
 #include "Log.h"
 
@@ -34,6 +35,7 @@ GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char
 		guiControl = new GuiButton(id, bounds, text);
 		break;
 	case GuiControlType::TOGGLE:
+		guiControl = new GuiToggle(id, bounds, text);
 		break;
 	case GuiControlType::CHECKBOX:
 		break;
