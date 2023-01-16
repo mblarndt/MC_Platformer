@@ -42,32 +42,35 @@ bool Gui::Start()
 	CreateButton(10, "SAVE", 100 + 200, (int)w / 13 * 3, saveBtn);
 	CreateButton(11, "LOAD", 100 + 200, (int)w / 13 * 4, loadBtn);
 	CreateButton(12, "TITLE", 510, (int)w / 13 * 3, titleBtn);
-	CreateButton(13, "AUDIO", 229, 30, audioBtn);
-	CreateButton(14, "VIDEO", 229 + 188, 30, videoBtn);
-	CreateButton(15, "GAME", 229 + 374, 30, gameBtn);
+	CreateButton(13, "AUDIO", 229, 62, audioBtn);
+	CreateButton(14, "VIDEO", 229 + 188, 62, videoBtn);
+	CreateButton(15, "GAME", 229 + 374, 62, gameBtn);
 
-	CreateToggle(19, "VSync", 420, 140, vsyncToggle);
+	CreateToggle(19, "VSync", 420, 140 + 20, vsyncToggle);
 	vsyncToggle->toggle = app->render->VSYNC;
 
-	CreateToggle(20, "Fullscreen", 420, 195, fullscreenToggle);
+	CreateToggle(20, "Fullscreen", 420, 195 + 20, fullscreenToggle);
 
-	CreateToggle(21, "Debug", 420, 140, debugToggle);
+	CreateToggle(21, "Debug", 420, 140 + 20, debugToggle);
 	debugToggle->toggle = app->physics->debug;
-	CreateToggle(22, "Godmode", 420, 195, godmodeToggle);
+	CreateToggle(22, "Godmode", 420, 195 + 20, godmodeToggle);
 	
-	CreateToggle(24, "Music", 350, 140, audioToggle);
+	CreateToggle(24, "Music", 350, 140 + 20, audioToggle);
 	audioToggle->toggle = app->audio->isAudioEnabled;
 
 
-	SDL_Rect sliderRect2 = { 350, 200, 300,38 };
-	musicSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 17, "Music Volume", sliderRect2, this);
+	SDL_Rect sliderRect2 = { 350, 200 + 20, 300,38 };
+	musicSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 17, "Music Volume", sliderRect2, this, { 0,128,0,0 });
 	musicVolume = preMusicVolume = app->audio->musicVolume;
 	musicSlider->SetValue(musicVolume);
 
-	SDL_Rect sliderRect = { 350, 250, 300,38 };
-	fxSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 18, "FX Volume", sliderRect, this);
+	SDL_Rect sliderRect = { 350, 250 + 20, 300,38 };
+	fxSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 18, "FX Volume", sliderRect, this, { 0,128,0,0 });
 	fxVolume = preFxVolume = app->audio->fxVolume;
 	fxSlider->SetValue(fxVolume);
+
+	SDL_Rect sliderRect3 = { 350, 250 + 20, 200, 38 };
+	fpsSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 18, "FPS", sliderRect3, this, {1,3,0,0});
 
 	
 
@@ -286,8 +289,8 @@ bool Gui::SettingsButtons()
 	continueBtn->state = GuiControlState::DISABLED;
 	lvl1Btn->state = GuiControlState::DISABLED;
 	lvl2Btn->state = GuiControlState::DISABLED;
-	backBtn->boundx = 250;
-	backBtn->bounds.y = 370;
+	backBtn->boundx = 229 + 188;
+	backBtn->bounds.y = 352;
 	backBtn->state = GuiControlState::NORMAL;
 
 	saveBtn->state = GuiControlState::DISABLED;
@@ -485,24 +488,25 @@ bool Gui::CreateToggle(int id, const char* label, int x, int y, GuiToggle*& togg
 
 bool Gui::SettingsWindow() {
 	if (app->scene->toggle)
-		app->render->DrawTexture(settingsBox, 229 - app->render->camera.x, 30);
+		app->render->DrawTexture(settingsBox, 200 - app->render->camera.x, 30);
 
 	if (settings == true) {
-		app->render->DrawTexture(settingsBox, 229 - app->render->camera.x, 30);
+		app->render->DrawTexture(settingsBox, 200 - app->render->camera.x, 30);
 		if (audioBtn->selected) {
-			app->render->DrawText("Sound", 250, 145, 0, 0, "white", false);
-			app->render->DrawText("Music", 250, 200, 0, 0, "white", false);
-			app->render->DrawText("FX", 250, 250, 0, 0, "white", false);
+			app->render->DrawText("Sound", 250, 145+20, 0, 0, "white", false);
+			app->render->DrawText("Music", 250, 200+20, 0, 0, "white", false);
+			app->render->DrawText("FX", 250, 250+20, 0, 0, "white", false);
 		}
 
 		else if (videoBtn->selected == true) {
-			app->render->DrawText("VSync", 250, 145, 0, 0, "white", false);
-			app->render->DrawText("Fullscreen", 250, 200, 0, 0, "white", false);
+			app->render->DrawText("VSync", 250, 145 + 20, 0, 0, "white", false);
+			app->render->DrawText("Fullscreen", 250, 200 + 20, 0, 0, "white", false);
+			app->render->DrawText("FPS", 250, 250 + 20, 0, 0, "white", false);
 		}
 
 		else if (gameBtn->selected == true) {
-			app->render->DrawText("Debug", 250, 145, 0, 0, "white", false);
-			app->render->DrawText("GodMode", 250, 200, 0, 0, "white", false);
+			app->render->DrawText("Debug", 250, 145 + 20, 0, 0, "white", false);
+			app->render->DrawText("GodMode", 250, 200 + 20, 0, 0, "white", false);
 		}
 	}
 

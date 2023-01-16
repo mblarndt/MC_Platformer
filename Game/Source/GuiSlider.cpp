@@ -12,8 +12,8 @@ GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, int minValue, int maxValue) : G
     this->bounds = bounds;
     this->bounds.h = 38;
     this->bounds.w = 300 - 38;
-    this->minValue = 0;
-    this->maxValue = 128;
+    this->minValue = minValue;
+    this->maxValue = maxValue;
     knobTex = app->tex->Load("Assets/Textures/Slime.png");
     barTex = app->tex->Load("Assets/Textures/SliderBar.png");
 
@@ -66,10 +66,10 @@ bool GuiSlider::Update(float dt)
        
        
         value = minValue + (maxValue - minValue) * (knobX / (float)bounds.w);
-        if (value < 10)
-            value = 0;
-        if (value > 120)
-            value = 128;
+        if (value < 0.1*minValue)
+            value = minValue;
+        if (value > maxValue - 0.1*maxValue)
+            value = maxValue;
 
     }
 
@@ -90,8 +90,11 @@ bool GuiSlider::Draw(Render* render)
 
     default:
     {
+        knobX = bounds.w * (value - minValue) / (float)(maxValue - minValue);
+
         render->DrawTexture(barTex, bounds.x, bounds.y);
-        render->DrawTexture(knobTex, bounds.x + knobX + 4 , bounds.y + 4);
+        render->DrawTexture(knobTex, bounds.x + (bounds.w * (value - minValue) / (float)(maxValue - minValue)) + 4, bounds.y + 4);
+
     } break;
     
 

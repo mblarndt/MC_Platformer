@@ -65,6 +65,7 @@ public:
 
 	GuiSlider* musicSlider;
 	GuiSlider* fxSlider;
+	GuiSlider* fpsSlider;
 
 	// L15: TODO 2: Declare a GUI Button and create it using the GuiManager
 
@@ -83,6 +84,9 @@ public:
 	GuiButton* audioBtn;
 	GuiButton* videoBtn;
 	GuiButton* gameBtn;
+	GuiButton* fifteenBtn;
+	GuiButton* thirtyBtn;
+	GuiButton* sixtyBtn;
 
 	GuiToggle* vsyncToggle;
 	GuiToggle* fullscreenToggle;
