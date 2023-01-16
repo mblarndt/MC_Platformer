@@ -55,8 +55,12 @@ bool Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 
-	isMusicOn = true;
 	isAudioEnabled = true;
+
+	musicVolume = 128 / 2;
+	fxVolume = 128 / 2;
+	SetMusicVolume(musicVolume);
+	SetFxVolume(fxVolume);
 
 	return ret;
 }
@@ -188,4 +192,16 @@ void Audio::ToggleMusic() {
 		Mix_ResumeMusic();
 	}
 	isAudioEnabled = !isAudioEnabled;
+}
+
+void Audio::SetFxVolume(int value)
+{
+	ListItem<Mix_Chunk*>* item;
+	for (item = fx.start; item != NULL; item = item->next)
+		Mix_VolumeChunk(item->data, value);
+}
+
+void Audio::SetMusicVolume(int value)
+{
+	Mix_VolumeMusic(value);
 }

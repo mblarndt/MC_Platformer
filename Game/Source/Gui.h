@@ -108,6 +108,11 @@ public:
 
 	SettingsState settingsState;
 
+	int musicVolume;
+	int fxVolume;
+	int preMusicVolume;
+	int preFxVolume;
+
 private:
 	
 

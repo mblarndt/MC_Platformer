@@ -13,11 +13,11 @@ GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, int minValue, int maxValue) : G
     this->bounds.h = 38;
     this->bounds.w = 300 - 38;
     this->minValue = 0;
-    this->maxValue = 100;
+    this->maxValue = 128;
     knobTex = app->tex->Load("Assets/Textures/Slime.png");
     barTex = app->tex->Load("Assets/Textures/SliderBar.png");
 
-    SetValue(50);
+    SetValue(maxValue / 2);
     
     boundx = bounds.x;
 }
@@ -45,6 +45,7 @@ bool GuiSlider::Update(float dt)
             {
                 state = GuiControlState::PRESSED;
                 knobX = mouseX - bounds.x;
+                NotifyObserver();
             }
         }
         else {
@@ -53,7 +54,7 @@ bool GuiSlider::Update(float dt)
                 if (knobX < 0) knobX = 0;
                 if (knobX > bounds.w) knobX = bounds.w;
                 
-                NotifyObserver();
+                
             }
             else {
                 state = GuiControlState::NORMAL;

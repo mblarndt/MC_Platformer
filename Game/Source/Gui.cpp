@@ -61,9 +61,13 @@ bool Gui::Start()
 
 	SDL_Rect sliderRect2 = { 350, 200, 300,38 };
 	musicSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 17, "Music Volume", sliderRect2, this);
+	musicVolume = preMusicVolume = app->audio->musicVolume;
+	musicSlider->SetValue(musicVolume);
 
 	SDL_Rect sliderRect = { 350, 250, 300,38 };
 	fxSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 18, "FX Volume", sliderRect, this);
+	fxVolume = preFxVolume = app->audio->fxVolume;
+	fxSlider->SetValue(fxVolume);
 
 	
 
@@ -79,10 +83,7 @@ bool Gui::Start()
 
 bool Gui::Update(float dt)
 {
-
-
 	ButtonInit();
-
 
 	return true;
 }
@@ -203,6 +204,14 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 	case 15:
 		settingsState = SettingsState::GAME;
 		SettingsButtons();
+		break;
+
+	case 17:
+		app->audio->SetMusicVolume(musicSlider->value);
+		break;
+
+	case 18:
+		app->audio->SetFxVolume(fxSlider->value);
 		break;
 
 	case 19:
