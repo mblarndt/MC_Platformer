@@ -150,6 +150,10 @@ bool App::Update()
 	if (input->GetWindowEvent(WE_QUIT) == true)
 		ret = false;
 
+
+	start_time = Clock::now();
+
+
 	if (ret == true)
 		ret = PreUpdate();
 
@@ -158,6 +162,17 @@ bool App::Update()
 
 	if (ret == true)
 		ret = PostUpdate();
+
+	
+	// Frame Rate control
+	end_time = Clock::now();
+	frame_time = duration_cast<milliseconds>(end_time - start_time).count();
+	
+	if (frame_time < (physics->dt * 1000.0))
+	{
+		SDL_Delay((physics->dt * 1000.0) - frame_time);
+	}
+	
 
 	FinishUpdate();
 	return ret;
