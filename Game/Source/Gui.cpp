@@ -46,15 +46,17 @@ bool Gui::Start()
 	CreateButton(14, "VIDEO", 229 + 188, 30, videoBtn);
 	CreateButton(15, "GAME", 229 + 374, 30, gameBtn);
 
-	CreateToggle(19, "VSync", 350, 140, vsyncToggle);
+	CreateToggle(19, "VSync", 420, 140, vsyncToggle);
 	vsyncToggle->toggle = app->render->VSYNC;
 
-	CreateToggle(20, "Fullscreen", 350, 240, fullscreenToggle);
+	CreateToggle(20, "Fullscreen", 420, 195, fullscreenToggle);
 
-	CreateToggle(21, "Debug", 350, 140, debugToggle);
+	CreateToggle(21, "Debug", 420, 140, debugToggle);
 	debugToggle->toggle = app->physics->debug;
-	CreateToggle(22, "Godmode", 350, 240, godmodeToggle);
-	CreateToggle(24, "Music", 350, 140, musicToggle);
+	CreateToggle(22, "Godmode", 420, 195, godmodeToggle);
+	
+	CreateToggle(24, "Music", 350, 140, audioToggle);
+	audioToggle->toggle = app->audio->isAudioEnabled;
 
 
 	SDL_Rect sliderRect2 = { 350, 200, 300,38 };
@@ -189,50 +191,18 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 		break;
 
 	case 13:
-		audioBtn->selected = true;
-		videoBtn->selected = false;
-		gameBtn->selected = false;
-
-		
-		musicSlider->state = GuiControlState::NORMAL;
-		fxSlider->state = GuiControlState::NORMAL;
-
-		musicToggle->state = GuiControlState::NORMAL;
-		vsyncToggle->state = GuiControlState::DISABLED;
-		fullscreenToggle->state = GuiControlState::DISABLED;
-		debugToggle->state = GuiControlState::DISABLED;
-		godmodeToggle->state = GuiControlState::DISABLED;
-		
+		settingsState = SettingsState::AUDIO;
+		SettingsButtons();
 		break;
 
 	case 14:
-		audioBtn->selected = false;
-		videoBtn->selected = true;
-		gameBtn->selected = false;
-
-		musicSlider->state = GuiControlState::DISABLED;
-		fxSlider->state = GuiControlState::DISABLED;
-
-		musicToggle->state = GuiControlState::DISABLED;
-		vsyncToggle->state = GuiControlState::NORMAL;
-		fullscreenToggle->state = GuiControlState::NORMAL;
-		debugToggle->state = GuiControlState::DISABLED;
-		godmodeToggle->state = GuiControlState::DISABLED;
+		settingsState = SettingsState::VIDEO;
+		SettingsButtons();
 		break;
 
 	case 15:
-		audioBtn->selected = false;
-		videoBtn->selected = false;
-		gameBtn->selected = true;
-
-		musicSlider->state = GuiControlState::DISABLED;
-		fxSlider->state = GuiControlState::DISABLED;
-
-		musicToggle->state = GuiControlState::DISABLED;
-		vsyncToggle->state = GuiControlState::DISABLED;
-		fullscreenToggle->state = GuiControlState::DISABLED;
-		debugToggle->state = GuiControlState::NORMAL;
-		godmodeToggle->state = GuiControlState::NORMAL;
+		settingsState = SettingsState::GAME;
+		SettingsButtons();
 		break;
 
 	case 19:
@@ -252,8 +222,8 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 		else
 			app->physics->debug = false;
 		break;
-	case 22:
-
+	case 24:
+		app->audio->ToggleMusic();
 		break;
 }
 
@@ -286,7 +256,7 @@ bool Gui::MainMenuButtons() {
 	musicSlider->state = GuiControlState::DISABLED;
 	fxSlider->state = GuiControlState::DISABLED;
 
-	musicToggle->state = GuiControlState::DISABLED;
+	audioToggle->state = GuiControlState::DISABLED;
 	vsyncToggle->state = GuiControlState::DISABLED;
 	fullscreenToggle->state = GuiControlState::DISABLED;
 	debugToggle->state = GuiControlState::DISABLED;
@@ -305,7 +275,8 @@ bool Gui::SettingsButtons()
 	continueBtn->state = GuiControlState::DISABLED;
 	lvl1Btn->state = GuiControlState::DISABLED;
 	lvl2Btn->state = GuiControlState::DISABLED;
-	backBtn->boundx = 350;
+	backBtn->boundx = 250;
+	backBtn->bounds.y = 370;
 	backBtn->state = GuiControlState::NORMAL;
 
 	saveBtn->state = GuiControlState::DISABLED;
@@ -313,14 +284,58 @@ bool Gui::SettingsButtons()
 	resumeBtn->state = GuiControlState::DISABLED;
 	titleBtn->state = GuiControlState::DISABLED;
 
-	vsyncToggle->state = GuiControlState::NORMAL;
 	audioBtn->state = GuiControlState::NORMAL;
 	videoBtn->state = GuiControlState::NORMAL;
 	gameBtn->state = GuiControlState::NORMAL;
 
-	musicSlider->state = GuiControlState::NORMAL;
-	fxSlider->state = GuiControlState::NORMAL;
+	switch (settingsState) {
+	case SettingsState::AUDIO:
+		audioBtn->selected = true;
+		videoBtn->selected = false;
+		gameBtn->selected = false;
 
+		audioToggle->state = GuiControlState::NORMAL;
+		musicSlider->state = GuiControlState::NORMAL;
+		fxSlider->state = GuiControlState::NORMAL;
+
+		vsyncToggle->state = GuiControlState::DISABLED;
+		fullscreenToggle->state = GuiControlState::DISABLED;
+
+		debugToggle->state = GuiControlState::DISABLED;
+		godmodeToggle->state = GuiControlState::DISABLED;
+		break;
+	case SettingsState::VIDEO:
+		audioBtn->selected = false;
+		videoBtn->selected = true;
+		gameBtn->selected = false;
+
+		audioToggle->state = GuiControlState::DISABLED;
+		musicSlider->state = GuiControlState::DISABLED;
+		fxSlider->state = GuiControlState::DISABLED;
+
+		vsyncToggle->state = GuiControlState::NORMAL;
+		fullscreenToggle->state = GuiControlState::NORMAL;
+
+		debugToggle->state = GuiControlState::DISABLED;
+		godmodeToggle->state = GuiControlState::DISABLED;
+		break;
+	case SettingsState::GAME:
+		audioBtn->selected = false;
+		videoBtn->selected = false;
+		gameBtn->selected = true;
+
+		audioToggle->state = GuiControlState::DISABLED;
+		musicSlider->state = GuiControlState::DISABLED;
+		fxSlider->state = GuiControlState::DISABLED;
+
+		vsyncToggle->state = GuiControlState::DISABLED;
+		fullscreenToggle->state = GuiControlState::DISABLED;
+
+		debugToggle->state = GuiControlState::NORMAL;
+		godmodeToggle->state = GuiControlState::NORMAL;
+		break;
+	}
+	
 	return true;
 }
 
@@ -334,6 +349,7 @@ bool Gui::StartButtons()
 	continueBtn->state = GuiControlState::NORMAL;
 	lvl1Btn->state = GuiControlState::NORMAL;
 	lvl2Btn->state = GuiControlState::NORMAL;
+	backBtn->bounds.y = 1024 / 13 * 4;
 	backBtn->state = GuiControlState::NORMAL;
 
 	saveBtn->state = GuiControlState::DISABLED;
@@ -371,7 +387,7 @@ bool Gui::NoButtons() {
 	audioBtn->state = GuiControlState::DISABLED;
 	videoBtn->state = GuiControlState::DISABLED;
 	gameBtn->state = GuiControlState::DISABLED;
-	musicToggle->state = GuiControlState::DISABLED;
+	audioToggle->state = GuiControlState::DISABLED;
 	fullscreenToggle->state = GuiControlState::DISABLED;
 	debugToggle->state = GuiControlState::DISABLED;
 	godmodeToggle->state = GuiControlState::DISABLED;
@@ -398,7 +414,7 @@ bool Gui::InGameMenu() {
 	resumeBtn->state = GuiControlState::NORMAL;
 	titleBtn->state = GuiControlState::NORMAL;
 	vsyncToggle->state = GuiControlState::DISABLED;
-	musicToggle->state = GuiControlState::DISABLED;
+	audioToggle->state = GuiControlState::DISABLED;
 	fullscreenToggle->state = GuiControlState::DISABLED;
 	debugToggle->state = GuiControlState::DISABLED;
 	godmodeToggle->state = GuiControlState::DISABLED;
@@ -439,7 +455,6 @@ bool Gui::ButtonInit() {
 
 	return true;
 }
-
 
 bool Gui::CreateButton(int id, const char* label, int x, int y, GuiButton*& button)
 {

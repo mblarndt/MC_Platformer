@@ -88,7 +88,7 @@ public:
 	GuiToggle* fullscreenToggle;
 	GuiToggle* debugToggle;
 	GuiToggle* godmodeToggle;
-	GuiToggle* musicToggle;
+	GuiToggle* audioToggle;
 
 	bool mainMenu;
 	bool start;
@@ -99,6 +99,14 @@ public:
 	SDL_Texture* settingsBox;
 
 	bool toggle;
+
+	enum class SettingsState {
+		AUDIO,
+		VIDEO,
+		GAME
+	};
+
+	SettingsState settingsState;
 
 private:
 	

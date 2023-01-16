@@ -55,6 +55,9 @@ bool Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 
+	isMusicOn = true;
+	isAudioEnabled = true;
+
 	return ret;
 }
 
@@ -89,7 +92,7 @@ bool Audio::PlayMusic(const char* path, float fadeTime)
 {
 	bool ret = true;
 
-	if(!active)
+	if (!active || !isAudioEnabled)
 		return false;
 
 	if(music != NULL)
@@ -166,7 +169,7 @@ bool Audio::PlayFx(unsigned int id, int repeat)
 {
 	bool ret = false;
 
-	if(!active)
+	if (!active || !isAudioEnabled)
 		return false;
 
 	if(id > 0 && id <= fx.Count())
@@ -175,4 +178,14 @@ bool Audio::PlayFx(unsigned int id, int repeat)
 	}
 
 	return ret;
+}
+
+void Audio::ToggleMusic() {
+	if (isAudioEnabled) {
+		Mix_PauseMusic();
+	}
+	else {
+		Mix_ResumeMusic();
+	}
+	isAudioEnabled = !isAudioEnabled;
 }
