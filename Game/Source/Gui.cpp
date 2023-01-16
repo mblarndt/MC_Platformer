@@ -52,6 +52,7 @@ bool Gui::Start()
 	CreateToggle(20, "Fullscreen", 350, 240, fullscreenToggle);
 
 	CreateToggle(21, "Debug", 350, 140, debugToggle);
+	debugToggle->toggle = app->physics->debug;
 	CreateToggle(22, "Godmode", 350, 240, godmodeToggle);
 	CreateToggle(24, "Music", 350, 140, musicToggle);
 
@@ -234,13 +235,28 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 		godmodeToggle->state = GuiControlState::NORMAL;
 		break;
 
-	case 16:
+	case 19:
 		if (app->render->VSYNC == true)
 			app->render->VSYNC = false;
 		else
 			app->render->VSYNC = true;
 		break;
+
+	case 20:
+
+		break;
+
+	case 21:
+		if (app->physics->debug == false)
+			app->physics->debug = true;
+		else
+			app->physics->debug = false;
+		break;
+	case 22:
+
+		break;
 }
+
 	
 	return true;
 }
@@ -355,6 +371,10 @@ bool Gui::NoButtons() {
 	audioBtn->state = GuiControlState::DISABLED;
 	videoBtn->state = GuiControlState::DISABLED;
 	gameBtn->state = GuiControlState::DISABLED;
+	musicToggle->state = GuiControlState::DISABLED;
+	fullscreenToggle->state = GuiControlState::DISABLED;
+	debugToggle->state = GuiControlState::DISABLED;
+	godmodeToggle->state = GuiControlState::DISABLED;
 
 	musicSlider->state = GuiControlState::DISABLED;
 	fxSlider->state = GuiControlState::DISABLED;
@@ -378,6 +398,10 @@ bool Gui::InGameMenu() {
 	resumeBtn->state = GuiControlState::NORMAL;
 	titleBtn->state = GuiControlState::NORMAL;
 	vsyncToggle->state = GuiControlState::DISABLED;
+	musicToggle->state = GuiControlState::DISABLED;
+	fullscreenToggle->state = GuiControlState::DISABLED;
+	debugToggle->state = GuiControlState::DISABLED;
+	godmodeToggle->state = GuiControlState::DISABLED;
 
 	audioBtn->state = GuiControlState::DISABLED;
 	videoBtn->state = GuiControlState::DISABLED;
@@ -434,6 +458,8 @@ bool Gui::CreateToggle(int id, const char* label, int x, int y, GuiToggle*& togg
 }
 
 bool Gui::SettingsWindow() {
+	if (app->scene->toggle)
+		app->render->DrawTexture(settingsBox, 229 - app->render->camera.x, 30);
 
 	if (settings == true) {
 		app->render->DrawTexture(settingsBox, 229 - app->render->camera.x, 30);
@@ -454,8 +480,7 @@ bool Gui::SettingsWindow() {
 		}
 	}
 
-	if (app->scene->toggle)
-		app->render->DrawTexture(settingsBox, 229 - app->render->camera.x, 30);
+	
 
 	return true;
 }
