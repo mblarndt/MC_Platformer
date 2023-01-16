@@ -56,11 +56,15 @@ public:
 
 	bool CreateButton(int id, const char* label, int x, int y, GuiButton*& button);
 
+	bool CreateToggle(int id, const char* label, int x, int y, GuiToggle*& toggle);
+
+	bool SettingsWindow();
+
 public:
 	int numButtons;
 
-	GuiSlider* slider1;
-	GuiSlider* slider2;
+	GuiSlider* musicSlider;
+	GuiSlider* fxSlider;
 
 	// L15: TODO 2: Declare a GUI Button and create it using the GuiManager
 
@@ -81,6 +85,10 @@ public:
 	GuiButton* gameBtn;
 
 	GuiToggle* vsyncToggle;
+	GuiToggle* fullscreenToggle;
+	GuiToggle* debugToggle;
+	GuiToggle* godmodeToggle;
+	GuiToggle* musicToggle;
 
 	bool mainMenu;
 	bool start;

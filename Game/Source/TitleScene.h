@@ -45,10 +45,6 @@ public:
 
 	bool toggle;
 
-	SDL_Rect settingsRect;
-	SDL_Texture* settingsBox;
-	const char* settingsBoxPath;
-
 
 private:
 	SDL_Rect logoRect;

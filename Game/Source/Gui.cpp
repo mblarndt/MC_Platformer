@@ -46,22 +46,30 @@ bool Gui::Start()
 	CreateButton(14, "VIDEO", 229 + 188, 30, videoBtn);
 	CreateButton(15, "GAME", 229 + 374, 30, gameBtn);
 
-
-	vsyncToggle = (GuiToggle*)app->guiManager->CreateGuiControl(GuiControlType::TOGGLE, 13, "VSYNC", { 350, 140,  78, 48 }, this);
+	CreateToggle(19, "VSync", 350, 140, vsyncToggle);
 	vsyncToggle->toggle = app->render->VSYNC;
 
-	SDL_Rect sliderRect = { 350, 250, 300,38 };
-	slider1 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 14, "Slider 1", sliderRect, this);
+	CreateToggle(20, "Fullscreen", 350, 240, fullscreenToggle);
+
+	CreateToggle(21, "Debug", 350, 140, debugToggle);
+	CreateToggle(22, "Godmode", 350, 240, godmodeToggle);
+	CreateToggle(24, "Music", 350, 140, musicToggle);
+
 
 	SDL_Rect sliderRect2 = { 350, 200, 300,38 };
-	slider2 = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 15, "Slider 2", sliderRect2, this);
+	musicSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 17, "Music Volume", sliderRect2, this);
+
+	SDL_Rect sliderRect = { 350, 250, 300,38 };
+	fxSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 18, "FX Volume", sliderRect, this);
+
+	
 
 	NoButtons();
 
 	audioBtn->selected = true;
 	toggle = false;
 
-	
+	settingsBox = app->tex->Load("Assets/Textures/SettingsBox.png");
 
 	return true;
 }
@@ -178,26 +186,59 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 		app->titleScene->toggle = true;
 		app->scene->toggle = false;
 		break;
+
 	case 13:
+		audioBtn->selected = true;
+		videoBtn->selected = false;
+		gameBtn->selected = false;
+
+		
+		musicSlider->state = GuiControlState::NORMAL;
+		fxSlider->state = GuiControlState::NORMAL;
+
+		musicToggle->state = GuiControlState::NORMAL;
+		vsyncToggle->state = GuiControlState::DISABLED;
+		fullscreenToggle->state = GuiControlState::DISABLED;
+		debugToggle->state = GuiControlState::DISABLED;
+		godmodeToggle->state = GuiControlState::DISABLED;
+		
+		break;
+
+	case 14:
+		audioBtn->selected = false;
+		videoBtn->selected = true;
+		gameBtn->selected = false;
+
+		musicSlider->state = GuiControlState::DISABLED;
+		fxSlider->state = GuiControlState::DISABLED;
+
+		musicToggle->state = GuiControlState::DISABLED;
+		vsyncToggle->state = GuiControlState::NORMAL;
+		fullscreenToggle->state = GuiControlState::NORMAL;
+		debugToggle->state = GuiControlState::DISABLED;
+		godmodeToggle->state = GuiControlState::DISABLED;
+		break;
+
+	case 15:
+		audioBtn->selected = false;
+		videoBtn->selected = false;
+		gameBtn->selected = true;
+
+		musicSlider->state = GuiControlState::DISABLED;
+		fxSlider->state = GuiControlState::DISABLED;
+
+		musicToggle->state = GuiControlState::DISABLED;
+		vsyncToggle->state = GuiControlState::DISABLED;
+		fullscreenToggle->state = GuiControlState::DISABLED;
+		debugToggle->state = GuiControlState::NORMAL;
+		godmodeToggle->state = GuiControlState::NORMAL;
+		break;
+
+	case 16:
 		if (app->render->VSYNC == true)
 			app->render->VSYNC = false;
 		else
 			app->render->VSYNC = true;
-		break;
-	case 16:
-		audioBtn->selected = true;
-		videoBtn->selected = false;
-		gameBtn->selected = false;
-		break;
-	case 17:
-		audioBtn->selected = false;
-		videoBtn->selected = true;
-		gameBtn->selected = false;
-		break;
-	case 18:
-		audioBtn->selected = false;
-		videoBtn->selected = false;
-		gameBtn->selected = true;
 		break;
 }
 	
@@ -221,14 +262,19 @@ bool Gui::MainMenuButtons() {
 	loadBtn->state = GuiControlState::DISABLED;
 	resumeBtn->state = GuiControlState::DISABLED;
 	titleBtn->state = GuiControlState::DISABLED;
-	vsyncToggle->state = GuiControlState::DISABLED;
 
 	audioBtn->state = GuiControlState::DISABLED;
 	videoBtn->state = GuiControlState::DISABLED;
 	gameBtn->state = GuiControlState::DISABLED;
 
-	slider1->state = GuiControlState::DISABLED;
-	slider2->state = GuiControlState::DISABLED;
+	musicSlider->state = GuiControlState::DISABLED;
+	fxSlider->state = GuiControlState::DISABLED;
+
+	musicToggle->state = GuiControlState::DISABLED;
+	vsyncToggle->state = GuiControlState::DISABLED;
+	fullscreenToggle->state = GuiControlState::DISABLED;
+	debugToggle->state = GuiControlState::DISABLED;
+	godmodeToggle->state = GuiControlState::DISABLED;
 
 	return true;
 }
@@ -256,8 +302,8 @@ bool Gui::SettingsButtons()
 	videoBtn->state = GuiControlState::NORMAL;
 	gameBtn->state = GuiControlState::NORMAL;
 
-	slider1->state = GuiControlState::NORMAL;
-	slider2->state = GuiControlState::NORMAL;
+	musicSlider->state = GuiControlState::NORMAL;
+	fxSlider->state = GuiControlState::NORMAL;
 
 	return true;
 }
@@ -284,8 +330,8 @@ bool Gui::StartButtons()
 	videoBtn->state = GuiControlState::DISABLED;
 	gameBtn->state = GuiControlState::DISABLED;
 
-	slider1->state = GuiControlState::DISABLED;
-	slider2->state = GuiControlState::DISABLED;
+	musicSlider->state = GuiControlState::DISABLED;
+	fxSlider->state = GuiControlState::DISABLED;
 
 	return true;
 }
@@ -310,8 +356,8 @@ bool Gui::NoButtons() {
 	videoBtn->state = GuiControlState::DISABLED;
 	gameBtn->state = GuiControlState::DISABLED;
 
-	slider1->state = GuiControlState::DISABLED;
-	slider2->state = GuiControlState::DISABLED;
+	musicSlider->state = GuiControlState::DISABLED;
+	fxSlider->state = GuiControlState::DISABLED;
 
 	return true;
 }
@@ -337,8 +383,8 @@ bool Gui::InGameMenu() {
 	videoBtn->state = GuiControlState::DISABLED;
 	gameBtn->state = GuiControlState::DISABLED;
 
-	slider1->state = GuiControlState::DISABLED;
-	slider2->state = GuiControlState::DISABLED;
+	musicSlider->state = GuiControlState::DISABLED;
+	fxSlider->state = GuiControlState::DISABLED;
 	return true;
 }
 
@@ -377,4 +423,39 @@ bool Gui::CreateButton(int id, const char* label, int x, int y, GuiButton*& butt
 	int h = 66;
 	button = (GuiButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, id, label, { x, y, w, h }, this);
 	return button != nullptr;
+}
+
+bool Gui::CreateToggle(int id, const char* label, int x, int y, GuiToggle*& toggle)
+{
+	int w = 78;
+	int h = 48;
+	toggle = (GuiToggle*)app->guiManager->CreateGuiControl(GuiControlType::TOGGLE, id, label, { x, y, w, h }, this);
+	return toggle != nullptr;
+}
+
+bool Gui::SettingsWindow() {
+
+	if (settings == true) {
+		app->render->DrawTexture(settingsBox, 229 - app->render->camera.x, 30);
+		if (audioBtn->selected) {
+			app->render->DrawText("Sound", 250, 145, 0, 0, "white", false);
+			app->render->DrawText("Music", 250, 200, 0, 0, "white", false);
+			app->render->DrawText("FX", 250, 250, 0, 0, "white", false);
+		}
+
+		else if (videoBtn->selected == true) {
+			app->render->DrawText("VSync", 250, 145, 0, 0, "white", false);
+			app->render->DrawText("Fullscreen", 250, 200, 0, 0, "white", false);
+		}
+
+		else if (gameBtn->selected == true) {
+			app->render->DrawText("Debug", 250, 145, 0, 0, "white", false);
+			app->render->DrawText("GodMode", 250, 200, 0, 0, "white", false);
+		}
+	}
+
+	if (app->scene->toggle)
+		app->render->DrawTexture(settingsBox, 229 - app->render->camera.x, 30);
+
+	return true;
 }

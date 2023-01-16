@@ -41,7 +41,6 @@ bool TitleScene::Awake(pugi::xml_node& config)
 	logoRect.w = 1024;
 
 	texturePath = "Assets/Textures/background1.png";
-	settingsBoxPath = "Assets/Textures/SettingsBox.png";
 
 
 
@@ -55,7 +54,6 @@ bool TitleScene::Start()
 	app->scene->active = false;
 
 	logo = app->tex->Load(texturePath);
-	settingsBox = app->tex->Load(settingsBoxPath);
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
@@ -85,13 +83,7 @@ bool TitleScene::Update(float dt)
 	//SDL_SetTextureAlphaMod(logo, accumulatedTime * 10.0f);
 	app->render->DrawTexture(logo, 0, 0);
 
-	if (app->gui->settings) {
-		//app->render->DrawTexture(settingsBox, 100 - app->render->camera.x, 0);
-		app->render->DrawTexture(settingsBox, 229 + app->render->camera.x, 30);
-		app->render->DrawText("Sound", 250 - app->render->camera.x, 145, 0, 0, "white", false);
-		app->render->DrawText("Music", 250 - app->render->camera.x, 200, 0, 0, "white", false);
-		app->render->DrawText("FX", 250 + app->render->camera.x, 250, 0, 0, "white", false);
-	}
+	app->gui->SettingsWindow();
 
 	//L15: Draw GUI
 	app->guiManager->Draw();
