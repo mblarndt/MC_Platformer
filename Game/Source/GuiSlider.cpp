@@ -10,8 +10,6 @@
 GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, int minValue, int maxValue) : GuiControl(GuiControlType::SLIDER, id)
 {
     this->bounds = bounds;
-    this->bounds.h = 38;
-    this->bounds.w = 300 - 38;
     this->minValue = minValue;
     this->maxValue = maxValue;
     knobTex = app->tex->Load("Assets/Textures/Slime.png");
@@ -20,6 +18,7 @@ GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, int minValue, int maxValue) : G
     SetValue(maxValue / 2);
     
     boundx = bounds.x;
+    boundw = bounds.w - 38;
 }
 
 GuiSlider::~GuiSlider()
@@ -66,10 +65,6 @@ bool GuiSlider::Update(float dt)
        
        
         value = minValue + (maxValue - minValue) * (knobX / (float)bounds.w);
-        if (value < 0.1*minValue)
-            value = minValue;
-        if (value > maxValue - 0.1*maxValue)
-            value = maxValue;
 
     }
 
@@ -90,10 +85,15 @@ bool GuiSlider::Draw(Render* render)
 
     default:
     {
-        knobX = bounds.w * (value - minValue) / (float)(maxValue - minValue);
+        //knobX = bounds.w * (value - minValue) / (float)(maxValue - minValue);
 
-        render->DrawTexture(barTex, bounds.x, bounds.y);
-        render->DrawTexture(knobTex, bounds.x + (bounds.w * (value - minValue) / (float)(maxValue - minValue)) + 4, bounds.y + 4);
+        SDL_Rect BarBlack = bounds;
+        render->DrawRectangle(BarBlack, 0, 0, 0);
+
+        SDL_Rect BarGrey = {bounds.x + 4, bounds.y + 4, bounds.w - 8, bounds.h - 8};
+        render->DrawRectangle(BarGrey, 255, 255, 255, 150);
+        //render->DrawTexture(barTex, bounds.x, bounds.y);
+        render->DrawTexture(knobTex, bounds.x + ((boundw) * (value - minValue) / (float)(maxValue - minValue)) + 4, bounds.y + 4);
 
     } break;
     

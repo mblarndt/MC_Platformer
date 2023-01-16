@@ -59,17 +59,17 @@ bool Gui::Start()
 	audioToggle->toggle = app->audio->isAudioEnabled;
 
 
-	SDL_Rect sliderRect2 = { 350, 200 + 20, 300,38 };
+	SDL_Rect sliderRect2 = { 350, 200 + 20, 300-38,38 };
 	musicSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 17, "Music Volume", sliderRect2, this, { 0,128,0,0 });
 	musicVolume = preMusicVolume = app->audio->musicVolume;
 	musicSlider->SetValue(musicVolume);
 
-	SDL_Rect sliderRect = { 350, 250 + 20, 300,38 };
+	SDL_Rect sliderRect = { 350, 250 + 20, 300-38,38 };
 	fxSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 18, "FX Volume", sliderRect, this, { 0,128,0,0 });
 	fxVolume = preFxVolume = app->audio->fxVolume;
 	fxSlider->SetValue(fxVolume);
 
-	SDL_Rect sliderRect3 = { 350, 250 + 20, 200, 38 };
+	SDL_Rect sliderRect3 = { 420, 250 + 20, 100, 38 };
 	fpsSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 18, "FPS", sliderRect3, this, {1,3,0,0});
 
 	
@@ -269,6 +269,7 @@ bool Gui::MainMenuButtons() {
 
 	musicSlider->state = GuiControlState::DISABLED;
 	fxSlider->state = GuiControlState::DISABLED;
+	fpsSlider->state = GuiControlState::DISABLED;
 
 	audioToggle->state = GuiControlState::DISABLED;
 	vsyncToggle->state = GuiControlState::DISABLED;
@@ -314,6 +315,7 @@ bool Gui::SettingsButtons()
 
 		vsyncToggle->state = GuiControlState::DISABLED;
 		fullscreenToggle->state = GuiControlState::DISABLED;
+		fpsSlider->state = GuiControlState::DISABLED;
 
 		debugToggle->state = GuiControlState::DISABLED;
 		godmodeToggle->state = GuiControlState::DISABLED;
@@ -329,6 +331,7 @@ bool Gui::SettingsButtons()
 
 		vsyncToggle->state = GuiControlState::NORMAL;
 		fullscreenToggle->state = GuiControlState::NORMAL;
+		fpsSlider->state = GuiControlState::NORMAL;
 
 		debugToggle->state = GuiControlState::DISABLED;
 		godmodeToggle->state = GuiControlState::DISABLED;
@@ -344,6 +347,7 @@ bool Gui::SettingsButtons()
 
 		vsyncToggle->state = GuiControlState::DISABLED;
 		fullscreenToggle->state = GuiControlState::DISABLED;
+		fpsSlider->state = GuiControlState::DISABLED;
 
 		debugToggle->state = GuiControlState::NORMAL;
 		godmodeToggle->state = GuiControlState::NORMAL;
@@ -378,6 +382,7 @@ bool Gui::StartButtons()
 
 	musicSlider->state = GuiControlState::DISABLED;
 	fxSlider->state = GuiControlState::DISABLED;
+	fpsSlider->state = GuiControlState::DISABLED;
 
 	return true;
 }
@@ -408,6 +413,7 @@ bool Gui::NoButtons() {
 
 	musicSlider->state = GuiControlState::DISABLED;
 	fxSlider->state = GuiControlState::DISABLED;
+	fpsSlider->state = GuiControlState::DISABLED;
 
 	return true;
 }
@@ -439,6 +445,7 @@ bool Gui::InGameMenu() {
 
 	musicSlider->state = GuiControlState::DISABLED;
 	fxSlider->state = GuiControlState::DISABLED;
+	fpsSlider->state = GuiControlState::DISABLED;
 	return true;
 }
 

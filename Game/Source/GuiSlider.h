@@ -29,6 +29,7 @@ private:
     unsigned int click;
 
     int boundx;
+    int boundw;
 };
 
 #endif // __GUISLIDER_H__
