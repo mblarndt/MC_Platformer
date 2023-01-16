@@ -6,8 +6,16 @@
 
 #include "PugiXml/src/pugixml.hpp"
 
+
+#include <chrono>
+using namespace std;
+using namespace chrono;
+typedef high_resolution_clock Clock;
+
+
 #define CONFIG_FILENAME		"config.xml"
 #define SAVE_STATE_FILENAME "save_game.xml"
+
 
 // Modules
 class Window;
@@ -127,6 +135,10 @@ private:
 	// L03: DONE 1: Create control variables to control that the real Load and Save happens at the end of the frame
 	bool saveGameRequested;
 	bool loadGameRequested;
+
+	steady_clock::time_point start_time;
+	steady_clock::time_point end_time;
+	long long frame_time;
 };
 
 extern App* app;

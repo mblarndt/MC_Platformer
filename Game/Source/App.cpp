@@ -150,6 +150,10 @@ bool App::Update()
 	if (input->GetWindowEvent(WE_QUIT) == true)
 		ret = false;
 
+
+	start_time = Clock::now();
+
+
 	if (ret == true)
 		ret = PreUpdate();
 
@@ -158,6 +162,14 @@ bool App::Update()
 
 	if (ret == true)
 		ret = PostUpdate();
+
+	
+	// Frame Rate control
+	end_time = Clock::now();
+	frame_time = duration_cast<milliseconds>(end_time - start_time).count();
+	
+	physics->dt = frame_time / 1000.0;
+	
 
 	FinishUpdate();
 	return ret;
