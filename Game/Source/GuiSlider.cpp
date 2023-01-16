@@ -30,7 +30,7 @@ GuiSlider::~GuiSlider()
 bool GuiSlider::Update(float dt)
 {
     int camX = app->render->camera.x;
-    bounds.x = app->render->camera.x * (-1) + boundx;
+    bounds.x = boundx - camX;
 
     if (state != GuiControlState::DISABLED)
     {
@@ -44,13 +44,16 @@ bool GuiSlider::Update(float dt)
             if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
             {
                 state = GuiControlState::PRESSED;
-                knobX = mouseX - bounds.x;
+                knobX = mouseX - bounds.x - camX;
+                if (knobX < 0) knobX = 0;
+                if (knobX > bounds.w) knobX = bounds.w;
                 NotifyObserver();
             }
         }
         else {
             if (state == GuiControlState::PRESSED && app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) != KeyState::KEY_UP) {
-                knobX = mouseX - bounds.x;
+                knobX = mouseX - bounds.x - camX;
+                
                 if (knobX < 0) knobX = 0;
                 if (knobX > bounds.w) knobX = bounds.w;
                 
@@ -60,7 +63,13 @@ bool GuiSlider::Update(float dt)
                 state = GuiControlState::NORMAL;
             }
         }
+       
+       
         value = minValue + (maxValue - minValue) * (knobX / (float)bounds.w);
+        if (value < 10)
+            value = 0;
+        if (value > 120)
+            value = 128;
 
     }
 

@@ -208,6 +208,8 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 
 	case 17:
 		app->audio->SetMusicVolume(musicSlider->value);
+		LOG("Knob Position: %i", musicSlider->knobX);
+		LOG("Knob Slider Value: %i", musicSlider->value);
 		break;
 
 	case 18:

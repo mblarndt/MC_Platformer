@@ -16,11 +16,12 @@ public:
     int GetValue();
 
     int value;
+    int knobX;
 
 private:
     int minValue;
     int maxValue;
-    int knobX;
+    
     SDL_Texture* knobTex;
     SDL_Texture* barTex;
 
