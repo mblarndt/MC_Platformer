@@ -168,7 +168,10 @@ bool App::Update()
 	end_time = Clock::now();
 	frame_time = duration_cast<milliseconds>(end_time - start_time).count();
 	
-	physics->dt = frame_time / 1000.0;
+	if (frame_time < (physics->dt * 1000.0))
+	{
+		SDL_Delay((physics->dt * 1000.0) - frame_time);
+	}
 	
 
 	FinishUpdate();

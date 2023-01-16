@@ -52,6 +52,15 @@ bool Physics::PreUpdate()
 {
 	bool ret = true;
 
+
+	switch (fpsTarget)
+	{
+	case TargetFps::SIXTY:
+		dt = 1.0 / 60.0;
+		break;
+	}
+
+
 	// Step (update) the World
 	// WARNING: WE ARE STEPPING BY CONSTANT 1/60 SECONDS!
 	world->Step(dt, 6, 2);

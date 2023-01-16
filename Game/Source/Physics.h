@@ -37,6 +37,14 @@ enum class ColliderType {
 	// ..
 };
 
+enum class TargetFps
+{
+	SIXTY,
+	THIRTY,
+	VARIABLE,
+
+};
+
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
@@ -87,6 +95,9 @@ public:
 	b2World* world;
 
 	double dt;
+	double fps;
+
+	TargetFps fpsTarget = TargetFps::SIXTY;
 
 	// Debug mode
 	bool debug;
