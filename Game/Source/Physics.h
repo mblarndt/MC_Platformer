@@ -41,6 +41,7 @@ enum class TargetFps
 {
 	SIXTY,
 	THIRTY,
+	FIFTEEN,
 	VARIABLE,
 
 };
@@ -90,6 +91,8 @@ public:
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
+
+	bool SetFPS(TargetFps fps);
 
 	// Box2D World
 	b2World* world;

@@ -44,8 +44,9 @@ bool GuiSlider::Update(float dt)
             {
                 state = GuiControlState::PRESSED;
                 knobX = mouseX - bounds.x - camX;
-                if (knobX < 0) knobX = 0;
-                if (knobX > bounds.w) knobX = bounds.w;
+                if (knobX < minValue) knobX = minValue;
+                if (knobX > bounds.w) knobX = maxValue;
+                value = minValue + (maxValue - minValue) * (knobX / (float)bounds.w);
                 NotifyObserver();
             }
         }
@@ -55,6 +56,8 @@ bool GuiSlider::Update(float dt)
                 
                 if (knobX < 0) knobX = 0;
                 if (knobX > bounds.w) knobX = bounds.w;
+                value = minValue + (maxValue - minValue) * (knobX / (float)bounds.w);
+                NotifyObserver();
                 
                 
             }
@@ -63,8 +66,8 @@ bool GuiSlider::Update(float dt)
             }
         }
        
-       
         value = minValue + (maxValue - minValue) * (knobX / (float)bounds.w);
+        
 
     }
 

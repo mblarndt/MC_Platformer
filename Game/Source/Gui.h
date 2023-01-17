@@ -117,6 +117,8 @@ public:
 	int preMusicVolume;
 	int preFxVolume;
 
+	const char* currentFps;
+
 private:
 	
 

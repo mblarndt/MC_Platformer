@@ -55,6 +55,12 @@ bool Physics::PreUpdate()
 
 	switch (fpsTarget)
 	{
+	case TargetFps::FIFTEEN:
+		dt = 1.0 / 15.0;
+		break;
+	case TargetFps::THIRTY:
+		dt = 1.0 / 30.0;
+		break;
 	case TargetFps::SIXTY:
 		dt = 1.0 / 60.0;
 		break;
@@ -447,4 +453,9 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 	}
 
 	return ret;
+}
+
+bool Physics::SetFPS(TargetFps fps) {
+	fpsTarget = fps;
+	return true;
 }

@@ -70,8 +70,15 @@ bool Gui::Start()
 	fxSlider->SetValue(fxVolume);
 
 	SDL_Rect sliderRect3 = { 420, 250 + 20, 100, 38 };
-	fpsSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 18, "FPS", sliderRect3, this, {1,3,0,0});
-
+	fpsSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 25, "FPS", sliderRect3, this, {1,3,0,0});
+	
+	TargetFps fps = app->physics->fpsTarget;
+	if (fps == TargetFps::FIFTEEN)
+		fpsSlider->SetValue(1);
+	if (fps == TargetFps::THIRTY)
+		fpsSlider->SetValue(2);
+	if (fps == TargetFps::SIXTY)
+		fpsSlider->SetValue(3);
 	
 
 	NoButtons();
@@ -106,8 +113,6 @@ bool Gui::PostUpdate()
 bool Gui::CleanUp()
 {
 	
-	
-
 	return true;
 }
 
@@ -211,8 +216,6 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 
 	case 17:
 		app->audio->SetMusicVolume(musicSlider->value);
-		LOG("Knob Position: %i", musicSlider->knobX);
-		LOG("Knob Slider Value: %i", musicSlider->value);
 		break;
 
 	case 18:
@@ -238,6 +241,15 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 		break;
 	case 24:
 		app->audio->ToggleMusic();
+		break;
+	case 25:
+		LOG("FPS Slider Value: %i", fpsSlider->value);
+		if (fpsSlider->value == 1)
+			app->physics->SetFPS(TargetFps::FIFTEEN);
+		if (fpsSlider->value == 2)
+			app->physics->SetFPS(TargetFps::THIRTY);
+		if (fpsSlider->value == 3)
+			app->physics->SetFPS(TargetFps::SIXTY);
 		break;
 }
 
@@ -499,21 +511,35 @@ bool Gui::SettingsWindow() {
 
 	if (settings == true) {
 		app->render->DrawTexture(settingsBox, 200 - app->render->camera.x, 30);
-		if (audioBtn->selected) {
-			app->render->DrawText("Sound", 250, 145+20, 0, 0, "white", false);
-			app->render->DrawText("Music", 250, 200+20, 0, 0, "white", false);
-			app->render->DrawText("FX", 250, 250+20, 0, 0, "white", false);
-		}
 
-		else if (videoBtn->selected == true) {
+
+
+		switch (settingsState) {
+
+		case SettingsState::AUDIO:
+			app->render->DrawText("Sound", 250, 145 + 20, 0, 0, "white", false);
+			app->render->DrawText("Music", 250, 200 + 20, 0, 0, "white", false);
+			app->render->DrawText("FX", 250, 250 + 20, 0, 0, "white", false);
+			break;
+		case SettingsState::VIDEO:
 			app->render->DrawText("VSync", 250, 145 + 20, 0, 0, "white", false);
 			app->render->DrawText("Fullscreen", 250, 200 + 20, 0, 0, "white", false);
-			app->render->DrawText("FPS", 250, 250 + 20, 0, 0, "white", false);
-		}
+			app->render->DrawText("FPS:", 250, 250 + 20, 0, 0, "white", false);
 
-		else if (gameBtn->selected == true) {
+			if (fpsSlider->value == 1)
+				currentFps = "15 fps";
+			else if (fpsSlider->value == 2)
+				currentFps = "30 fps";
+			else if (fpsSlider->value == 3)
+				currentFps = "60 fps";
+
+			app->render->DrawText(currentFps, 250 + 65, 250 + 20, 0, 0, "white", false);
+			break;
+
+		case SettingsState::GAME:
 			app->render->DrawText("Debug", 250, 145 + 20, 0, 0, "white", false);
 			app->render->DrawText("GodMode", 250, 200 + 20, 0, 0, "white", false);
+			break;
 		}
 	}
 
