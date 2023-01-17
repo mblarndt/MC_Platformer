@@ -48,6 +48,8 @@ public:
 	bool LoadState(pugi::xml_node&);
 	bool SaveState(pugi::xml_node&);
 
+	void ScaleContent(int width, int height);
+
 public:
 	bool VSYNC;
 	SDL_Renderer* renderer;

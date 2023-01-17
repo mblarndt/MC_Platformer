@@ -50,6 +50,7 @@ bool Gui::Start()
 	vsyncToggle->toggle = app->render->VSYNC;
 
 	CreateToggle(20, "Fullscreen", 420, 195 + 20, fullscreenToggle);
+	fullscreenToggle->toggle = app->win->fullscreen;
 
 	CreateToggle(21, "Debug", 420, 140 + 20, debugToggle);
 	debugToggle->toggle = app->physics->debug;
@@ -229,7 +230,7 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 		break;
 
 	case 20:
-
+		app->win->ToggleFullscreen();
 		break;
 
 	case 21:
