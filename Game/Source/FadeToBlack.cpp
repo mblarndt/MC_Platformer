@@ -211,6 +211,7 @@ bool FadeToBlack::SwitchScenes(char* scene)
 			app->input->active = true;
 		}
 		activeScene = scene;
+		app->gui->ButtonInit();
 	}
 
 	return true;

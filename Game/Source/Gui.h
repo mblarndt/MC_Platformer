@@ -60,6 +60,9 @@ public:
 
 	bool SettingsWindow();
 
+	bool SetSceneState(const char* scene);
+
+
 public:
 	int numButtons;
 
@@ -110,6 +113,12 @@ public:
 		GAME
 	};
 
+	enum class MainState {
+		TITLE,
+		IN_GAME
+	};
+
+	MainState mainState;
 	SettingsState settingsState;
 
 	int musicVolume;

@@ -307,7 +307,6 @@ bool Scene::SceneStart(int level)
 
 	app->win->SetTitle(title.GetString());
 
-	app->gui->ButtonInit();
 
 	SpawnPlayer();
 

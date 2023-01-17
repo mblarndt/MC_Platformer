@@ -30,18 +30,18 @@ bool Gui::Start()
 	uint w, h;
 	app->win->GetWindowSize(w, h);
 
-	CreateButton(1, "START", 100, (int)w / 13, startBtn);
-	CreateButton(3, "SETTINGS", 100, (int)w / 13 * 2, settingsBtn);
-	CreateButton(7, "CREDITS", 100, (int)w / 13 * 3, creditsBtn);
-	CreateButton(2, "EXIT", 100, (int)w / 13 * 4, exitBtn);
-	CreateButton(8, "CONTINUE", 100, (int)w / 13, continueBtn);
-	CreateButton(4, "LEVEL 1", 100, (int)w / 13 * 2, lvl1Btn);
-	CreateButton(5, "LEVEL 2", 100, (int)w / 13 * 3, lvl2Btn);
-	CreateButton(6, "BACK", 100, (int)w / 13 * 4, backBtn);
-	CreateButton(9, "RESUME", 100 + 200, (int)w / 13 * 2, resumeBtn);
-	CreateButton(10, "SAVE", 100 + 200, (int)w / 13 * 3, saveBtn);
-	CreateButton(11, "LOAD", 100 + 200, (int)w / 13 * 4, loadBtn);
-	CreateButton(12, "TITLE", 510, (int)w / 13 * 3, titleBtn);
+	CreateButton(1, "START", 100, 1024 / 13, startBtn);
+	CreateButton(3, "SETTINGS", 100, 1024 / 13 * 2, settingsBtn);
+	CreateButton(7, "CREDITS", 100, 1024 / 13 * 3, creditsBtn);
+	CreateButton(2, "EXIT", 100, 1024 / 13 * 4, exitBtn);
+	CreateButton(8, "CONTINUE", 100, 1024 / 13, continueBtn);
+	CreateButton(4, "LEVEL 1", 100, 1024 / 13 * 2, lvl1Btn);
+	CreateButton(5, "LEVEL 2", 100, 1024 / 13 * 3, lvl2Btn);
+	CreateButton(6, "BACK", 100, 1024 / 13 * 4, backBtn);
+	CreateButton(9, "RESUME", 100 + 200 + 105, 1024 / 13 * 1, resumeBtn);
+	CreateButton(10, "SAVE", 100 + 200, 1024 / 13 * 2, saveBtn);
+	CreateButton(11, "LOAD", 100 + 200, 1024 / 13 * 3, loadBtn);
+	CreateButton(12, "TITLE", 510, 1024 / 13 * 3, titleBtn);
 	CreateButton(13, "AUDIO", 229, 62, audioBtn);
 	CreateButton(14, "VIDEO", 229 + 188, 62, videoBtn);
 	CreateButton(15, "GAME", 229 + 374, 62, gameBtn);
@@ -93,7 +93,6 @@ bool Gui::Start()
 
 bool Gui::Update(float dt)
 {
-	ButtonInit();
 
 	return true;
 }
@@ -258,6 +257,12 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 }
 
 bool Gui::MainMenuButtons() {
+
+	settingsBtn->boundx = 100;
+	settingsBtn->bounds.y = 1024 / 13 * 2;
+
+	exitBtn->boundx = 100;
+	exitBtn->bounds.y = 1024 / 13 * 4;
 
 	startBtn->state = GuiControlState::NORMAL;
 	settingsBtn->state = GuiControlState::NORMAL;
@@ -463,27 +468,21 @@ bool Gui::InGameMenu() {
 
 bool Gui::ButtonInit() {
 	if (app->fadeToBlack->activeScene == "TitleScene") {
-		uint w, h;
-		app->win->GetWindowSize(w, h);
-
 		settingsBtn->boundx = 100;
-		settingsBtn->bounds.y = (int)w / 13 * 2;
+		settingsBtn->bounds.y = 1024 / 13 * 2;
 
 		exitBtn->boundx = 100;
-		exitBtn->bounds.y = (int)w / 13 * 4;
+		exitBtn->bounds.y = 1024 / 13 * 4;
 	}
 
 	if (app->fadeToBlack->activeScene == "Scene") {
 		//Button Setup
-		uint w, h;
-		app->win->GetWindowSize(w, h);
-
 		settingsBtn->boundx = 510;
-		settingsBtn->bounds.y = (int)w / 13 * 2;
+		settingsBtn->bounds.y = 1024 / 13 * 2;
 		titleBtn->boundx = 510;
-		titleBtn->bounds.y = (int)w / 13 * 3;
-		exitBtn->boundx = 510;
-		exitBtn->bounds.y = (int)w / 13 * 4;
+		titleBtn->bounds.y = 1024 / 13 * 3;
+		exitBtn->boundx = 229 + 188;
+		exitBtn->bounds.y = 352;
 	}
 
 	return true;
@@ -543,7 +542,15 @@ bool Gui::SettingsWindow() {
 		}
 	}
 
-	
-
 	return true;
 }
+
+bool Gui::SetSceneState(const char* scene)
+{
+	if (scene == "title")
+		mainState = MainState::TITLE;
+	if (scene == "ingame")
+		mainState = MainState::IN_GAME;
+	return true;
+}
+
