@@ -273,6 +273,7 @@ bool Scene::SceneStart(int level)
 		break;
 	case 2:
 		fileName = "Assets/Maps/Level2.tmx";
+		break;
 	default:
 		LOG("No Map found");
 		break;
@@ -311,6 +312,8 @@ bool Scene::SceneStart(int level)
 
 
 	SpawnPlayer();
+
+	playerptr->level_start = Clock::now();
 
 	return retLoad;
 }

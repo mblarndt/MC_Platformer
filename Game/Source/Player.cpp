@@ -44,6 +44,15 @@ bool Player::Start() {
 
 bool Player::Update()
 {
+	level_now = Clock::now();
+
+	level_time = duration_cast<seconds>(level_now - level_start).count();
+
+	if (level_time >= maxtime)
+	{
+		playerDeath = true;
+	}
+
 	if (health == 0)
 		playerDeath = true;
 	if (lives == 0)
@@ -514,7 +523,10 @@ void Player::PlayerGUI(bool show) {
 		const char* c_str = str.c_str();
 		app->render->DrawText(c_str, 35, 58, 0, 0, "white", false);
 
-		
+		app->render->DrawTexture(bulletsBG, 900 - camPos.x, 30);
+		str = std::to_string(level_time) + "time";
+		c_str = str.c_str();
+		app->render->DrawText(c_str, 950, 45, 0, 0, "white", true);
 	}
 }
 

@@ -97,6 +97,7 @@ public:
 	GuiToggle* godmodeToggle;
 	GuiToggle* audioToggle;
 
+	
 	bool mainMenu;
 	bool start;
 	bool settings;

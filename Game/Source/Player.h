@@ -13,6 +13,11 @@
 #define MAX_VEL 4.0f
 #define DAMP 0.9f
 
+#include <chrono>
+using namespace std;
+using namespace chrono;
+typedef high_resolution_clock Clock;
+
 struct SDL_Texture;
 
 class Player : public Entity
@@ -136,6 +141,10 @@ public:
 	bool showGUI;
 	bool gameOver;
 
+	long long level_time;
+	long long maxtime = 60; //seconds
+	steady_clock::time_point level_start;
+	steady_clock::time_point level_now;
 
 private:
 
