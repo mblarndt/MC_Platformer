@@ -39,14 +39,16 @@ bool EnemyFloor::Start() {
 
 bool EnemyFloor::Update()
 {
-	if (health <= 0) {
-		pbody->body->DestroyFixture(pbody->body->GetFixtureList());
-		app->entityManager->DestroyEntity(this);
+	if (app->scene->gamePaused == false) {
+		if (health <= 0) {
+			pbody->body->DestroyFixture(pbody->body->GetFixtureList());
+			app->entityManager->DestroyEntity(this);
+		}
+		FindPath();
+		Move();
+		RenderEntity();
+		UpdateAnim();
 	}
-	FindPath();
-	Move();
-	RenderEntity();
-	UpdateAnim();
 	return true;
 }
 

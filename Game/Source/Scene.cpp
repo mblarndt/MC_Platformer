@@ -103,12 +103,14 @@ bool Scene::Update(float dt)
 			toggle = false;
 			app->gui->NoButtons();
 			app->gui->settings = false;
-			playerptr->startGame = true;
+			//playerptr->startGame = true;
+			gamePaused = false;
 			
 		}
 		else {
 			app->gui->InGameMenu();
-			playerptr->startGame = false;
+			//playerptr->startGame = false;
+			gamePaused = true;
 			toggle = true;
 		}
 			

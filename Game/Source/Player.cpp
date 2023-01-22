@@ -50,34 +50,34 @@ bool Player::Update()
 		gameOver = true;
 
 	if (startGame == true) {
-		
-		if (levelFinish == false) {
+		if (app->scene->gamePaused == false) {
+			if (levelFinish == false) {
 
-			if (playerDeath == false && gameOver == false) {
-				
-				showGUI = true;
-				/*----------------------------Follow Camera--------------------------*/
-				PlayerCamera();
-				/*----------------------------Get State of Player--------------------------*/
-				StateMachine();
-				/*----------------------------Player Movement--------------------------*/
-				HandleMovement();
-				
-				/*----------------------------Rendering Player--------------------------*/
-				RenderEntity();
+				if (playerDeath == false && gameOver == false) {
 
-				PlayerGUI(showGUI);
+					showGUI = true;
+					/*----------------------------Follow Camera--------------------------*/
+					PlayerCamera();
+					/*----------------------------Get State of Player--------------------------*/
+					StateMachine();
+					/*----------------------------Player Movement--------------------------*/
+					HandleMovement();
 
+					/*----------------------------Rendering Player--------------------------*/
+					RenderEntity();
+
+					PlayerGUI(showGUI);
+
+				}
 			}
+
+			//When Player collides with Lava he spawns at start again	
+			HandleDeath(playerDeath);
+
+			Debug();
+
 		}
-
-		//When Player collides with Lava he spawns at start again	
-		HandleDeath(playerDeath);
-
-		Debug();
-		
 	}
-
 	return true;
 }
 
