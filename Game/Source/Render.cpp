@@ -54,7 +54,8 @@ bool Render::Awake(pugi::xml_node& config)
 	TTF_Init();
 
 	//load a font into memory
-	font = TTF_OpenFont("Assets/Fonts/Minecraft/Minecraft-Regular.otf", 30);
+	fontSmall = TTF_OpenFont("Assets/Fonts/Minecraft/Minecraft-Regular.otf", 30);
+	fontBig = TTF_OpenFont("Assets/Fonts/Minecraft/Minecraft-Regular.otf", 50);
 
 	return ret;
 }
@@ -91,7 +92,8 @@ bool Render::PostUpdate()
 bool Render::CleanUp()
 {
 	// Free the font
-	TTF_CloseFont(font);
+	TTF_CloseFont(fontSmall);
+	TTF_CloseFont(fontBig);
 
 	//we clean up TTF library
 	TTF_Quit();
@@ -241,14 +243,25 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 	return ret;
 }
 
-bool Render::DrawText(const char* text, int posx, int posy, int w, int h, const char* color, bool center) 
+bool Render::DrawText(const char* text, int posx, int posy, int w, int h,const char* color, bool center, const char* size)
 {
 	SDL_Color colour;
+	TTF_Font* font;
 
 	if (color == "white")
 		colour = { 255,255,255 };
+	else if (color == "green")
+		colour = { 13,110,0 };
 	else
 		colour = {0,0,0};
+
+	if (size == "normal")
+		font = fontSmall;
+	if (size == "big")
+		font = fontBig;
+	else
+		font = fontSmall;
+	
 
 	int textX, textY;
 	SDL_Surface* surface = TTF_RenderText_Solid(font, text, colour);

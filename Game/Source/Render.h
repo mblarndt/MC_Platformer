@@ -39,7 +39,7 @@ public:
 	bool DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool useCamera = true) const;
 	bool DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
 	bool DrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
-	bool DrawText(const char* text, int posX, int posY, int w, int h, const char* color = "white", bool center = true);
+	bool DrawText(const char* text, int posX, int posY, int w, int h, const char* color = "white", bool center = true, const char* size = "normal");
 
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
@@ -56,7 +56,8 @@ public:
 	SDL_Rect camera;
 	SDL_Rect viewport;
 	SDL_Color background;
-	TTF_Font* font;
+	TTF_Font* fontSmall;
+	TTF_Font* fontBig;
 };
 
 #endif // __RENDER_H__

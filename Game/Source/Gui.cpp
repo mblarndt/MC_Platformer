@@ -157,6 +157,7 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 
 	case 6:
 		LOG("Button 6: Back to Main Menu");
+		credits = false;
 		settings = false;
 		if(app->fadeToBlack->activeScene == "TitleScene")
 			MainMenuButtons();
@@ -164,8 +165,18 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 			InGameMenu();
 		break;
 
+	case 7:
+		LOG("Button 7: Show Credits");
+		Credits();
+		if (!credits)
+			credits = true;
+		else
+			credits = false;
+		
+		break;
+
 	case 8:
-		LOG("Button 7: Continue from saved state");
+		LOG("Button 8: Continue from saved state");
 		NoButtons();
 		app->scene->SceneStart(1);
 		app->fadeToBlack->FadeToBlackScene("Scene", 0.5);
@@ -467,6 +478,39 @@ bool Gui::InGameMenu() {
 	return true;
 }
 
+bool Gui::Credits() {
+	startBtn->state = GuiControlState::DISABLED;
+	settingsBtn->state = GuiControlState::DISABLED;
+	creditsBtn->state = GuiControlState::DISABLED;
+	exitBtn->state = GuiControlState::DISABLED;
+
+	continueBtn->state = GuiControlState::DISABLED;
+	lvl1Btn->state = GuiControlState::DISABLED;
+	lvl2Btn->state = GuiControlState::DISABLED;
+	backBtn->boundx = 229 + 188;
+	backBtn->bounds.y = 352;
+
+	backBtn->state = GuiControlState::NORMAL;
+
+	saveBtn->state = GuiControlState::DISABLED;
+	loadBtn->state = GuiControlState::DISABLED;
+	resumeBtn->state = GuiControlState::DISABLED;
+	titleBtn->state = GuiControlState::DISABLED;
+	vsyncToggle->state = GuiControlState::DISABLED;
+	audioBtn->state = GuiControlState::DISABLED;
+	videoBtn->state = GuiControlState::DISABLED;
+	gameBtn->state = GuiControlState::DISABLED;
+	audioToggle->state = GuiControlState::DISABLED;
+	fullscreenToggle->state = GuiControlState::DISABLED;
+	debugToggle->state = GuiControlState::DISABLED;
+	godmodeToggle->state = GuiControlState::DISABLED;
+
+	musicSlider->state = GuiControlState::DISABLED;
+	fxSlider->state = GuiControlState::DISABLED;
+	fpsSlider->state = GuiControlState::DISABLED;
+	return true;
+}
+
 bool Gui::ButtonInit() {
 	if (app->fadeToBlack->activeScene == "TitleScene") {
 		settingsBtn->boundx = 100;
@@ -506,6 +550,19 @@ bool Gui::CreateToggle(int id, const char* label, int x, int y, GuiToggle*& togg
 }
 
 bool Gui::SettingsWindow() {
+	if (credits) {
+		int offset = 15;
+		int spacing = 15;
+		app->render->DrawTexture(settingsBox, 200 - app->render->camera.x, 30);
+		app->render->DrawText("Credits", 424, 70, 0, 0, "white", false,"big");
+		app->render->DrawText("Programming", 420, 150 - offset, 0, 0, "black", false);
+		app->render->DrawText("Art & Animations:", 390, 180 - offset, 0, 0, "black", false);
+		app->render->DrawText("Ben Arndt", 438, 220 - offset, 0, 0, "white", false);
+
+		app->render->DrawText("Programming:", 415, 300 - 30, 0, 0, "black", false);
+		app->render->DrawText("Pau Fusco", 438, 340 - 30, 0, 0, "white", false);
+	}
+
 	if (app->scene->toggle)
 		app->render->DrawTexture(settingsBox, 200 - app->render->camera.x, 30);
 

@@ -52,6 +52,8 @@ public:
 
 	bool InGameMenu();
 
+	bool Credits();
+
 	bool ButtonInit();
 
 	bool CreateButton(int id, const char* label, int x, int y, GuiButton*& button);
@@ -107,6 +109,8 @@ public:
 	SDL_Texture* settingsBox;
 
 	bool toggle;
+
+	bool credits;
 
 	enum class SettingsState {
 		AUDIO,
