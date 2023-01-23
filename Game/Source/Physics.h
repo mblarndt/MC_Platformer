@@ -97,7 +97,7 @@ public:
 	// Box2D World
 	b2World* world;
 
-	double dt;
+	double dt = 1.0 / 60.0;
 	double fps;
 
 	TargetFps fpsTarget = TargetFps::SIXTY;

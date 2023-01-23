@@ -142,6 +142,17 @@ private:
 	steady_clock::time_point start_time;
 	steady_clock::time_point end_time;
 	long long frame_time;
+	
+	double fps;
+	double total_fps;
+	double avg_fps;
+	double fps_count;
+	
+	std::string str;
+	const char* aux;
+
+	void WindowTitleFPS();
+
 };
 
 extern App* app;
