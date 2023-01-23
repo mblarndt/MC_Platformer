@@ -136,6 +136,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	case ColliderType::CHECKPOINT:
 		LOG("Collision Checkpoint");
 		app->SaveGameRequest();
+		app->scene->checkpointReached = true;
 		break;
 	case ColliderType::ENEMY:
 		app->audio->PlayFx(hitFxId);

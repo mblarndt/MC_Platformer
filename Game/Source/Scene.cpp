@@ -116,9 +116,6 @@ bool Scene::Update(float dt)
 			
 	}
 		
-
-
-
 	if (playerptr->levelFinish) {
 		SDL_Rect rect = { 0, 0, app->win->width, 480 };
 		app->render->DrawTexture(finishTex, app->render->camera.x * (-1), 0, &rect);
@@ -136,12 +133,30 @@ bool Scene::Update(float dt)
 			app->fadeToBlack->SwitchMap(1);
 		}
 	}
+		
 
 	else(app->map->Draw());
 	
 	app->gui->SettingsWindow();
 
 	app->guiManager->Draw();
+
+	if (checkpointReached) {
+			
+	}
+
+	if (checkpointReached)
+	{
+		if (!timerStarted)
+		{
+			t.Start();
+			timerStarted = true;
+		}
+		else if (t.ReadSec() <= 2)
+		{
+			app->render->DrawText("CHECKPOINT", 512, 450);
+		}
+	}
 
 
 	DebugPathfinding();
@@ -316,6 +331,8 @@ bool Scene::SceneStart(int level)
 	playerptr->level_start = Clock::now();
 
 	gamePaused = false;
+
+	checkpointReached = false;
 
 	return retLoad;
 }

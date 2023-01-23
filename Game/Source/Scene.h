@@ -71,6 +71,10 @@ public:
 
 	bool gamePaused;
 
+	bool checkpointReached;
+
+	bool timerStarted;
+
 private:
 	SDL_Rect settingsRect;
 	SDL_Texture* settingsBox;
@@ -113,7 +117,7 @@ private:
 	int click1FxId;
 	int click2FxId;
 
-	
+	Timer t;
 
 
 };
