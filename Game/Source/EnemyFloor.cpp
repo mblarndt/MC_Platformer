@@ -41,6 +41,9 @@ bool EnemyFloor::Update()
 {
 	if (app->scene->gamePaused == false) {
 		if (health <= 0) {
+			pugi::xml_node item;
+			app->scene->CreateItem(item, Item::ItemType::HEALTH, position.x, position.y);
+
 			pbody->body->DestroyFixture(pbody->body->GetFixtureList());
 			app->entityManager->DestroyEntity(this);
 		}

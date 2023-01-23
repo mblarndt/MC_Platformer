@@ -103,10 +103,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
 	switch (physB->ctype)
 	{
-	case ColliderType::ITEM:
-		//LOG("Collision ITEM");
+	case ColliderType::ITEM_BULLET:
 		app->audio->PlayFx(pickCoinFxId);
 		bullets = bullets+1;
+		break;
+	case ColliderType::ITEM_HEALTH:
+		health = health + 1;
 		break;
 	case ColliderType::PLATFORM:
 		//LOG("Collision PLATFORM");

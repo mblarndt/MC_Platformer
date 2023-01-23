@@ -260,10 +260,13 @@ bool Scene::LoadState(pugi::xml_node& data)
 	return true;
 }
 
-void Scene::CreateItem(pugi::xml_node itemNode)
+void Scene::CreateItem(pugi::xml_node itemNode, Item::ItemType type, int x, int y)
 {
 	Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM, itemNode);
-	item->ItemInitialisation(itemNode);
+	item->type = type;
+	itemNode.append_attribute("x") = 1400;
+	item->ItemInitialisation(itemNode, x, y);
+	item->position.x = 1400;
 }
 
 void Scene::CreateBullet(pugi::xml_node itemNode, int x, int y, int direction)
