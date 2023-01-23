@@ -84,8 +84,8 @@ bool Player::Update()
 			HandleDeath(playerDeath);
 
 			if (teleport && isTeleported == false) {
-				position.x = 50;
-				position.y = 6*32;
+				position.x = 183*32;
+				position.y = 9*32;
 				app->render->camera.x = 0;
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 				velocitx.x = 1;
@@ -98,8 +98,8 @@ bool Player::Update()
 				position.y = 14 * 32;
 				app->render->camera.x = 0;
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
-				pbody->body->ApplyLinearImpulse(b2Vec2(0, -5), pbody->body->GetPosition(), true);
 				velocitx.x = 0;
+				pbody->body->ApplyLinearImpulse(b2Vec2(0, -5), pbody->body->GetPosition(), true);
 				isTeleported = false;
 				teleport = false;
 			}
@@ -174,11 +174,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 	case ColliderType::TELEPORT:
 		LOG("Collision Telleport");
 		teleport = true;
-		position.x = spawn.x;
-		position.y = spawn.y;
-		app->render->camera.x = 0;
-		pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
-		velocitx.x = 0;
+
 		
 		break;
 	case ColliderType::UNKNOWN:
