@@ -24,6 +24,8 @@ GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(
     boundx = bounds.x;
 
 	selected = false;
+
+	isActive = true;
 }
 
 GuiButton::~GuiButton()
@@ -33,56 +35,58 @@ GuiButton::~GuiButton()
 
 bool GuiButton::Update(float dt)
 {
+	if (isActive) {
+		int camX = app->render->camera.x;
+		bounds.x = camX * (-1) + boundx;
 
-    int camX = app->render->camera.x;
-    bounds.x = camX * (-1) + boundx;
-
-	if (state != GuiControlState::DISABLED)
-	{
-		// L15: TODO 3: Update the state of the GUiButton according to the mouse position
-
-		app->input->GetMousePosition(mouseX, mouseY);
-
-		if (((mouseX - camX) > bounds.x) && ((mouseX - camX) < (bounds.x + bounds.w)) &&
-			(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
+		if (state != GuiControlState::DISABLED)
 		{
-			state = GuiControlState::FOCUSED;
+			// L15: TODO 3: Update the state of the GUiButton according to the mouse position
 
-			if (previousState != state) {
-				app->audio->PlayFx(click1FxId);
-			}
+			app->input->GetMousePosition(mouseX, mouseY);
 
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+			if (((mouseX - camX) > bounds.x) && ((mouseX - camX) < (bounds.x + bounds.w)) &&
+				(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
 			{
+				state = GuiControlState::FOCUSED;
+
 				if (previousState != state) {
-					state = GuiControlState::PRESSED;
-					app->audio->PlayFx(click2FxId);
+					app->audio->PlayFx(click1FxId);
 				}
-			}
 
-			// If mouse button pressed -> Generate event!
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP)
-			{
-				//Check if the button can be clicked
-				if (canClick)
+				if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
 				{
-					NotifyObserver();
-					canClick = false;
+					if (previousState != state) {
+						state = GuiControlState::PRESSED;
+						app->audio->PlayFx(click2FxId);
+					}
 				}
+
+				// If mouse button pressed -> Generate event!
+				if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP)
+				{
+					//Check if the button can be clicked
+					if (canClick)
+					{
+						NotifyObserver();
+						canClick = false;
+					}
+				}
+				else {
+					canClick = true;
+				}
+
 			}
 			else {
-				canClick = true;
+				state = GuiControlState::NORMAL;
 			}
 
+			previousState = state;
 		}
-		else {
-			state = GuiControlState::NORMAL;
-		}
-
-		previousState = state;
+		else
+			canClick = false;
 	}
-	else
-		canClick = false;
+
 	return false;
 
 }
@@ -90,59 +94,72 @@ bool GuiButton::Update(float dt)
 bool GuiButton::Draw(Render* render)
 {
 
+	if (isActive) {
+		// Draw the right button depending on state
+		switch (state)
+		{
+		case GuiControlState::DISABLED:
+		{
+			render->DrawRectangle(bounds, 0, 0, 0, 0);
+		} break;
 
-	// Draw the right button depending on state
-	switch (state)
-	{
+		case GuiControlState::NORMAL:
+		{
+			if (selected == true) {
+				SDL_Rect rect = { 0,0,190,66 };
+				render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+			}
+			else {
+				SDL_Rect rect = { 0,70,190,66 };
+				render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+			}
 
-	case GuiControlState::DISABLED:
-	{
-		render->DrawRectangle(bounds, 0, 0, 0, 0);
-	} break;
 
-	case GuiControlState::NORMAL:
-	{
-		if (selected == true) {
+		} break;
+
+		//L15: TODO 4: Draw the button according the GuiControl State
+		case GuiControlState::FOCUSED:
+		{
 			SDL_Rect rect = { 0,0,190,66 };
 			render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+
+
+		} break;
+		case GuiControlState::PRESSED:
+		{
+			SDL_Rect rect = { 0,141,190,66 };
+			render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+
+
+		} break;
+
+		case GuiControlState::SELECTED:
+		{
+			render->DrawRectangle(bounds, 0, 255, 0, 255);
+			break;
+		}
+
+		default:
+			break;
+		}
+		if (state != GuiControlState::DISABLED)
+		{
+			bounds.x = bounds.x + app->render->camera.x;
+			app->render->DrawText(text.GetString(), bounds.x + 5, bounds.y + 5, bounds.w - 10, bounds.h - 10, "white");
+		}
+	}
+	else {
+		
+		if (state == GuiControlState::DISABLED)
+		{
+			render->DrawRectangle(bounds, 0, 0, 0, 0);
 		}
 		else {
-			SDL_Rect rect = { 0,70,190,66 };
+			SDL_Rect rect = { 0,141,190,66 };
 			render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
+			app->render->DrawText(text.GetString(), bounds.x + 5, bounds.y + 5, bounds.w - 10, bounds.h - 10, "white");
 		}
-
-
-	} break;
-
-	//L15: TODO 4: Draw the button according the GuiControl State
-	case GuiControlState::FOCUSED:
-	{
-		SDL_Rect rect = { 0,0,190,66 };
-		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
-
-
-	} break;
-	case GuiControlState::PRESSED:
-	{
-		SDL_Rect rect = { 0,141,190,66 };
-		render->DrawTexture(buttonTex, bounds.x, bounds.y, &rect);
-
-
-	} break;
-
-	case GuiControlState::SELECTED:
-	{
-		render->DrawRectangle(bounds, 0, 255, 0, 255);
-		break;
 	}
-
-	default:
-		break;
-	}
-	if (state != GuiControlState::DISABLED)
-	{
-		bounds.x = bounds.x + app->render->camera.x;
-		app->render->DrawText(text.GetString(), bounds.x + 5, bounds.y + 5, bounds.w - 10, bounds.h - 10, "white");
-	}
+		
 	return false;
 }

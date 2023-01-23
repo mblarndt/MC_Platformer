@@ -315,6 +315,8 @@ bool Scene::SceneStart(int level)
 
 	playerptr->level_start = Clock::now();
 
+	gamePaused = false;
+
 	return retLoad;
 }
 

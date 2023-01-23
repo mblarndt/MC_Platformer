@@ -114,6 +114,8 @@ public:
 	GuiManager* guiManager;
 	Gui* gui;
 
+	bool saveExist;
+
 private:
 
 	int argc;

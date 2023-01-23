@@ -35,6 +35,7 @@ bool Gui::Start()
 	CreateButton(7, "CREDITS", 100, 1024 / 13 * 3, creditsBtn);
 	CreateButton(2, "EXIT", 100, 1024 / 13 * 4, exitBtn);
 	CreateButton(8, "CONTINUE", 100, 1024 / 13, continueBtn);
+
 	CreateButton(4, "LEVEL 1", 100, 1024 / 13 * 2, lvl1Btn);
 	CreateButton(5, "LEVEL 2", 100, 1024 / 13 * 3, lvl2Btn);
 	CreateButton(6, "BACK", 100, 1024 / 13 * 4, backBtn);
@@ -192,6 +193,8 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 	case 10:
 		LOG("Button 10: Save Game");
 		app->SaveGameRequest();
+		app->saveExist = true;
+		continueBtn->isActive = true;
 		break;
 
 	case 11:
@@ -199,6 +202,7 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 		app->LoadGameRequest();
 		app->scene->playerptr->startGame = true;
 		app->scene->toggle = false;
+		app->scene->gamePaused = false;
 		NoButtons();
 		break;
 
@@ -392,6 +396,9 @@ bool Gui::StartButtons()
 	settingsBtn->state = GuiControlState::DISABLED;
 	creditsBtn->state = GuiControlState::DISABLED;
 	exitBtn->state = GuiControlState::DISABLED;
+
+	if(app->saveExist == false)
+		continueBtn->isActive = false;
 
 	continueBtn->state = GuiControlState::NORMAL;
 	lvl1Btn->state = GuiControlState::NORMAL;

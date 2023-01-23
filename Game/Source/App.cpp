@@ -193,6 +193,7 @@ bool App::LoadConfig()
 	}
 	else {
 		LOG("Error in App::LoadConfig(): %s", parseResult.description());
+		
 	}
 
 	return ret;
@@ -368,9 +369,12 @@ bool App::LoadFromFile()
 			ret = item->data->LoadState(gameStateFile.child("save_state").child(item->data->name.GetString()));
 			item = item->next;
 		}
+		ret = true;
 	}
 
 	loadGameRequested = false;
+
+	saveExist = ret;
 
 	return ret;
 }

@@ -37,6 +37,8 @@ public:
 	bool isPressed;
 	bool selected;
 
+	bool isActive;
+
 };
 
 #endif // __GUIBUTTON_H__
