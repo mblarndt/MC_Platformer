@@ -135,7 +135,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		break;
 	case ColliderType::CHECKPOINT:
 		LOG("Collision Checkpoint");
-		app->SaveGameRequest();
+		//app->SaveGameRequest();
 		app->scene->checkpointReached = true;
 		break;
 	case ColliderType::ENEMY:
@@ -295,13 +295,24 @@ void Player::HandleDeath(bool dead)
 		lives = lives - 1;
 				
 		health = 5;
-		position.x = spawn.x;
-		position.y = spawn.y;
+
+		if (app->scene->checkpointReached) {
+			position = app->map->checkpointPos;
+		}
+		else {
+			position.x = spawn.x;
+			position.y = spawn.y;
+		}
+		
 		app->render->camera.x = 0;
 		pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 		velocitx.x = 0;
 		playerDeath = false;
 		deadTextureOn = false;
+	}
+
+	else if (app->scene->checkpointReached) {
+
 	}
 
 }
