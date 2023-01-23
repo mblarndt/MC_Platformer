@@ -174,7 +174,8 @@ bool App::Update()
 	{
 		SDL_Delay((physics->dt * 1000.0) - frame_time);
 	}
-	
+
+	WindowTitleFPS();
 
 	FinishUpdate();
 	return ret;
@@ -425,4 +426,25 @@ bool App::SaveToFile()
 	saveGameRequested = false;
 
 	return ret;
+}
+
+void App::WindowTitleFPS()
+{
+	end_time = Clock::now();
+
+	frame_time = duration_cast<milliseconds>(end_time - start_time).count();
+
+	fps = 1.0 / frame_time;
+
+	fps_count++;
+
+	total_fps += fps;
+	avg_fps = total_fps / fps_count * 1000.0;
+
+	fps *= 1000.0;
+
+	str = "FPS " + std::to_string(fps) + " / Avg. FPS " + std::to_string(avg_fps) + " / Last-Frame MS " + std::to_string(frame_time) + " / V-Sync " + std::to_string(render->VSYNC);
+	aux = str.c_str();
+
+	win->SetTitle(aux);
 }

@@ -536,7 +536,7 @@ void Player::PlayerGUI(bool show) {
 		app->render->DrawText(c_str, 35, 58, 0, 0, "white", false);
 
 		app->render->DrawTexture(bulletsBG, 900 - camPos.x, 30);
-		str = std::to_string(level_time) + "time";
+		str = std::to_string(60 - level_time);
 		c_str = str.c_str();
 		app->render->DrawText(c_str, 950, 45, 0, 0, "white", true);
 	}
