@@ -194,7 +194,6 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 		LOG("Button 10: Save Game");
 		app->SaveGameRequest();
 		app->saveExist = true;
-		continueBtn->isActive = true;
 		break;
 
 	case 11:
@@ -399,6 +398,8 @@ bool Gui::StartButtons()
 
 	if(app->saveExist == false)
 		continueBtn->isActive = false;
+	else
+		continueBtn->isActive = true;
 
 	continueBtn->state = GuiControlState::NORMAL;
 	lvl1Btn->state = GuiControlState::NORMAL;

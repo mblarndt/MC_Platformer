@@ -138,6 +138,8 @@ bool App::Start()
 		item = item->next;
 	}
 
+	CheckSaveExist();
+
 	return ret;
 }
 
@@ -347,6 +349,27 @@ void App::SaveGameRequest()
 
 // L02: DONE 5: Implement the method LoadFromFile() to actually load a xml file
 // then call all the modules to load themselves
+bool App::CheckSaveExist()
+{
+	bool ret = true;
+
+	pugi::xml_document gameStateFile;
+	pugi::xml_parse_result result = gameStateFile.load_file("save_game.xml");
+
+	if (result == NULL)
+	{
+		ret = false;
+	}
+	else
+	{
+		ret = true;
+	}
+
+	saveExist = ret;
+
+	return ret;
+}
+
 bool App::LoadFromFile()
 {
 	bool ret = true;
