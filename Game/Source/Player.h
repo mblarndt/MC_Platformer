@@ -132,6 +132,9 @@ public:
 
 	bool camTransition;
 
+	bool teleport;
+	bool isTeleported;
+
 	iPoint camPos;
 
 	//Player, Camera and Game States

@@ -83,6 +83,27 @@ bool Player::Update()
 			//When Player collides with Lava he spawns at start again	
 			HandleDeath(playerDeath);
 
+			if (teleport && isTeleported == false) {
+				position.x = 50;
+				position.y = 6*32;
+				app->render->camera.x = 0;
+				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+				velocitx.x = 1;
+				velocitx.x = 0;
+				isTeleported = true;
+				teleport = false;
+			}
+			else if (teleport && isTeleported == true) {
+				position.x = 72*32;
+				position.y = 14 * 32;
+				app->render->camera.x = 0;
+				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+				pbody->body->ApplyLinearImpulse(b2Vec2(0, -5), pbody->body->GetPosition(), true);
+				velocitx.x = 0;
+				isTeleported = false;
+				teleport = false;
+			}
+
 			Debug();
 
 		}
@@ -149,6 +170,16 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 			pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
 		}
 
+		break;
+	case ColliderType::TELEPORT:
+		LOG("Collision Telleport");
+		teleport = true;
+		position.x = spawn.x;
+		position.y = spawn.y;
+		app->render->camera.x = 0;
+		pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
+		velocitx.x = 0;
+		
 		break;
 	case ColliderType::UNKNOWN:
 		//LOG("Collision UNKNOWN");
@@ -507,6 +538,8 @@ void Player::InitPlayer() {
 	startGame = true;
 
 	toDelete = false;
+
+	teleport = false;
 
 	
 }

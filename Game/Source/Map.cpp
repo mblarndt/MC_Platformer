@@ -507,6 +507,9 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->stringType == "checkpoint") {
             newObject->type = ObjectTypes::OBJECTTYPE_CHECKPOINT;
         }
+        else if (newObject->stringType == "teleport") {
+            newObject->type = ObjectTypes::OBJECTTYPE_TELEPORT;
+        }
         else
             newObject->type = ObjectTypes::OBJECTTYPE_ENTITY;
 
@@ -536,6 +539,10 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
             cstr->ctype = ColliderType::CHECKPOINT;
             checkpointPos.x = newObject->x;
             checkpointPos.y = newObject->y;
+        }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_TELEPORT) {
+            PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
+            cstr->ctype = ColliderType::TELEPORT;
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_PLAYERSPAWN) {
             playerSpawn.x = object.attribute("x").as_int();
