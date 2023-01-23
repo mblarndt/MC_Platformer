@@ -154,8 +154,27 @@ bool Scene::Update(float dt)
 		}
 		else if (t.ReadSec() <= 2)
 		{
-			app->render->DrawText("CHECKPOINT", 512, 450);
+			app->render->DrawText("CHECKPOINT", 512, 435);
 		}
+	}
+
+	if (clickedSave)
+	{
+		if (!timer2Started)
+		{
+			t2.Start();
+			timer2Started = true;
+		}
+		else if (t2.ReadSec() <= 2)
+		{
+			app->render->DrawText("GAME SAVED", 512, 435);
+		}
+
+		else if (t2.ReadSec() >= 2) {
+			clickedSave = false;
+			timer2Started = false;
+		}
+			
 	}
 
 
@@ -189,6 +208,7 @@ bool Scene::SaveState(pugi::xml_node &data)
 	player.append_attribute("x") = playerptr->position.x;
 	player.append_attribute("y") = playerptr->position.y;
 	player.append_attribute("health") = playerptr->health;
+	player.append_attribute("lives") = playerptr->lives;
 	player.append_attribute("bullets") = playerptr->bullets;
 
 	pugi::xml_node enemyair = data.append_child("enemyair");
@@ -211,6 +231,7 @@ bool Scene::LoadState(pugi::xml_node& data)
 	playerptr->position.x = data.child("player").attribute("x").as_int();
 	playerptr->position.y = data.child("player").attribute("y").as_int();
 	playerptr->health = data.child("player").attribute("health").as_int();
+	playerptr->lives = data.child("player").attribute("lives").as_int();
 	playerptr->bullets = data.child("player").attribute("bullets").as_int();
 
 	playerptr->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(playerptr->position.x),

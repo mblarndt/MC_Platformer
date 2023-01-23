@@ -75,6 +75,10 @@ public:
 
 	bool timerStarted;
 
+	bool timer2Started;
+
+	bool clickedSave;
+
 private:
 	SDL_Rect settingsRect;
 	SDL_Texture* settingsBox;
@@ -118,6 +122,7 @@ private:
 	int click2FxId;
 
 	Timer t;
+	Timer t2;
 
 
 };

@@ -194,6 +194,7 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 		LOG("Button 10: Save Game");
 		app->SaveGameRequest();
 		app->saveExist = true;
+		app->scene->clickedSave = true;
 		break;
 
 	case 11:
