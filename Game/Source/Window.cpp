@@ -125,17 +125,6 @@ void Window::ToggleFullscreen()
 		// Calculate aspect ratio of the game's window
 		float aspect_ratio = (float)width / (float)height;
 
-		// Set the new window size based on the aspect ratio
-		if ((float)display_mode.w / (float)display_mode.h < aspect_ratio)
-		{
-			width = (int)((float)display_mode.h * aspect_ratio);
-			height = display_mode.h;
-		}
-		else
-		{
-			width = display_mode.w;
-			height = (int)((float)display_mode.w / aspect_ratio);
-		}
 		SDL_SetWindowSize(window, width, height);
 	}
 }
