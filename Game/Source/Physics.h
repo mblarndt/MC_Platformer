@@ -27,6 +27,7 @@ enum class ColliderType {
 	PLAYER,
 	ENEMY,
 	ITEM_BULLET,
+	ITEM_DIAMOND,
 	ITEM_HEALTH,
 	BULLET,
 	PLATFORM,

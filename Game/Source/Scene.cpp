@@ -128,7 +128,7 @@ bool Scene::Update(float dt)
 	else if (playerptr->gameOver) {
 		SDL_Rect rect = { 0, 0, 1024, 480 };
 		app->render->DrawTexture(deathTex, app->render->camera.x * -1, 0, &rect);
-
+		gamePaused = true;
 		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 			app->fadeToBlack->SwitchMap(1);
 		}

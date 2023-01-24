@@ -128,12 +128,13 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		app->audio->PlayFx(pickCoinFxId);
 		bullets = bullets+1;
 		break;
+	case ColliderType::ITEM_DIAMOND:
+		app->audio->PlayFx(pickCoinFxId);
+		diamondCollected = true;
+		break;
 	case ColliderType::ITEM_HEALTH:
 		if (health != maxHealth)
 			health = health + 1;
-		break;
-	case ColliderType::PLATFORM:
-		//LOG("Collision PLATFORM");
 		break;
 	case ColliderType::FLOOR:
 		//LOG("Collision FLOOR");
@@ -546,7 +547,7 @@ void Player::InitPlayer() {
 
 	teleport = false;
 
-	app->render->camera.x = 1024+camOffset;
+	diamondCollected = false;
 }
 
 void Player::PlayerGUI(bool show) {

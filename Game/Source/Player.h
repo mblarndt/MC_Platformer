@@ -140,6 +140,7 @@ public:
 	//Player, Camera and Game States
 	bool playerDeath;
 	bool levelFinish;
+	bool diamondCollected;
 
 	bool showGUI;
 	bool gameOver;

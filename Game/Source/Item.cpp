@@ -84,6 +84,13 @@ void Item::ItemInitialisation(pugi::xml_node itemNode, int x, int y)
 		pbody->ctype = ColliderType::ITEM_BULLET;
 		break;
 
+	case ItemType::DIAMOND:
+		radius = 16;
+		texturePath = "Assets/Textures/diamond.png";
+		pbody = app->physics->CreateCircleSensor(position.x + (15), position.y + (15), radius, STATIC);
+		pbody->ctype = ColliderType::ITEM_DIAMOND;
+		break;
+
 	case ItemType::HEALTH:
 		position.x = x;
 		position.y = y;

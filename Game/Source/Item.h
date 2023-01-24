@@ -30,6 +30,7 @@ public:
 
 	enum class ItemType {
 		BULLET,
+		DIAMOND,
 		HEALTH,
 		OTHER
 	};

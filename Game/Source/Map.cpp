@@ -495,6 +495,9 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->stringType == "item") {
             newObject->type = ObjectTypes::OBJECTTYPE_ITEM;
         }
+        else if (newObject->stringType == "item_diamond") {
+            newObject->type = ObjectTypes::OBJECTTYPE_ITEM_DIAMOND;
+        }
         else if (newObject->stringType == "playerSpawn") {
             newObject->type = ObjectTypes::OBJECTTYPE_PLAYERSPAWN;
         }
@@ -551,6 +554,9 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_ITEM) {
             app->scene->CreateItem(object, Item::ItemType::BULLET);
+        }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_ITEM_DIAMOND) {
+            app->scene->CreateItem(object, Item::ItemType::DIAMOND);
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_ENEMYAIR) {
             app->scene->InitEnemyAirSpawn(object);
