@@ -175,7 +175,6 @@ private:
 	
 
 	//Position Variables
-	
 	iPoint menu;
 	int camOffset;
 	int remainingPixels;

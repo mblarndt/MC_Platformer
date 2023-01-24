@@ -333,7 +333,6 @@ void Player::HandleDeath(bool dead)
 			position.y = spawn.y;
 		}
 		
-		app->render->camera.x = 0;
 		pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 		velocitx.x = 0;
 		playerDeath = false;
@@ -375,14 +374,19 @@ void Player::RenderEntity()
 
 void Player::PlayerCamera()
 {
-	if (position.x > (camOffset) && position.x < ((app->map->mapData.width * app->map->mapData.tileWidth) - (app->win->width - camOffset))) {
-		app->render->camera.x = -(position.x) + camOffset;
+	if (position.x > 1024 + camOffset && position.x < 5120 - (1024-camOffset)) {
+		app->render->camera.x = -(position.x - camOffset);
 		app->render->camera.y = menu.y;
 	}
-	else {
-		lastcamPos = app->render->camera.x;
+	if(position.x < 1024+camOffset) {
+		app->render->camera.x = -1024;
+		app->render->camera.y = menu.y;
+	}
+	if (position.x > 5120 - (1024 - camOffset)) {
+		app->render->camera.x = -(5120 - 1024);
 	}
 }
+
 
 bool Player::CamTransition(int start, int stop)
 {
@@ -525,7 +529,7 @@ void Player::InitPlayer() {
 	pbody->body->SetFixedRotation(true);
 
 
-	app->render->camera.x = menu.x;
+	
 
 	currentAnimation = &idle;
 
@@ -537,7 +541,7 @@ void Player::InitPlayer() {
 
 	teleport = false;
 
-	
+	app->render->camera.x = 1024+camOffset;
 }
 
 void Player::PlayerGUI(bool show) {

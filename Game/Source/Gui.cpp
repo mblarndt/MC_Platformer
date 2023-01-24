@@ -188,6 +188,7 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 		LOG("Button 9: Continue");
 		NoButtons();
 		app->scene->toggle = false;
+		app->scene->gamePaused = false;
 		break;
 
 	case 10:
