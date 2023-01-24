@@ -83,20 +83,20 @@ bool Player::Update()
 			//When Player collides with Lava he spawns at start again	
 			HandleDeath(playerDeath);
 
-			if (teleport && isTeleported == false) {
-				position.x = 183*32;
-				position.y = 9*32;
-				app->render->camera.x = 0;
+			if (teleport == true && isTeleported == false) {
+				position.x = 4*32;
+				position.y = 0;
+				//app->render->camera.x = 0;
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 				velocitx.x = 1;
-				velocitx.x = 0;
+				
 				isTeleported = true;
 				teleport = false;
 			}
-			else if (teleport && isTeleported == true) {
+			else if (teleport == true && isTeleported == true) {
 				position.x = 72*32;
-				position.y = 14 * 32;
-				app->render->camera.x = 0;
+				position.y = 14*32;
+				//app->render->camera.x = 0;
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 				velocitx.x = 0;
 				pbody->body->ApplyLinearImpulse(b2Vec2(0, -5), pbody->body->GetPosition(), true);
@@ -129,7 +129,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		bullets = bullets+1;
 		break;
 	case ColliderType::ITEM_HEALTH:
-		health = health + 1;
+		if (health != maxHealth)
+			health = health + 1;
 		break;
 	case ColliderType::PLATFORM:
 		//LOG("Collision PLATFORM");
@@ -384,6 +385,10 @@ void Player::PlayerCamera()
 	}
 	if (position.x > 5120 - (1024 - camOffset)) {
 		app->render->camera.x = -(5120 - 1024);
+	}
+
+	if (position.x > 0 && position.x < 1024) {
+		app->render->camera.x = 0;
 	}
 }
 
