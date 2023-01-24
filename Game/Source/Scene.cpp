@@ -149,7 +149,17 @@ bool Scene::Update(float dt)
 	}
 		
 	else {
-		app->render->DrawText("BRING THE DIAMOND TO THE CASTLE", 512, 435);
+		if (!timer2Started)
+		{
+			t2.Start();
+			timer2Started = true;
+		}
+		else if (t2.ReadSec() <= 2)
+		{
+			app->render->DrawText("BRING THE DIAMOND TO THE CASTLE", 512, 435);
+		}
+
+
 		if (playerptr->levelFinish == true) {
 			gamePaused = true;
 			SDL_Rect rect = { 0, 0, app->win->width, 480 };

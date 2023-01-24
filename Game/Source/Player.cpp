@@ -15,6 +15,7 @@
 #include "Window.h"
 #include "FadeToBlack.h"
 #include "TitleScene.h"
+#include "Gui.h"
 
 Player::Player(pugi::xml_node paras) : Entity(EntityType::PLAYER)
 {	
@@ -569,6 +570,8 @@ void Player::InitPlayer() {
 	teleport = false;
 
 	diamondCollected = false;
+	godmode = false;
+	app->gui->godmodeToggle->toggle = godmode;
 }
 
 void Player::PlayerGUI(bool show) {
