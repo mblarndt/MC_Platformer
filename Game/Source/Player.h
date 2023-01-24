@@ -85,6 +85,8 @@ public:
 
 	void HealthBar();
 
+	bool ToggleGodmode();
+
 	void PlayerGUI(bool show);
 	
 	//Player Physics Body
@@ -115,6 +117,7 @@ public:
 	PlayerState mainState;
 
 	bool grounded;
+	bool godmode;
 	//playerState state;
 	int bullets;
 	int health;

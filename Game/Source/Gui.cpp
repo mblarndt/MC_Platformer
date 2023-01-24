@@ -255,7 +255,11 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 		else
 			app->physics->debug = false;
 		break;
+	case 22:
+		app->scene->playerptr->ToggleGodmode();
+		break;
 	case 24:
+		audioToggle->toggle = app->audio->isMusicOn;
 		app->audio->ToggleMusic();
 		break;
 	case 25:

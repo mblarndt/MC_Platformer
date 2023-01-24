@@ -6,8 +6,8 @@
 	<textures />
 	<physics />
 	<scene>
-		<player x="3897" y="354" health="5" lives="2" bullets="7" />
-		<enemyair x="5951" y="240" health="2" />
+		<player x="4648" y="322" health="5" lives="2" bullets="8" />
+		<enemyair x="5927" y="215" health="2" />
 		<enemyfloor x="3865" y="335" health="0" />
 	</scene>
 	<entitymanager />
@@ -20,6 +20,6 @@
 	<guiManager />
 	<gui />
 	<renderer>
-		<camera x="-3593" y="0" />
+		<camera x="-4096" y="0" />
 	</renderer>
 </save_state>

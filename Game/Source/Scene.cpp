@@ -115,15 +115,6 @@ bool Scene::Update(float dt)
 		}
 			
 	}
-		
-	if (playerptr->levelFinish) {
-		SDL_Rect rect = { 0, 0, app->win->width, 480 };
-		app->render->DrawTexture(finishTex, app->render->camera.x * (-1), 0, &rect);
-
-		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-			app->fadeToBlack->SwitchMap(2);
-		}
-	}
 
 	else if (playerptr->gameOver) {
 		SDL_Rect rect = { 0, 0, 1024, 480 };
@@ -134,8 +125,45 @@ bool Scene::Update(float dt)
 		}
 	}
 		
-
 	else(app->map->Draw());
+
+
+	if (playerptr->diamondCollected == false) {
+		if (playerptr->levelFinish == true) {
+			if (!timer2Started)
+			{
+				t2.Start();
+				timer2Started = true;
+			}
+			else if (t2.ReadSec() <= 2)
+			{
+				app->render->DrawText("COLLECT THE DIAMOND", 512, 435);
+			}
+
+			else if (t2.ReadSec() >= 2) {
+				playerptr->levelFinish = false;
+				timer2Started = false;
+			}
+		}
+		
+	}
+		
+	else {
+		app->render->DrawText("BRING THE DIAMOND TO THE CASTLE", 512, 435);
+		if (playerptr->levelFinish == true) {
+			gamePaused = true;
+			SDL_Rect rect = { 0, 0, app->win->width, 480 };
+			app->render->DrawTexture(finishTex, app->render->camera.x * (-1), 0, &rect);
+
+			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+				app->fadeToBlack->SwitchMap(2);
+			}
+
+		}
+	}
+		
+
+
 	
 	app->gui->SettingsWindow();
 
@@ -256,6 +284,7 @@ bool Scene::LoadState(pugi::xml_node& data)
 
 
 	app->entityManager->LoadState(data);
+	checkpointReached = false;
 
 	return true;
 }

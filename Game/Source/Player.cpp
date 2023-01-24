@@ -37,6 +37,7 @@ bool Player::Start() {
 
 	InitPlayer();
 	camTransition = false;
+	diamondCollected = false;
 	//position = spawn = app->map->playerSpawn;
 
 	return true;
@@ -48,54 +49,57 @@ bool Player::Update()
 
 	level_time = duration_cast<seconds>(level_now - level_start).count();
 
-	if (level_time >= maxtime)
-	{
-		playerDeath = true;
+
+	if (!godmode) {
+		if (level_time >= maxtime)
+		{
+			playerDeath = true;
+		}
+
+		if (health == 0)
+			playerDeath = true;
+		if (lives == 0)
+			gameOver = true;
 	}
+	
 
-	if (health == 0)
-		playerDeath = true;
-	if (lives == 0)
-		gameOver = true;
 
-	if (startGame == true) {
-		if (app->scene->gamePaused == false) {
-			if (levelFinish == false) {
+	if (app->scene->gamePaused == false) {
+		{
 
-				if (playerDeath == false && gameOver == false) {
+			if (playerDeath == false && gameOver == false) {
 
-					showGUI = true;
-					/*----------------------------Follow Camera--------------------------*/
-					PlayerCamera();
-					/*----------------------------Get State of Player--------------------------*/
-					StateMachine();
-					/*----------------------------Player Movement--------------------------*/
-					HandleMovement();
+				showGUI = true;
+				/*----------------------------Follow Camera--------------------------*/
+				PlayerCamera();
+				/*----------------------------Get State of Player--------------------------*/
+				StateMachine();
+				/*----------------------------Player Movement--------------------------*/
+				HandleMovement();
 
-					/*----------------------------Rendering Player--------------------------*/
-					RenderEntity();
+				/*----------------------------Rendering Player--------------------------*/
+				RenderEntity();
 
-					PlayerGUI(showGUI);
+				PlayerGUI(showGUI);
 
-				}
 			}
 
 			//When Player collides with Lava he spawns at start again	
 			HandleDeath(playerDeath);
 
 			if (teleport == true && isTeleported == false) {
-				position.x = 4*32;
+				position.x = 4 * 32;
 				position.y = 0;
 				//app->render->camera.x = 0;
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 				velocitx.x = 1;
-				
+
 				isTeleported = true;
 				teleport = false;
 			}
 			else if (teleport == true && isTeleported == true) {
-				position.x = 72*32;
-				position.y = 14*32;
+				position.x = 72 * 32;
+				position.y = 14 * 32;
 				//app->render->camera.x = 0;
 				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y)), 0);
 				velocitx.x = 0;
@@ -128,49 +132,61 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		app->audio->PlayFx(pickCoinFxId);
 		bullets = bullets+1;
 		break;
+
 	case ColliderType::ITEM_DIAMOND:
 		app->audio->PlayFx(pickCoinFxId);
 		diamondCollected = true;
 		break;
+
 	case ColliderType::ITEM_HEALTH:
 		if (health != maxHealth)
 			health = health + 1;
 		break;
 	case ColliderType::FLOOR:
 		//LOG("Collision FLOOR");
-		if ((physA->body->GetPosition().y > physB->body->GetPosition().y)) {
+		if (!godmode){
+			if ((physA->body->GetPosition().y > physB->body->GetPosition().y)) {
 
-			if (physA->body->GetPosition().x < physB->body->GetPosition().x) {
-				velocitx.x = -speed;
-			}
-			if (physA->body->GetPosition().x > physB->body->GetPosition().x) {
-				velocitx.x = speed;
+				if (physA->body->GetPosition().x < physB->body->GetPosition().x) {
+					velocitx.x = -speed;
+				}
+				if (physA->body->GetPosition().x > physB->body->GetPosition().x) {
+					velocitx.x = speed;
+				}
 			}
 		}
+		
 		
 		jumpcount = 0;
 		break;
 	case ColliderType::DEATH:
-		app->audio->PlayFx(hitFxId);
-		playerDeath = true;
+		if (!godmode) {
+			app->audio->PlayFx(hitFxId);
+			playerDeath = true;
+		}
+		
 		break;
 	case ColliderType::FINISH:
 		//LOG("Collision FINISH");
 		levelFinish = true;
 		break;
+
 	case ColliderType::CHECKPOINT:
 		LOG("Collision Checkpoint");
 		//app->SaveGameRequest();
 		app->scene->checkpointReached = true;
 		break;
 	case ColliderType::ENEMY:
-		app->audio->PlayFx(hitFxId);
-		health = health - 1;
-		pbody->body->ApplyLinearImpulse(b2Vec2(2, 0), pbody->body->GetPosition(), true);
+		if (!godmode) {
+			app->audio->PlayFx(hitFxId);
+			health = health - 1;
+			pbody->body->ApplyLinearImpulse(b2Vec2(2, 0), pbody->body->GetPosition(), true);
 
-		if (mainState = FALL) {
-			pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
+			if (mainState = FALL) {
+				pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
+			}
 		}
+		
 
 		break;
 	case ColliderType::TELEPORT:
@@ -278,7 +294,8 @@ void Player::StateMachine()
 void Player::Shoot()
 {
 	if (bullets > 0) {
-		bullets = bullets - 1;
+		if(!godmode)
+			bullets = bullets - 1;
 		pugi::xml_node object;
 		object.attribute("x") = METERS_TO_PIXELS(pbody->body->GetTransform().p.x);
 		object.attribute("y") = METERS_TO_PIXELS(pbody->body->GetTransform().p.y);
@@ -301,10 +318,14 @@ void Player::HandleMovement()
 	}
 	//Jump
 	else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-		if (jumpcount <= 3) {
-			pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
-			jumpcount++;
+		if (!godmode) {
+			if (jumpcount <= 3) {
+				pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
+				jumpcount++;
+			}
 		}
+		else
+			pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
 	}
 
 	//Shoot
@@ -591,4 +612,14 @@ void Player::HealthBar() {
 	SDL_Rect stroke = { healthbar.x - thickness, healthbar.y - thickness, 200 + thickness * 2, healthbar.h + 2 * thickness };
 	app->render->DrawRectangle(stroke, 0, 0, 0, 255, true, true);
 	app->render->DrawRectangle(healthbar, 255, 0, 0, 255, true, true);
+}
+
+
+bool Player::ToggleGodmode() {
+	if (godmode)
+		godmode = false;
+	else
+		godmode = true;
+
+	return godmode;
 }
