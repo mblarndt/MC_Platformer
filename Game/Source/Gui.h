@@ -100,17 +100,17 @@ public:
 	GuiToggle* audioToggle;
 
 	
-	bool mainMenu;
-	bool start;
-	bool settings;
-	bool exit;
+	bool mainMenu = true;
+	bool start = false;
+	bool settings = false;
+	bool exit = false;
 	bool nothing;
 
 	SDL_Texture* settingsBox;
 
 	bool toggle;
 
-	bool credits;
+	bool credits = false;
 
 	enum class SettingsState {
 		AUDIO,
