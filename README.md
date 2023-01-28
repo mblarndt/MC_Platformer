@@ -30,6 +30,10 @@ Enemies can be killed by shoothing collectable "Slime Balls".
   - F6: Load State
   - F9: Show colliders & enemy paths
 
+### GUI
+GUI has been implemented for this release. This means that things like the volume of sfx or music can be controlled with a slider in the menu. Also video features like V-Sync or FPs output of the game. Also gameplay features like GodMode or Debug mode.
+Live display of the amount of projectiles left, health points and lives remaining. Also level completion time limit has been added, meaning players have 1 minute to complete each level. Pausing the game stops the timer.
+
 ## Developers
 
  - Ben - Programming and Art&Animations
