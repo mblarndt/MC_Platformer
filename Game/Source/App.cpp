@@ -165,15 +165,18 @@ bool App::Update()
 	if (ret == true)
 		ret = PostUpdate();
 
-	
+
 	// Frame Rate control
 	end_time = Clock::now();
 	frame_time = duration_cast<milliseconds>(end_time - start_time).count();
-	
-	if (frame_time < (physics->dt * 1000.0))
-	{
-		SDL_Delay((physics->dt * 1000.0) - frame_time);
+
+	if (app->render->VSYNC) {
+		if (frame_time < (physics->dt * 1000.0))
+		{
+			SDL_Delay((physics->dt * 1000.0) - frame_time);
+		}
 	}
+	else physics->dt = frame_time / 1000.0;
 
 	WindowTitleFPS();
 

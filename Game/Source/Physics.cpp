@@ -53,18 +53,19 @@ bool Physics::PreUpdate()
 {
 	bool ret = true;
 
-
-	switch (fpsTarget)
-	{
-	case TargetFps::FIFTEEN:
-		dt = 1.0 / 15.0;
-		break;
-	case TargetFps::THIRTY:
-		dt = 1.0 / 30.0;
-		break;
-	case TargetFps::SIXTY:
-		dt = 1.0 / 60.0;
-		break;
+	if (app->render->VSYNC) {
+		switch (fpsTarget)
+		{
+		case TargetFps::FIFTEEN:
+			dt = 1.0 / 15.0;
+			break;
+		case TargetFps::THIRTY:
+			dt = 1.0 / 30.0;
+			break;
+		case TargetFps::SIXTY:
+			dt = 1.0 / 60.0;
+			break;
+		}
 	}
 
 	if (app->scene->gamePaused == false) {
