@@ -13,12 +13,16 @@
 #include "FadeToBlack.h"
 #include "Pathfinding.h"
 #include "Animation.h"
+#include "GuiManager.h"
+#include "Gui.h"
 
 #include "Defs.h"
 #include "Log.h"
 
 #include <iostream>
 #include <sstream>
+
+#include "Optick/include/optick.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -40,13 +44,16 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	map = new Map();
 	pathfinding = new PathFinding();
 	animation = new Animation();
+	guiManager = new GuiManager();
+	gui = new Gui();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
+	AddModule(audio);
 	AddModule(input);
 	AddModule(win);
 	AddModule(tex);
-	AddModule(audio);
+	
 	//L07 DONE 2: Add Physics module
 	AddModule(physics);
 
@@ -60,8 +67,11 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(fadeToBlack);
 	AddModule(pathfinding);
 	AddModule(animation);
+	AddModule(guiManager);
+	AddModule(gui);
 	// Render last to swap buffer
 	AddModule(render);
+	
 }
 
 // Destructor
@@ -128,6 +138,8 @@ bool App::Start()
 		item = item->next;
 	}
 
+	CheckSaveExist();
+
 	return ret;
 }
 
@@ -140,6 +152,10 @@ bool App::Update()
 	if (input->GetWindowEvent(WE_QUIT) == true)
 		ret = false;
 
+
+	start_time = Clock::now();
+
+
 	if (ret == true)
 		ret = PreUpdate();
 
@@ -148,6 +164,21 @@ bool App::Update()
 
 	if (ret == true)
 		ret = PostUpdate();
+
+
+	// Frame Rate control
+	end_time = Clock::now();
+	frame_time = duration_cast<milliseconds>(end_time - start_time).count();
+
+	if (app->render->VSYNC) {
+		if (frame_time < (physics->dt * 1000.0))
+		{
+			SDL_Delay((physics->dt * 1000.0) - frame_time);
+		}
+	}
+	else physics->dt = frame_time / 1000.0;
+
+	WindowTitleFPS();
 
 	FinishUpdate();
 	return ret;
@@ -168,6 +199,7 @@ bool App::LoadConfig()
 	}
 	else {
 		LOG("Error in App::LoadConfig(): %s", parseResult.description());
+		
 	}
 
 	return ret;
@@ -176,11 +208,14 @@ bool App::LoadConfig()
 // ---------------------------------------------
 void App::PrepareUpdate()
 {
+	OPTICK_EVENT();
 }
 
 // ---------------------------------------------
 void App::FinishUpdate()
 {
+	OPTICK_EVENT();
+
 	// L03: DONE 1: This is a good place to call Load / Save methods
 	if (loadGameRequested == true) LoadFromFile();
 	if (saveGameRequested == true) SaveToFile();
@@ -189,6 +224,8 @@ void App::FinishUpdate()
 // Call modules before each loop iteration
 bool App::PreUpdate()
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 	ListItem<Module*>* item;
 	item = modules.start;
@@ -211,6 +248,8 @@ bool App::PreUpdate()
 // Call modules on each loop iteration
 bool App::DoUpdate()
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 	ListItem<Module*>* item;
 	item = modules.start;
@@ -233,6 +272,8 @@ bool App::DoUpdate()
 // Call modules after each loop iteration
 bool App::PostUpdate()
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 	ListItem<Module*>* item;
 	Module* pModule = NULL;
@@ -312,6 +353,27 @@ void App::SaveGameRequest()
 
 // L02: DONE 5: Implement the method LoadFromFile() to actually load a xml file
 // then call all the modules to load themselves
+bool App::CheckSaveExist()
+{
+	bool ret = true;
+
+	pugi::xml_document gameStateFile;
+	pugi::xml_parse_result result = gameStateFile.load_file("save_game.xml");
+
+	if (result == NULL)
+	{
+		ret = false;
+	}
+	else
+	{
+		ret = true;
+	}
+
+	saveExist = ret;
+
+	return ret;
+}
+
 bool App::LoadFromFile()
 {
 	bool ret = true;
@@ -334,9 +396,12 @@ bool App::LoadFromFile()
 			ret = item->data->LoadState(gameStateFile.child("save_state").child(item->data->name.GetString()));
 			item = item->next;
 		}
+		ret = true;
 	}
 
 	loadGameRequested = false;
+
+	saveExist = ret;
 
 	return ret;
 }
@@ -364,4 +429,25 @@ bool App::SaveToFile()
 	saveGameRequested = false;
 
 	return ret;
+}
+
+void App::WindowTitleFPS()
+{
+	end_time = Clock::now();
+
+	frame_time = duration_cast<milliseconds>(end_time - start_time).count();
+
+	fps = 1.0 / frame_time;
+
+	fps_count++;
+
+	total_fps += fps;
+	avg_fps = total_fps / fps_count * 1000.0;
+
+	fps *= 1000.0;
+
+	str = "FPS " + std::to_string(fps) + " / Avg. FPS " + std::to_string(avg_fps) + " / Last-Frame MS " + std::to_string(frame_time) +" / Total FPS " + std::to_string(fps_count) + " / V-Sync " + std::to_string(render->VSYNC);
+	aux = str.c_str();
+
+	win->SetTitle(aux);
 }

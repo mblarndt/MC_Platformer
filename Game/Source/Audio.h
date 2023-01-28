@@ -32,6 +32,20 @@ public:
 	// Play a previously loaded WAV
 	bool PlayFx(unsigned int fx, int repeat = 0);
 
+	void ToggleMusic();
+
+	void SetFxVolume(int value);
+
+	void SetMusicVolume(int value);
+
+	bool isMusicOn;
+
+	bool isAudioEnabled;
+	
+	int musicVolume;
+
+	int fxVolume;
+
 private:
 
 	_Mix_Music* music;

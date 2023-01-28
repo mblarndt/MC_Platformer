@@ -2,6 +2,8 @@
 #define __TITLE_SCENE_H__
 
 #include "Module.h"
+#include "GuiSlider.h"
+
 
 struct SDL_Texture;
 
@@ -32,12 +34,30 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+
+	void AutomaticTransition();
+
 public:
+	GuiSlider* slider1;
+	GuiSlider* slider2;
+
+	GuiButton* button1;
+
+	bool toggle;
+
 
 private:
 	SDL_Rect logoRect;
 	SDL_Texture* logo;
 	const char* texturePath;
+
+	
+
+	bool settings;
+	bool exit;
+
+	
+	float duration;
 
 };
 

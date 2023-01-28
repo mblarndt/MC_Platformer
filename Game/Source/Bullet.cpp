@@ -27,7 +27,6 @@ bool Bullet::Awake() {
 	radius = 7.5;
 	texturePath = "Assets/Textures/slimeball.png";
 
-
 	return true;
 }
 

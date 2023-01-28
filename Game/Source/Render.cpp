@@ -5,7 +5,6 @@
 #include "Defs.h"
 #include "Log.h"
 
-#define VSYNC true
 
 Render::Render() : Module()
 {
@@ -23,6 +22,8 @@ Render::~Render()
 // Called before render is available
 bool Render::Awake(pugi::xml_node& config)
 {
+	VSYNC = true;
+
 	LOG("Create SDL rendering context");
 	bool ret = true;
 
@@ -48,6 +49,13 @@ bool Render::Awake(pugi::xml_node& config)
 		camera.x = 0;
 		camera.y = 0;
 	}
+
+	//initialise the SDL_ttf library
+	TTF_Init();
+
+	//load a font into memory
+	fontSmall = TTF_OpenFont("Assets/Fonts/Minecraft/Minecraft-Regular.otf", 30);
+	fontBig = TTF_OpenFont("Assets/Fonts/Minecraft/Minecraft-Regular.otf", 50);
 
 	return ret;
 }
@@ -83,6 +91,14 @@ bool Render::PostUpdate()
 // Called before quitting
 bool Render::CleanUp()
 {
+	// Free the font
+	TTF_CloseFont(fontSmall);
+	TTF_CloseFont(fontBig);
+
+	//we clean up TTF library
+	TTF_Quit();
+
+
 	LOG("Destroying SDL render");
 	SDL_DestroyRenderer(renderer);
 	return true;
@@ -225,6 +241,53 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 	}
 
 	return ret;
+}
+
+bool Render::DrawText(const char* text, int posx, int posy, int w, int h,const char* color, bool center, const char* size)
+{
+	SDL_Color colour;
+	TTF_Font* font;
+
+	if (color == "white")
+		colour = { 255,255,255 };
+	else if (color == "green")
+		colour = { 13,110,0 };
+	else
+		colour = {0,0,0};
+
+	if (size == "normal")
+		font = fontSmall;
+	if (size == "big")
+		font = fontBig;
+	else
+		font = fontSmall;
+	
+
+	int textX, textY;
+	SDL_Surface* surface = TTF_RenderText_Solid(font, text, colour);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+	int texW = 0;
+	int texH = 0;
+	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+
+	if (center) {
+		textX = posx + (w - texW) / 2;
+		textY = posy + (h - texH) / 2;
+	}
+	else {
+		textX = posx ;
+		textY = posy;
+	}
+
+	SDL_Rect dstrect = { textX, textY, texW, texH };
+
+	SDL_RenderCopy(renderer, texture, NULL, &dstrect);
+
+	SDL_DestroyTexture(texture);
+	SDL_FreeSurface(surface);
+
+	return true;
 }
 
 // L03: DONE 6: Implement a method to load the state

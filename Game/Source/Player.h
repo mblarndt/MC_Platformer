@@ -13,6 +13,11 @@
 #define MAX_VEL 4.0f
 #define DAMP 0.9f
 
+#include <chrono>
+using namespace std;
+using namespace chrono;
+typedef high_resolution_clock Clock;
+
 struct SDL_Texture;
 
 class Player : public Entity
@@ -60,6 +65,8 @@ public:
 
 	void HandleDeath(bool dead);
 
+	void HandleGameOver(bool over);
+
 	void HandleFinish(bool finish);
 
 	void RenderEntity();
@@ -71,6 +78,16 @@ public:
 	bool CamTransition(int start, int stop);
 
 	void Bump();
+
+	void Reset();
+
+	void InitPlayer();
+
+	void HealthBar();
+
+	bool ToggleGodmode();
+
+	void PlayerGUI(bool show);
 	
 	//Player Physics Body
 	PhysBody* pbody;
@@ -100,14 +117,41 @@ public:
 	PlayerState mainState;
 
 	bool grounded;
+	bool godmode;
 	//playerState state;
 	int bullets;
 	int health;
+	int maxHealth;
+	float healthPerc;
 	int lives;
 
 	int lastcamPos;
 
 	bool deadTextureOn;
+
+	iPoint spawn;
+
+	bool startGame;
+
+	bool camTransition;
+
+	bool teleport;
+	bool isTeleported;
+
+	iPoint camPos;
+
+	//Player, Camera and Game States
+	bool playerDeath;
+	bool levelFinish;
+	bool diamondCollected;
+
+	bool showGUI;
+	bool gameOver;
+
+	long long level_time;
+	long long maxtime = 60; //seconds
+	steady_clock::time_point level_start;
+	steady_clock::time_point level_now;
 
 private:
 
@@ -117,15 +161,11 @@ private:
 	int width;
 	int height;
 
-	SDL_Texture* texDeath;
-	const char* deathPath;
-	int deathWidth;
-	int deathHeight;
+	SDL_Texture* heartTex;
+	SDL_Texture* slimeball;
+	SDL_Texture* bulletsBG;
+
 	
-	SDL_Texture* texFinish;
-	const char* finishPath;
-	int finishWidth;
-	int finishHeight;
 
 	//FX-Sound Variables
 	int hitFxId;
@@ -134,14 +174,11 @@ private:
 	const char* hitFxPath;
 	const char* backmusicPath;
 	
-	//Player, Camera and Game States
-	bool playerDeath;
-	bool levelFinish;
-	bool startGame;
-	bool gameOver;
+	
+	
+	
 
 	//Position Variables
-	iPoint spawn;
 	iPoint menu;
 	int camOffset;
 	int remainingPixels;
@@ -174,10 +211,6 @@ private:
 	int spriteHeight;
 	int row;
 	int column;
-
-
-	
-	
 };
 
 #endif // __PLAYER_H__

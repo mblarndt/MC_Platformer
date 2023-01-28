@@ -55,6 +55,13 @@ bool Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 
+	isAudioEnabled = true;
+
+	musicVolume = 128 / 2;
+	fxVolume = 128 / 2;
+	SetMusicVolume(musicVolume);
+	SetFxVolume(fxVolume);
+
 	return ret;
 }
 
@@ -89,7 +96,7 @@ bool Audio::PlayMusic(const char* path, float fadeTime)
 {
 	bool ret = true;
 
-	if(!active)
+	if (!active || !isAudioEnabled)
 		return false;
 
 	if(music != NULL)
@@ -166,7 +173,7 @@ bool Audio::PlayFx(unsigned int id, int repeat)
 {
 	bool ret = false;
 
-	if(!active)
+	if (!active || !isAudioEnabled)
 		return false;
 
 	if(id > 0 && id <= fx.Count())
@@ -175,4 +182,26 @@ bool Audio::PlayFx(unsigned int id, int repeat)
 	}
 
 	return ret;
+}
+
+void Audio::ToggleMusic() {
+	if (isAudioEnabled) {
+		Mix_PauseMusic();
+	}
+	else {
+		Mix_ResumeMusic();
+	}
+	isAudioEnabled = !isAudioEnabled;
+}
+
+void Audio::SetFxVolume(int value)
+{
+	ListItem<Mix_Chunk*>* item;
+	for (item = fx.start; item != NULL; item = item->next)
+		Mix_VolumeChunk(item->data, value);
+}
+
+void Audio::SetMusicVolume(int value)
+{
+	Mix_VolumeMusic(value);
 }

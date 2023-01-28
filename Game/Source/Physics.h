@@ -26,15 +26,27 @@ enum bodyType {
 enum class ColliderType {
 	PLAYER,
 	ENEMY,
-	ITEM,
+	ITEM_BULLET,
+	ITEM_DIAMOND,
+	ITEM_HEALTH,
 	BULLET,
 	PLATFORM,
 	FLOOR,
 	DEATH,
 	FINISH,
 	CHECKPOINT,
+	TELEPORT,
 	UNKNOWN
 	// ..
+};
+
+enum class TargetFps
+{
+	SIXTY,
+	THIRTY,
+	FIFTEEN,
+	VARIABLE,
+
 };
 
 // Small class to return to other modules to track position and rotation of physics bodies
@@ -83,10 +95,15 @@ public:
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
+	bool SetFPS(TargetFps fps);
+
 	// Box2D World
 	b2World* world;
 
+	double dt = 1.0 / 60.0;
+	double fps;
 
+	TargetFps fpsTarget = TargetFps::SIXTY;
 
 	// Debug mode
 	bool debug;

@@ -9,6 +9,11 @@
 #include "Map.h"
 #include "Physics.h"
 #include "FadeToBlack.h"
+#include "GuiButton.h"
+#include "GuiManager.h"
+#include "GuiSlider.h"
+#include "Gui.h"
+
 
 #include "Defs.h"
 #include "Log.h"
@@ -23,8 +28,6 @@ TitleScene::TitleScene() : Module()
 TitleScene::~TitleScene()
 {}
 
-
-
 // Called before render is available
 bool TitleScene::Awake(pugi::xml_node& config)
 {
@@ -37,7 +40,9 @@ bool TitleScene::Awake(pugi::xml_node& config)
 	logoRect.h = 480;
 	logoRect.w = 1024;
 
-	texturePath = "Assets/Textures/logo.png";
+	texturePath = "Assets/Textures/background1.png";
+
+
 
 	return ret;
 }
@@ -46,11 +51,14 @@ bool TitleScene::Awake(pugi::xml_node& config)
 bool TitleScene::Start()
 {
 	app->fadeToBlack->activeScene = "TitleScene";
+	app->scene->active = false;
 
 	logo = app->tex->Load(texturePath);
 
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
+
+	toggle = true;
 
 	return true;
 }
@@ -64,23 +72,23 @@ bool TitleScene::PreUpdate()
 // Called each loop iteration
 bool TitleScene::Update(float dt)
 {
+	if (toggle == true) {
+		app->gui->MainMenuButtons();
+		toggle = false;
+	}
+		
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
 		
 	//SDL_SetTextureAlphaMod(logo, accumulatedTime * 10.0f);
 	app->render->DrawTexture(logo, 0, 0);
 
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-	{
+	app->gui->SettingsWindow();
 
-		
-		
-		app->fadeToBlack->FadeToBlackScene("Scene", 0.1);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-	{
-		app->fadeToBlack->DoFadeToBlack(2);
-	}
+	//L15: Draw GUI
+	app->guiManager->Draw();
+
+
 
 	return true;
 }
@@ -90,9 +98,9 @@ bool TitleScene::PostUpdate()
 {
 	bool ret = true;
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	//Exit Button
+	if (exit)
 		ret = false;
-
 
 	return ret;
 }
@@ -101,7 +109,7 @@ bool TitleScene::PostUpdate()
 bool TitleScene::CleanUp()
 {
 	LOG("Freeing TitleScene");
+	app->tex->UnLoad(logo);
 
 	return true;
 }
-

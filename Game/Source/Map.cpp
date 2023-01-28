@@ -13,6 +13,7 @@
 #include <math.h>
 #include "SDL_image/include/SDL_image.h"
 #include "Item.h"
+#include "Optick/include/optick.h"
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -87,6 +88,8 @@ bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 
 void Map::Draw()
 {
+    OPTICK_EVENT();
+
     if(mapLoaded == false)
         return;
 
@@ -212,18 +215,20 @@ bool Map::CleanUp()
 {
     LOG("Unloading map");
 
-    // L04: DONE 2: Make sure you clean up any memory allocated from tilesets/map
-	ListItem<TileSet*>* item;
-	item = mapData.tilesets.start;
 
-	while (item != NULL)
-	{
-		RELEASE(item->data);
-		item = item->next;
-	}
-	mapData.tilesets.Clear();
+    // Remove all tilesets
+    ListItem<TileSet*>* item;
+    item = mapData.tilesets.start;
 
-    // L05: DONE 2: clean up all layer data
+    while (item != NULL)
+    {
+        SDL_DestroyTexture(item->data->texture);
+
+        RELEASE(item->data);
+        item = item->next;
+    }
+    mapData.tilesets.Clear();
+
     // Remove all layers
     ListItem<MapLayer*>* layerItem;
     layerItem = mapData.maplayers.start;
@@ -233,22 +238,36 @@ bool Map::CleanUp()
         RELEASE(layerItem->data);
         layerItem = layerItem->next;
     }
+    mapData.maplayers.Clear();
+
+    //Object cleanup
+    ListItem<ObjectGroups*>* groupItem;
+    groupItem = mapData.objectgroups.start;
+    
+    while (groupItem != NULL)
+    {
+        RELEASE(groupItem->data);
+        groupItem = groupItem->next;
+    }
+    mapData.objectgroups.Clear();
+
+    // Clean up the pugui tree
+    mapFileXML.reset();
 
     return true;
 }
 
 // Load new map
-bool Map::Load()
+bool Map::Load(const char* fileCName)
 {
     bool ret = true;
 
-    pugi::xml_document mapFileXML;
-    pugi::xml_parse_result result = mapFileXML.load_file(mapFileName.GetString());
+    pugi::xml_parse_result result = mapFileXML.load_file(fileCName);
     //pugi::xml_parse_result nameResult = mapFileXML.load_file(mapFileName.GetString());
 
     if(result == NULL)
     {
-        LOG("Could not load map xml file %s. pugi error: %s", mapFileName, result.description());
+        LOG("Could not load map xml file %s. pugi error: %s", mapNamePath, result.description());
         ret = false;
     }
 
@@ -266,6 +285,7 @@ bool Map::Load()
     if (ret == true)
     {
         ret = LoadAllLayers(mapFileXML.child("map"));
+        LOG("AllLayers loaded");
     }
 
 
@@ -273,7 +293,7 @@ bool Map::Load()
     {
         // L04: DONE 5: LOG all the data loaded iterate all tilesets and LOG everything
        
-        LOG("Successfully parsed map XML file :%s", mapFileName.GetString());
+        LOG("Successfully parsed map XML file :%s", SString(fileCName).GetString());
         LOG("width : %d height : %d",mapData.width,mapData.height);
         LOG("tile_width : %d tile_height : %d",mapData.tileWidth, mapData.tileHeight);
         
@@ -292,6 +312,8 @@ bool Map::Load()
         // L05: DONE 4: LOG the info for each loaded layer
         ListItem<MapLayer*>* mapLayer;
         mapLayer = mapData.maplayers.start;
+
+        LOG("MapLayer----");
 
         while (mapLayer != NULL) {
             LOG("id : %d name : %s", mapLayer->data->id, mapLayer->data->name.GetString());
@@ -473,6 +495,9 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->stringType == "item") {
             newObject->type = ObjectTypes::OBJECTTYPE_ITEM;
         }
+        else if (newObject->stringType == "item_diamond") {
+            newObject->type = ObjectTypes::OBJECTTYPE_ITEM_DIAMOND;
+        }
         else if (newObject->stringType == "playerSpawn") {
             newObject->type = ObjectTypes::OBJECTTYPE_PLAYERSPAWN;
         }
@@ -484,6 +509,9 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         }
         else if (newObject->stringType == "checkpoint") {
             newObject->type = ObjectTypes::OBJECTTYPE_CHECKPOINT;
+        }
+        else if (newObject->stringType == "teleport") {
+            newObject->type = ObjectTypes::OBJECTTYPE_TELEPORT;
         }
         else
             newObject->type = ObjectTypes::OBJECTTYPE_ENTITY;
@@ -512,12 +540,23 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         else if (newObject->type == ObjectTypes::OBJECTTYPE_CHECKPOINT) {
             PhysBody* cstr = app->physics->CreateRectangleSensor(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
             cstr->ctype = ColliderType::CHECKPOINT;
+            checkpointPos.x = newObject->x;
+            checkpointPos.y = newObject->y;
+        }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_TELEPORT) {
+            PhysBody* cstr = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
+            cstr->ctype = ColliderType::TELEPORT;
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_PLAYERSPAWN) {
-            app->scene->InitPlayerSpawn(object);
+            playerSpawn.x = object.attribute("x").as_int();
+            playerSpawn.y = object.attribute("y").as_int();
+            //app->scene->SpawnPlayer();
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_ITEM) {
-            app->scene->CreateItem(object);
+            app->scene->CreateItem(object, Item::ItemType::BULLET);
+        }
+        else if (newObject->type == ObjectTypes::OBJECTTYPE_ITEM_DIAMOND) {
+            app->scene->CreateItem(object, Item::ItemType::DIAMOND);
         }
         else if (newObject->type == ObjectTypes::OBJECTTYPE_ENEMYAIR) {
             app->scene->InitEnemyAirSpawn(object);
@@ -530,6 +569,7 @@ bool Map::LoadObjects(pugi::xml_node& node, ObjectGroups* group)
         case ObjectTypes::OBJECTTYPE_SOLID:
             PhysBody* floor = app->physics->CreateRectangle(newObject->x + (newObject->width) / 2, newObject->y + (newObject->height) / 2, newObject->width, newObject->height, STATIC);
             floor->ctype = ColliderType::FLOOR;
+            bodys.Add(floor);
         }
        
 

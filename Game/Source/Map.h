@@ -43,8 +43,10 @@ enum ObjectTypes
 	OBJECTTYPE_DEATH,
 	OBJECTTYPE_FINISH,
 	OBJECTTYPE_ITEM,
+	OBJECTTYPE_ITEM_DIAMOND,
 	OBJECTTYPE_PLAYERSPAWN,
 	OBJECTTYPE_CHECKPOINT,
+	OBJECTTYPE_TELEPORT,
 	OBJECTTYPE_ENEMYAIR,
 	OBJECTTYPE_ENEMYFLOOR,
 	OBJECTTYPE_ENTITY
@@ -162,8 +164,9 @@ public:
     // Called before quitting
     bool CleanUp();
 
+
     // Load new map
-    bool Load();
+    bool Load(const char* fileCName);
 
 	// L05: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
 	iPoint MapToWorld(int x, int y) const;
@@ -176,11 +179,17 @@ public:
 
 
 	SString mapFileName;
+	const char* mapNamePath;
 	pugi::xml_parse_result nameResult;
+	pugi::xml_document mapFileXML;
+
+	List<PhysBody*> bodys;
+
+	bool LoadMap(pugi::xml_node mapFile);
 
 private:
 
-	bool LoadMap(pugi::xml_node mapFile);
+	
 
 	// L04: DONE 4: Create and call a private function to load a tileset
 	bool LoadTileSet(pugi::xml_node mapFile);
@@ -205,6 +214,8 @@ public:
 
 	// L04: DONE 1: Declare a variable data of the struct MapData
 	MapData mapData;
+	iPoint playerSpawn;
+	iPoint checkpointPos;
 
 private:
 

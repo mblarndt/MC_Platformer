@@ -10,6 +10,8 @@
 #include "Player.h"
 #include "Window.h"
 #include "Player.h"
+#include "Map.h"
+#include "Scene.h"
 #include "Box2D/Box2D/Box2D.h"
 
 // Tell the compiler to reference the compiled Box2D libraries
@@ -51,24 +53,41 @@ bool Physics::PreUpdate()
 {
 	bool ret = true;
 
-	// Step (update) the World
-	// WARNING: WE ARE STEPPING BY CONSTANT 1/60 SECONDS!
-	world->Step(1.0f / 60.0f, 6, 2);
-
-	// Because Box2D does not automatically broadcast collisions/contacts with sensors, 
-	// we have to manually search for collisions and "call" the equivalent to the ModulePhysics::BeginContact() ourselves...
-	for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
-	{
-		// For each contact detected by Box2D, see if the first one colliding is a sensor
-		if (c->IsTouching() && c->GetFixtureA()->IsSensor())
+	if (app->render->VSYNC) {
+		switch (fpsTarget)
 		{
-			// If so, we call the OnCollision listener function (only of the sensor), passing as inputs our custom PhysBody classes
-			PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
-			PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData();
-			if (pb1 && pb2 && pb1->listener)
-				pb1->listener->OnCollision(pb1, pb2, c);
+		case TargetFps::FIFTEEN:
+			dt = 1.0 / 15.0;
+			break;
+		case TargetFps::THIRTY:
+			dt = 1.0 / 30.0;
+			break;
+		case TargetFps::SIXTY:
+			dt = 1.0 / 60.0;
+			break;
 		}
 	}
+
+	if (app->scene->gamePaused == false) {
+		// Step (update) the World
+		world->Step(dt, 6, 2);
+
+		// Because Box2D does not automatically broadcast collisions/contacts with sensors, 
+		// we have to manually search for collisions and "call" the equivalent to the ModulePhysics::BeginContact() ourselves...
+		for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
+		{
+			// For each contact detected by Box2D, see if the first one colliding is a sensor
+			if (c->IsTouching() && c->GetFixtureA()->IsSensor())
+			{
+				// If so, we call the OnCollision listener function (only of the sensor), passing as inputs our custom PhysBody classes
+				PhysBody* pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
+				PhysBody* pb2 = (PhysBody*)c->GetFixtureB()->GetBody()->GetUserData();
+				if (pb1 && pb2 && pb1->listener)
+					pb1->listener->OnCollision(pb1, pb2, c);
+			}
+		}
+	}
+	
 
 	return ret;
 }
@@ -437,4 +456,9 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 	}
 
 	return ret;
+}
+
+bool Physics::SetFPS(TargetFps fps) {
+	fpsTarget = fps;
+	return true;
 }

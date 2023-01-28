@@ -1,6 +1,7 @@
 #include "App.h"
 #include "Input.h"
 #include "Textures.h"
+#include "Render.h"
 #include "Audio.h"
 #include "Render.h"
 #include "Window.h"
@@ -14,6 +15,13 @@
 #include "Pathfinding.h"
 #include "EnemyAir.h"
 #include "EnemyFloor.h"
+#include "GuiManager.h"
+#include "GuiButton.h"
+#include "FadeToBlack.h"
+#include "Gui.h"
+#include "TitleScene.h"
+#include "SDL/include/SDL.h"
+#include "SDL_ttf/include/SDL_ttf.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -33,9 +41,21 @@ bool Scene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 	
+	params = config;
 
-	//L02: DONE 3: Instantiate the player using the entity manager
-	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER, config.child("player"));
+	//Load from config
+	pugi::xml_node finishTextures = config.child("textures").child("finish");
+	finishTexPath = finishTextures.attribute("path").as_string();
+	finishTexW = finishTextures.attribute("width").as_int();
+	finishTexH = finishTextures.attribute("height").as_int();
+
+	pugi::xml_node deathTextures = config.child("textures").child("death");
+	deathTexPath = deathTextures.attribute("path").as_string();
+	deathTexW = deathTextures.attribute("width").as_int();
+	deathTexH = deathTextures.attribute("height").as_int();
+
+
+	//ButtonSetup();
 
 	return ret;
 }
@@ -43,52 +63,11 @@ bool Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Scene::Start()
 {
-	bool retLoad = app->map->Load();
+	app->fadeToBlack->activeScene = "Scene";
+	app->titleScene->active = false;
 
-	// L12 Create walkability map
-	if (retLoad) {
-		int w, h;
-		uchar* data = NULL;
-
-		bool retWalkMap = app->map->CreateWalkabilityMap(w, h, &data);
-		if (retWalkMap) app->pathfinding->SetMap(w, h, data);
-
-		RELEASE_ARRAY(data);
-
-	}
-
-
-	if (app->map->mapData.type == MapTypes::MAPTYPE_ISOMETRIC) {
-		uint width, height;
-		app->win->GetWindowSize(width, height);
-		app->render->camera.x = width / 2;
-
-		// Texture to highligh mouse position 
-		mouseTileTex = app->tex->Load("Assets/Maps/path.png");
-
-		// Texture to show path origin 
-		originTex = app->tex->Load("Assets/Maps/x.png");
-	}
-
-	if (app->map->mapData.type == MapTypes::MAPTYPE_ORTHOGONAL) {
-
-		// Texture to highligh mouse position 
-		mouseTileTex = app->tex->Load("Assets/Maps/path_square.png");
-
-		// Texture to show path origin 
-		originTex = app->tex->Load("Assets/Maps/x_square.png");
-	}
-
-	
-	// L04: DONE 7: Set the window title with map/tileset info
-	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
-		app->map->mapData.width,
-		app->map->mapData.height,
-		app->map->mapData.tileWidth,
-		app->map->mapData.tileHeight,
-		app->map->mapData.tilesets.Count());
-
-	app->win->SetTitle(title.GetString());
+	deathTex = app->tex->Load(deathTexPath);
+	finishTex = app->tex->Load(finishTexPath);
 
 	return true;
 }
@@ -97,11 +76,15 @@ bool Scene::Start()
 bool Scene::PreUpdate()
 {
 	return true;
+	LOG("Scene PreUpdate Finished");
 }
 
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+
+
+
 	// L03: DONE 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		app->SaveGameRequest();
@@ -109,20 +92,141 @@ bool Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		app->LoadGameRequest();
 
-	// Draw map
-	app->map->Draw();
+	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+		app->fadeToBlack->SwitchMap(1);
+
+	if (app->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
+		app->fadeToBlack->SwitchMap(2);
+
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+		if (toggle) {
+			toggle = false;
+			app->gui->NoButtons();
+			app->gui->settings = false;
+			//playerptr->startGame = true;
+			gamePaused = false;
+			
+		}
+		else {
+			app->gui->InGameMenu();
+			//playerptr->startGame = false;
+			gamePaused = true;
+			toggle = true;
+		}
+			
+	}
+
+	else if (playerptr->gameOver) {
+		SDL_Rect rect = { 0, 0, 1024, 480 };
+		app->render->DrawTexture(deathTex, app->render->camera.x * -1, 0, &rect);
+		gamePaused = true;
+		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+			app->fadeToBlack->SwitchMap(1);
+		}
+	}
+		
+	else(app->map->Draw());
+
+
+	if (playerptr->diamondCollected == false) {
+		if (playerptr->levelFinish == true) {
+			if (!timer2Started)
+			{
+				t2.Start();
+				timer2Started = true;
+			}
+			else if (t2.ReadSec() <= 2)
+			{
+				app->render->DrawText("COLLECT THE DIAMOND", 512, 435);
+			}
+
+			else if (t2.ReadSec() >= 2) {
+				playerptr->levelFinish = false;
+				timer2Started = false;
+			}
+		}
+		
+	}
+		
+	else {
+		if (!timer2Started)
+		{
+			t2.Start();
+			timer2Started = true;
+		}
+		else if (t2.ReadSec() <= 2)
+		{
+			app->render->DrawText("BRING THE DIAMOND TO THE CASTLE", 512, 435);
+		}
+
+
+		if (playerptr->levelFinish == true) {
+			gamePaused = true;
+			SDL_Rect rect = { 0, 0, app->win->width, 480 };
+			app->render->DrawTexture(finishTex, app->render->camera.x * (-1), 0, &rect);
+
+			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+				app->fadeToBlack->SwitchMap(2);
+			}
+
+		}
+	}
+		
+
+
+	
+	app->gui->SettingsWindow();
+
+	app->guiManager->Draw();
+
+	if (checkpointReached) {
+			
+	}
+
+	if (checkpointReached)
+	{
+		if (!timerStarted)
+		{
+			t.Start();
+			timerStarted = true;
+		}
+		else if (t.ReadSec() <= 2)
+		{
+			app->render->DrawText("CHECKPOINT", 512, 435);
+		}
+	}
+
+	if (clickedSave)
+	{
+		if (!timer2Started)
+		{
+			t2.Start();
+			timer2Started = true;
+		}
+		else if (t2.ReadSec() <= 2)
+		{
+			app->render->DrawText("GAME SAVED", 512, 435);
+		}
+
+		else if (t2.ReadSec() >= 2) {
+			clickedSave = false;
+			timer2Started = false;
+		}
+			
+	}
+
 
 	DebugPathfinding();
 
 	return true;
+	LOG("Scene Update Finished");
 }
 
 bool Scene::PostUpdate()
 {
 	bool ret = true;
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
+
 
 	return ret;
 }
@@ -142,6 +246,7 @@ bool Scene::SaveState(pugi::xml_node &data)
 	player.append_attribute("x") = playerptr->position.x;
 	player.append_attribute("y") = playerptr->position.y;
 	player.append_attribute("health") = playerptr->health;
+	player.append_attribute("lives") = playerptr->lives;
 	player.append_attribute("bullets") = playerptr->bullets;
 
 	pugi::xml_node enemyair = data.append_child("enemyair");
@@ -164,6 +269,7 @@ bool Scene::LoadState(pugi::xml_node& data)
 	playerptr->position.x = data.child("player").attribute("x").as_int();
 	playerptr->position.y = data.child("player").attribute("y").as_int();
 	playerptr->health = data.child("player").attribute("health").as_int();
+	playerptr->lives = data.child("player").attribute("lives").as_int();
 	playerptr->bullets = data.child("player").attribute("bullets").as_int();
 
 	playerptr->pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(playerptr->position.x),
@@ -188,14 +294,18 @@ bool Scene::LoadState(pugi::xml_node& data)
 
 
 	app->entityManager->LoadState(data);
+	checkpointReached = false;
 
 	return true;
 }
 
-void Scene::CreateItem(pugi::xml_node itemNode)
+void Scene::CreateItem(pugi::xml_node itemNode, Item::ItemType type, int x, int y)
 {
 	Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM, itemNode);
-	item->ItemInitialisation(itemNode);
+	item->type = type;
+	itemNode.append_attribute("x") = 1400;
+	item->ItemInitialisation(itemNode, x, y);
+	item->position.x = 1400;
 }
 
 void Scene::CreateBullet(pugi::xml_node itemNode, int x, int y, int direction)
@@ -204,22 +314,14 @@ void Scene::CreateBullet(pugi::xml_node itemNode, int x, int y, int direction)
 	bullet->BulletInitialisation(itemNode, x, y, direction);
 }
 
-void Scene::InitPlayerSpawn(pugi::xml_node itemNode)
-{
-	playerptr->InitSpawn(itemNode);
-}
-
 void Scene::InitEnemyAirSpawn(pugi::xml_node itemNode)
 {
 	enemyairptr = (EnemyAir*)app->entityManager->CreateEntity(EntityType::ENEMYAIR, itemNode);
-	enemyairptr->InitSpawn(itemNode);
-
 }
 
 void Scene::InitEnemyFloorSpawn(pugi::xml_node itemNode)
 {
 	enemyfloorptr = (EnemyFloor*)app->entityManager->CreateEntity(EntityType::ENEMYFLOOR, itemNode);
-	enemyfloorptr->InitSpawn(itemNode);
 }
 
 void Scene::DebugPathfinding() {
@@ -238,6 +340,70 @@ void Scene::DebugPathfinding() {
 		iPoint originScreen = app->map->MapToWorld(origin.x, origin.y);
 		app->render->DrawTexture(originTex, originScreen.x, originScreen.y);
 	}
+}
+
+bool Scene::SceneStart(int level)
+{
+	switch (level)
+	{
+	case 1:
+		fileName = "Assets/Maps/Level1.tmx";
+		break;
+	case 2:
+		fileName = "Assets/Maps/Level2.tmx";
+		break;
+	default:
+		LOG("No Map found");
+		break;
+	}
+		
+	bool retLoad = app->map->Load(fileName);
+
+	// L12 Create walkability map
+	if (retLoad) {
+		int w, h;
+		uchar* data = NULL;
+
+		bool retWalkMap = app->map->CreateWalkabilityMap(w, h, &data);
+		if (retWalkMap) app->pathfinding->SetMap(w, h, data);
+
+		RELEASE_ARRAY(data);
+
+	}
+
+	// Texture to highligh mouse position 
+	mouseTileTex = app->tex->Load("Assets/Maps/path_square.png");
+	// Texture to show path origin 
+	originTex = app->tex->Load("Assets/Maps/x_square.png");
+
+	LOG("Loaded Tile Textures");
+
+	// L04: DONE 7: Set the window title with map/tileset info
+	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
+		app->map->mapData.width,
+		app->map->mapData.height,
+		app->map->mapData.tileWidth,
+		app->map->mapData.tileHeight,
+		app->map->mapData.tilesets.Count());
+
+	app->win->SetTitle(title.GetString());
+
+
+	SpawnPlayer();
+
+	playerptr->level_start = Clock::now();
+
+	gamePaused = false;
+
+	checkpointReached = false;
+
+	return retLoad;
+}
+
+void Scene::SpawnPlayer() {
+	pugi::xml_node playerNode;
+	playerptr = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER, playerNode);
+	playerptr->camTransition = true;
 }
 
 

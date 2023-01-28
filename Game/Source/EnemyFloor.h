@@ -22,6 +22,8 @@ public:
 
 	EnemyFloor(pugi::xml_node paras);
 
+	pugi::xml_node paramaters;
+
 	virtual ~EnemyFloor();
 
 	bool Awake();
@@ -74,12 +76,16 @@ public:
 
 	void UpdateAnim();
 
+	void HealthBar();
+
 	//Player Physics Body
 	PhysBody* pbody;
 
 	b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
 
 	int health;
+	int maxHealth;
+	float healthPerc;
 
 private:
 

@@ -3,6 +3,7 @@
 
 #include "Defs.h"
 #include "Log.h"
+#include "Render.h"
 
 #include "SDL/include/SDL.h"
 
@@ -36,13 +37,13 @@ bool Window::Awake(pugi::xml_node& config)
 		// L01: DONE 6: Load all required configurations from config.xml
 		// Tip: get the name of the child and the attribute value
 		Uint32 flags = SDL_WINDOW_SHOWN;
-		bool fullscreen = config.child("fullscreen").attribute("value").as_bool(); // get from config
+		fullscreen = config.child("fullscreen").attribute("value").as_bool(); // get from config
 		bool borderless = config.child("bordeless").attribute("value").as_bool(); // get from config
 		bool resizable = config.child("resizable").attribute("value").as_bool(); // get from config
 		bool fullscreen_window = config.child("fullscreen_window").attribute("value").as_bool(); // get from config
 
-		width = config.child("resolution").attribute("width").as_int(); //get from config 
-		height = config.child("resolution").attribute("height").as_int();; //get from config 
+		width = initial_width = config.child("resolution").attribute("width").as_int(); //get from config 
+		height = initial_height = config.child("resolution").attribute("height").as_int();; //get from config 
 		scale = config.child("resolution").attribute("scale").as_int();; //get from config 
 
 		if (fullscreen == true) flags |= SDL_WINDOW_FULLSCREEN;
@@ -99,4 +100,31 @@ void Window::GetWindowSize(uint& width, uint& height) const
 uint Window::GetScale() const
 {
 	return scale;
+}
+
+void Window::ToggleFullscreen()
+{
+	// Get current window flags
+	Uint32 flags = SDL_GetWindowFlags(window);
+	if (flags & SDL_WINDOW_FULLSCREEN)
+	{
+		fullscreen = false;
+		// Turn off fullscreen
+		SDL_SetWindowFullscreen(window, 0);
+	}
+	else
+	{
+		fullscreen = true;
+		// Turn on fullscreen
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+
+		// Get the current display mode
+		SDL_DisplayMode display_mode;
+		SDL_GetCurrentDisplayMode(0, &display_mode);
+
+		// Calculate aspect ratio of the game's window
+		float aspect_ratio = (float)width / (float)height;
+
+		SDL_SetWindowSize(window, width, height);
+	}
 }

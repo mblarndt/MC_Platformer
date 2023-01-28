@@ -13,7 +13,6 @@
 Item::Item(pugi::xml_node paras) : Entity(EntityType::ITEM)
 {
 	name.Create("item");
-	parameters = paras;
 	
 }
 
@@ -21,11 +20,6 @@ Item::~Item() {}
 
 bool Item::Awake() {
 
-	position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
-	radius = 7.5;
-	texturePath = "Assets/Textures/slimeball.png";
-	
 
 	return true;
 }
@@ -39,13 +33,15 @@ bool Item::Start() {
 
 bool Item::Update()
 {
-	// L07 TODO 4: Add a physics to an item - update the position of the object from the physics.
-	position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x)-radius;
-	position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y)-radius;
-	
-	if (!app->scene->playerptr->deadTextureOn)
-	{
-		app->render->DrawTexture(texture, position.x, position.y);
+	if (app->scene->gamePaused == false) {
+		// L07 TODO 4: Add a physics to an item - update the position of the object from the physics.
+		position.x = METERS_TO_PIXELS(pbody->body->GetTransform().p.x) - radius;
+		position.y = METERS_TO_PIXELS(pbody->body->GetTransform().p.y) - radius;
+
+		if (!app->scene->playerptr->deadTextureOn)
+		{
+			app->render->DrawTexture(texture, position.x, position.y);
+		}
 	}
 	return true;
 }
@@ -75,20 +71,41 @@ void Item::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 
 }
 
-void Item::ItemInitialisation(pugi::xml_node itemNode)
+void Item::ItemInitialisation(pugi::xml_node itemNode, int x, int y)
 {
 	position.x = itemNode.attribute("x").as_int();
 	position.y = itemNode.attribute("y").as_int();
-	radius = 7.5;
-	texturePath = "Assets/Textures/slimeball.png";
+
+	switch (type) {
+	case ItemType::BULLET:
+		radius = 7.5;
+		texturePath = "Assets/Textures/slimeball.png";
+		pbody = app->physics->CreateCircleSensor(position.x + (15), position.y + (15), radius, STATIC);
+		pbody->ctype = ColliderType::ITEM_BULLET;
+		break;
+
+	case ItemType::DIAMOND:
+		radius = 16;
+		texturePath = "Assets/Textures/diamond.png";
+		pbody = app->physics->CreateCircleSensor(position.x + (15), position.y + (15), radius, STATIC);
+		pbody->ctype = ColliderType::ITEM_DIAMOND;
+		break;
+
+	case ItemType::HEALTH:
+		position.x = x;
+		position.y = y;
+		radius = 16;
+		texturePath = "Assets/Textures/heart.png";
+		pbody = app->physics->CreateCircle(position.x + (15), position.y + (15), radius, DYNAMIC);
+		pbody->ctype = ColliderType::ITEM_HEALTH;
+		pbody->body->ApplyLinearImpulse(b2Vec2(0, -3), pbody->body->GetPosition(), true);
+		break;
+	}
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 
-	// L07 TODO 4: Add a physics to an item - initialize the physics body
-	pbody = app->physics->CreateCircleSensor(position.x + (15), position.y + (15), radius, STATIC);
-
-	pbody->ctype = ColliderType::ITEM;
+	
 
 	pbody->listener = this;
 }

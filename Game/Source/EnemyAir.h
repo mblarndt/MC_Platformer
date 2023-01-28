@@ -41,6 +41,8 @@ public:
 
 	void InitSpawn(pugi::xml_node itemNode);
 
+	pugi::xml_node parameters;
+
 	enum BehaviourState {
 		IDLE,
 		CHASE,
@@ -74,12 +76,16 @@ public:
 
 	void UpdateAnim();
 
+	void HealthBar();
+
 	//Player Physics Body
 	PhysBody* pbody;
 
 	b2Vec2 velocitx = b2Vec2(0, -GRAVITY_Y);
 
 	int health;
+	int maxHealth;
+	float healthPerc;
 
 private:
 

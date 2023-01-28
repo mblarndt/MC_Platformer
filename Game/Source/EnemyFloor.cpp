@@ -17,6 +17,7 @@
 EnemyFloor::EnemyFloor(pugi::xml_node paras) : Entity(EntityType::ENEMYFLOOR)
 {
 	name.Create("EnemyFloor");
+	parameters = paras;
 }
 
 EnemyFloor::~EnemyFloor() {
@@ -25,26 +26,32 @@ EnemyFloor::~EnemyFloor() {
 
 bool EnemyFloor::Awake() {
 
+	InitSpawn(parameters);
 	return true;
 }
 
 bool EnemyFloor::Start() {
 
-	health = 2;
+	health = maxHealth = 2;
 
 	return true;
 }
 
 bool EnemyFloor::Update()
 {
-	if (health <= 0) {
-		pbody->body->DestroyFixture(pbody->body->GetFixtureList());
-		app->entityManager->DestroyEntity(this);
+	if (app->scene->gamePaused == false) {
+		if (health <= 0) {
+			pugi::xml_node item;
+			app->scene->CreateItem(item, Item::ItemType::HEALTH, position.x, position.y);
+
+			pbody->body->DestroyFixture(pbody->body->GetFixtureList());
+			app->entityManager->DestroyEntity(this);
+		}
+		FindPath();
+		Move();
+		RenderEntity();
+		UpdateAnim();
 	}
-	FindPath();
-	Move();
-	RenderEntity();
-	UpdateAnim();
 	return true;
 }
 
@@ -210,6 +217,7 @@ void EnemyFloor::RenderEntity()
 
 	if (!app->scene->playerptr->deadTextureOn)
 	{
+		HealthBar();
 		currentAnimation->Update();
 		SDL_Rect rect1 = currentAnimation->GetCurrentFrame();
 		app->render->DrawTexture(texture, position.x, position.y, &rect1);
@@ -234,4 +242,10 @@ void EnemyFloor::UpdateAnim()
 	{
 		currentAnimation = &idle;
 	}
+}
+
+void EnemyFloor::HealthBar() {
+	healthPerc = ((100 / maxHealth) * health);
+	SDL_Rect healthbar = { (position.x - 5), position.y - 10, healthPerc * 0.5, 5 };
+	app->render->DrawRectangle(healthbar, 255, 0, 0, 255, true, true);
 }

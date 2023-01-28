@@ -113,5 +113,5 @@ void LogoScene::AutomaticTransition()
 	accumulatedTime += 0.075f;
 
 	if (accumulatedTime >= duration)
-		app->fadeToBlack->FadeToBlackScene("Scene");
+		app->fadeToBlack->FadeToBlackScene("TitleScene");
 }

@@ -14,6 +14,7 @@
 #include "External/SDL/include/SDL_render.h"
 #include "External/SDL/include/SDL_timer.h"
 #include "Physics.h"
+#include "Gui.h"
 
 FadeToBlack::FadeToBlack()
 {
@@ -133,12 +134,38 @@ bool FadeToBlack::FadeToBlackScene(char* scene, float time)
 		ret = true;
 	}
 
+	if (scene == "TitleScene") {
+		//CleanUp
+		app->map->CleanUp();
+		app->scene->CleanUp();
+		app->entityManager->CleanUp();
+	}
+
+	app->gui->toggle = true;
+
 	return ret;
 }
 
 bool FadeToBlack::SwitchMap(int level)
 {
-	return false;
+
+	bool ret = true;
+	LOG("Switching Maps...");
+	
+	app->map->CleanUp();
+	app->scene->CleanUp();
+	app->entityManager->CleanUp();
+	
+	b2Body* body = app->physics->world->GetBodyList();
+	while (body != NULL)
+	{
+		app->physics->world->DestroyBody(app->physics->world->GetBodyList());
+		body = body->GetNext();
+	}
+
+	app->scene->SceneStart(level);		//Load specified map
+
+	return ret;
 }
 
 bool FadeToBlack::SwitchScenes(char* scene)
@@ -148,7 +175,6 @@ bool FadeToBlack::SwitchScenes(char* scene)
 
 		if (scene == "LogoScene")
 		{
-			app->scene->CleanUp();
 			app->scene->active = false;
 			app->map->active = false;
 			app->physics->active = false;
@@ -158,22 +184,34 @@ bool FadeToBlack::SwitchScenes(char* scene)
 		if (scene == "TitleScene")
 		{
 			app->scene->active = false;
-			app->map->active = false;
-			app->physics->active = false;
 			app->logoScene->active = false;
 			app->titleScene->active = true;
+			app->map->active = false;
+			app->physics->active = false;
+			app->input->active = true;
+
+			app->map->CleanUp();
+			app->scene->CleanUp();
+			app->entityManager->CleanUp();
+
+			b2Body* body = app->physics->world->GetBodyList();
+			while (body != NULL)
+			{
+				app->physics->world->DestroyBody(app->physics->world->GetBodyList());
+				body = body->GetNext();
+			}
 		}
 		if (scene == "Scene")
 		{
 			app->scene->active = true;
 			app->logoScene->active = false;
 			app->map->active = true;
-			app->physics->active = true;
 			app->titleScene->active = false;
+			app->physics->active = true;
 			app->input->active = true;
 		}
-
 		activeScene = scene;
+		app->gui->ButtonInit();
 	}
 
 	return true;

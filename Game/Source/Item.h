@@ -24,9 +24,18 @@ public:
 
 	void OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact);
 
-	void ItemInitialisation(pugi::xml_node itemNode);
+	void ItemInitialisation(pugi::xml_node itemNode, int x, int y);
 
 public:
+
+	enum class ItemType {
+		BULLET,
+		DIAMOND,
+		HEALTH,
+		OTHER
+	};
+
+	ItemType type;
 
 	bool isPicked = false;
 	PhysBody* pbody;
