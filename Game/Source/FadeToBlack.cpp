@@ -15,6 +15,7 @@
 #include "External/SDL/include/SDL_timer.h"
 #include "Physics.h"
 #include "Gui.h"
+#include "Audio.h"
 
 FadeToBlack::FadeToBlack()
 {
@@ -151,7 +152,7 @@ bool FadeToBlack::SwitchMap(int level)
 
 	bool ret = true;
 	LOG("Switching Maps...");
-	
+	activeLevel = level;
 	app->map->CleanUp();
 	app->scene->CleanUp();
 	app->entityManager->CleanUp();
@@ -164,6 +165,7 @@ bool FadeToBlack::SwitchMap(int level)
 	}
 
 	app->scene->SceneStart(level);		//Load specified map
+	
 
 	return ret;
 }
@@ -193,6 +195,7 @@ bool FadeToBlack::SwitchScenes(char* scene)
 			app->map->CleanUp();
 			app->scene->CleanUp();
 			app->entityManager->CleanUp();
+			
 
 			b2Body* body = app->physics->world->GetBodyList();
 			while (body != NULL)

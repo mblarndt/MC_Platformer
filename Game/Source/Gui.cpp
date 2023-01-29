@@ -38,12 +38,14 @@ bool Gui::Start()
 
 	CreateButton(4, "LEVEL 1", 100, 1024 / 13 * 2, lvl1Btn);
 	CreateButton(5, "LEVEL 2", 100, 1024 / 13 * 3, lvl2Btn);
+	lvl2Btn->isActive = false;
 	CreateButton(6, "BACK", 100, 1024 / 13 * 4, backBtn);
 	CreateButton(9, "RESUME", 100 + 200 + 105, 1024 / 13 * 1, resumeBtn);
 	CreateButton(10, "SAVE", 100 + 200, 1024 / 13 * 2, saveBtn);
 	CreateButton(11, "LOAD", 100 + 200, 1024 / 13 * 3, loadBtn);
 	CreateButton(12, "TITLE", 510, 1024 / 13 * 3, titleBtn);
 	CreateButton(13, "AUDIO", 229, 62, audioBtn);
+	settingsState = SettingsState::AUDIO;
 	CreateButton(14, "VIDEO", 229 + 188, 62, videoBtn);
 	CreateButton(15, "GAME", 229 + 374, 62, gameBtn);
 
@@ -256,10 +258,10 @@ bool Gui::OnGuiMouseClickEvent(GuiControl* control)
 			app->physics->debug = false;
 		break;
 	case 22:
-		app->scene->playerptr->ToggleGodmode();
+		ToggleGodmode();
 		break;
 	case 24:
-		audioToggle->toggle = app->audio->isMusicOn;
+		audioToggle->toggle = app->audio->isAudioEnabled;
 		app->audio->ToggleMusic();
 		break;
 	case 25:
@@ -624,5 +626,15 @@ bool Gui::SetSceneState(const char* scene)
 	if (scene == "ingame")
 		mainState = MainState::IN_GAME;
 	return true;
+}
+
+
+bool Gui::ToggleGodmode() {
+	if (godmode)
+		godmode = false;
+	else
+		godmode = true;
+
+	return godmode;
 }
 

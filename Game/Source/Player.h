@@ -85,8 +85,6 @@ public:
 
 	void HealthBar();
 
-	bool ToggleGodmode();
-
 	void PlayerGUI(bool show);
 	
 	//Player Physics Body

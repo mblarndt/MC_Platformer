@@ -64,6 +64,8 @@ public:
 
 	bool SetSceneState(const char* scene);
 
+	bool ToggleGodmode();
+
 
 public:
 	int numButtons;
@@ -132,6 +134,8 @@ public:
 	int preFxVolume;
 
 	const char* currentFps;
+
+	bool godmode;
 
 private:
 	

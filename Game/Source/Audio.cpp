@@ -194,6 +194,7 @@ void Audio::ToggleMusic() {
 	isAudioEnabled = !isAudioEnabled;
 }
 
+
 void Audio::SetFxVolume(int value)
 {
 	ListItem<Mix_Chunk*>* item;
