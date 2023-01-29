@@ -51,7 +51,7 @@ bool Player::Update()
 	level_time = duration_cast<seconds>(level_now - level_start).count();
 
 
-	if (!godmode) {
+	if (!app->gui->godmode) {
 		if (level_time >= maxtime)
 		{
 			playerDeath = true;
@@ -145,7 +145,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		break;
 	case ColliderType::FLOOR:
 		//LOG("Collision FLOOR");
-		if (!godmode){
+		if (!app->gui->godmode){
 			if ((physA->body->GetPosition().y > physB->body->GetPosition().y)) {
 
 				if (physA->body->GetPosition().x < physB->body->GetPosition().x) {
@@ -161,7 +161,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		jumpcount = 0;
 		break;
 	case ColliderType::DEATH:
-		if (!godmode) {
+		if (!app->gui->godmode) {
 			app->audio->PlayFx(hitFxId);
 			playerDeath = true;
 		}
@@ -178,7 +178,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB, b2Contact* contact) {
 		app->scene->checkpointReached = true;
 		break;
 	case ColliderType::ENEMY:
-		if (!godmode) {
+		if (!app->gui->godmode) {
 			app->audio->PlayFx(hitFxId);
 			health = health - 1;
 			pbody->body->ApplyLinearImpulse(b2Vec2(2, 0), pbody->body->GetPosition(), true);
@@ -295,7 +295,7 @@ void Player::StateMachine()
 void Player::Shoot()
 {
 	if (bullets > 0) {
-		if(!godmode)
+		if(!app->gui->godmode)
 			bullets = bullets - 1;
 		pugi::xml_node object;
 		object.attribute("x") = METERS_TO_PIXELS(pbody->body->GetTransform().p.x);
@@ -319,7 +319,7 @@ void Player::HandleMovement()
 	}
 	//Jump
 	else if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-		if (!godmode) {
+		if (!app->gui->godmode) {
 			if (jumpcount <= 3) {
 				pbody->body->ApplyLinearImpulse(b2Vec2(0, -jumpforce), pbody->body->GetPosition(), true);
 				jumpcount++;
@@ -570,8 +570,7 @@ void Player::InitPlayer() {
 	teleport = false;
 
 	diamondCollected = false;
-	godmode = false;
-	app->gui->godmodeToggle->toggle = godmode;
+
 }
 
 void Player::PlayerGUI(bool show) {
@@ -596,9 +595,9 @@ void Player::PlayerGUI(bool show) {
 		app->render->DrawTexture(bulletsBG, 20 - camPos.x, 60);
 		app->render->DrawTexture(slimeball, 88 - camPos.x, 72);
 		
-		std::string str = std::to_string(bullets) + " x";
+		std::string str = std::to_string(bullets);
 		const char* c_str = str.c_str();
-		app->render->DrawText(c_str, 35, 58, 0, 0, "white", false);
+		app->render->DrawText(c_str, 40, 58, 0, 0, "white", false);
 
 		app->render->DrawTexture(bulletsBG, 900 - camPos.x, 30);
 		str = std::to_string(60 - level_time);
@@ -615,14 +614,4 @@ void Player::HealthBar() {
 	SDL_Rect stroke = { healthbar.x - thickness, healthbar.y - thickness, 200 + thickness * 2, healthbar.h + 2 * thickness };
 	app->render->DrawRectangle(stroke, 0, 0, 0, 255, true, true);
 	app->render->DrawRectangle(healthbar, 255, 0, 0, 255, true, true);
-}
-
-
-bool Player::ToggleGodmode() {
-	if (godmode)
-		godmode = false;
-	else
-		godmode = true;
-
-	return godmode;
 }

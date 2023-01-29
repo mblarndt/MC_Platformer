@@ -173,15 +173,16 @@ bool Scene::Update(float dt)
 	}
 		
 
-
+	if (playerptr->lives != 0) {
+		if (app->fadeToBlack->activeLevel == 2)
+			app->render->DrawText("Thank you for playing!!", 512, 240, 0, 0, "white", true, "big");
+	}
+	
 	
 	app->gui->SettingsWindow();
 
 	app->guiManager->Draw();
 
-	if (checkpointReached) {
-			
-	}
 
 	if (checkpointReached)
 	{

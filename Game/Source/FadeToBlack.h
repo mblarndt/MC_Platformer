@@ -39,6 +39,7 @@ public:
 	bool sceneSwitch;
 	char* wantToSwitchScene;
 	char* activeScene;
+	int activeLevel;
 
 private:
 
